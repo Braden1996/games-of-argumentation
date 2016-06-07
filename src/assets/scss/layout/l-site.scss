@@ -1,0 +1,17 @@
+/*
+ Author: Braden Marshall
+ Description: Main layout components of the site.
+*/
+// Config
+
+$l-site-breakpoint-mobile: $base-breakpoint-mobile;
+$l-site-breakpoint-tablet: $base-breakpoint-tablet;
+$l-site-breakpoint-desktop: $base-breakpoint-desktop-lg;
+
+$l-site-color-background: basecolor("background");
+
+// Main
+#l-site {
+	height: 100%;
+	background-color: $l-site-color-background;
+}

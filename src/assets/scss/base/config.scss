@@ -1,0 +1,47 @@
+// Colors
+$base-colors: (
+  "primary": (
+    "base": #434a54,
+    "light": lighten(#434a54, 10%),
+    "dark": #292f33
+  ),
+  "accent": (
+    "base": #1abc9c,
+    "light": lighten(#1abc9c, 10%),
+    "dark": #16a085
+  ),
+  "secondary": (
+    "base": #e6567a,
+    "light": lighten(#e6567a, 10%),
+    "dark": #bf4a67
+  ),
+  "foreground": (
+    "base": #191919,
+    "light": #333333,
+    "dark": #111111,
+    "darker": #000000
+  ),
+  "background": (
+    "base": #f8fcfc,
+    "light": #ffffff,
+    "dark": #dddddd
+  ),
+  "success": (
+    "base": #2ecc71,
+    "light": #41c87a,
+    "dark": #27ae60
+  ),
+);
+
+// Constants
+$base-constant-golden: 1.618;
+$base-constant-transition: 0.32s;
+
+// Breakpoints
+$base-breakpoint-mobile: 20.000rem; // >= 320px;
+$base-breakpoint-mobile-lg: 30.063rem; // >= 481px;
+$base-breakpoint-tablet: 40.063rem; // >= 641px;
+$base-breakpoint-tablet-lg: 60.063rem; // >= 961px;
+$base-breakpoint-desktop: 64.063rem; // >= 1025px;
+$base-breakpoint-desktop-lg: 85.438rem; // >= 1367px;
+$base-breakpoint-desktop-xlg: 100.063rem; // >= 1601px;
