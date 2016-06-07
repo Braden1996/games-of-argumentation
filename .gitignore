@@ -4,3 +4,7 @@
 /bower_components/
 # Collected static-files
 /static/
+# Project static CSS
+/src/static/css
+# Project static JS
+/src/static/js
