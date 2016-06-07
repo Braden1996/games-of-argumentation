@@ -17,7 +17,7 @@ $l-site__sidebar-color-background: basecolor("background");
 
 	> #l-site__grapharea, #l-site__sidebar {
 		height: 100%;
-		float: left;
+		float: right;
 	}
 
 	> #l-site__grapharea{
@@ -29,7 +29,7 @@ $l-site__sidebar-color-background: basecolor("background");
 		width: 25%;
 		background-color: $l-site__sidebar-color-background;
 
-		box-shadow: -5px 0 5px 0px rgba(0,0,0,0.1);
+		box-shadow: 5px 0 5px 0px rgba(0,0,0,0.1);
 
 		> h1 {
 			text-align: center;
