@@ -10,7 +10,7 @@ gulp.task("watch-javascript", function() {
   var bundler = browserify(config.source, assign({
     cache: {},
     packageCache: {},
-  }, config.customOptions));
+  }, config.browserifyOptions));
 
   bundler = javascript.prepareBundle(bundler);
 

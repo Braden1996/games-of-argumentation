@@ -43,19 +43,13 @@
   },
   "browser": {
     "modernizr": "./bower_components/modernizr/modernizr.js",
+    "jquery": "./bower_components/jquery/dist/jquery.js",
+    "cytoscape": "./bower_components/cytoscape/dist/cytoscape.js"
   },
   "browserify-shim": {
-    "modernizr": "Modernizr"
+    "jquery": "$"
   },
   "browserify": {
-    "transform": [
-      [
-        "babelify",
-        {
-          "ignore": "bower_components/"
-        }
-      ],
-      "browserify-shim"
-    ]
-  },
+    "transform": [ "browserify-shim" ]
+  }
 }

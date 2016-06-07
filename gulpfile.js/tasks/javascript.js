@@ -16,11 +16,7 @@ var buffer       = require('vinyl-buffer');
 // Note: this is used by our JS watch task.
 function prepareBundle(bundler) {
   return bundler
-    .transform(babelify, {
-      presets: ["es2015"],
-      ignore: "bower_components",
-      extensions: [".js"]
-    })
+    .transform(babelify, config.babelifyOptions)
 }
 
 // Call bundle and then convert it into a stream, so that we
@@ -35,7 +31,7 @@ function pipeBundle(bundler) {
 }
 
 gulp.task("javascript", function() {
-  var bundler = browserify(config.source, config.customOptions);
+  var bundler = browserify(config.source, config.browserifyOptions);
   bundler = prepareBundle(bundler);
   return pipeBundle(bundler);
 });

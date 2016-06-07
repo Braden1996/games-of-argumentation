@@ -12,7 +12,8 @@ $m-legend-transition-time: .5s;
 
 // Main
 .m-legend {
-    float: right;
+    position: absolute;
+    right: 0;
 
     margin-top: $m-legend-margin;
     margin-right: $m-legend-margin;

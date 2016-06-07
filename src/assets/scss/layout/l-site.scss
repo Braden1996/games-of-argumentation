@@ -6,33 +6,41 @@
 $l-site-breakpoint-mobile: $base-breakpoint-mobile;
 $l-site-breakpoint-tablet: $base-breakpoint-tablet;
 $l-site-breakpoint-desktop: $base-breakpoint-desktop-lg;
-
-$l-site__grapharea-color-background: basecolor("background", "dark");
-
-$l-site__sidebar-color-background: basecolor("background");
+$l-site__grapharea-color-background: basecolor('background', 'dark');
+$l-site__sidebar-color-background: basecolor('background');
 
 // Main
 #l-site {
-	height: 100%;
+    height: 100%;
+    > #l-site__grapharea, #l-site__sidebar {
+        float: right;
 
-	> #l-site__grapharea, #l-site__sidebar {
-		height: 100%;
-		float: right;
-	}
+        height: 100%;
+    }
+    > #l-site__grapharea {
+        width: 75%;
 
-	> #l-site__grapharea{
-		width: 75%;
-		background-color: $l-site__grapharea-color-background;
-	}
+        background-color: $l-site__grapharea-color-background;
 
-	> #l-site__sidebar{
-		width: 25%;
-		background-color: $l-site__sidebar-color-background;
+        > #l-site__grapharea__legend {
+        	z-index: 1;
+        }
 
-		box-shadow: 5px 0 5px 0px rgba(0,0,0,0.1);
+        > #l-site__grapharea__container {
+            overflow: hidden;
 
-		> h1 {
-			text-align: center;
-		}
-	}
+            width: 100%;
+            height: 100%;
+        }
+    }
+    > #l-site__sidebar {
+        width: 25%;
+
+        background-color: $l-site__sidebar-color-background;
+        box-shadow: 5px 0 5px 0 rgba(0, 0, 0, .1);
+
+        > h1 {
+            text-align: center;
+        }
+    }
 }
