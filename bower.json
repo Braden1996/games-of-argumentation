@@ -1,0 +1,30 @@
+{
+  "name": "grounded-discussion-game",
+  "homepage": "https://github.com/Braden1996/grounded-discussion-game",
+  "description": "A web-demo Grounded Discussion Game (argumentation theory - discussion game for grounded semantics).",
+  "authors": [
+    {
+      "name": "Braden Marshall",
+      "email": "braden1996@hotmail.co.uk",
+      "homepage": "bradenmarshall.co.uk"
+    }
+  ],
+  "license": "UNLICENSED",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "normalize-css": "^4.1.1",
+    "modernizr": "^3.3.1"
+  },
+  "overrides": {
+    "modernizr": {
+      "main": "modernizr.js"
+    }
+  }
+}

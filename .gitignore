@@ -1,4 +1,6 @@
 # Installed Node modules
 /node_modules/
+# Installed Bower components
+/bower_components/
 # Collected static-files
 /static/
