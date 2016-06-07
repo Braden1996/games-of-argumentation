@@ -1,0 +1,4 @@
+# Installed Node modules
+/node_modules/
+# Collected static-files
+/static/
