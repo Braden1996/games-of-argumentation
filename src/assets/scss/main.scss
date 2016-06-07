@@ -1,3 +1,6 @@
+// Normalize
+@import "normalize-css/normalize";
+
 // Base
 @import "base/functions.scss";
 @import "base/mixins.scss";
@@ -8,4 +11,4 @@
 @import "layout/l-site.scss";
 
 // Modules
-// @import "modules/m-example.scss";
+@import "modules/m-legend.scss";

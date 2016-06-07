@@ -16,15 +16,15 @@ $base-colors: (
     "dark": #bf4a67
   ),
   "foreground": (
-    "base": #191919,
-    "light": #333333,
-    "dark": #111111,
-    "darker": #000000
+    "base": #839496,
+    "light": #93a1a1,
+    "dark": #586e75,
+    "darker": #073642
   ),
   "background": (
-    "base": #f8fcfc,
-    "light": #ffffff,
-    "dark": #dddddd
+    "base": #073642,
+    "light": lighten(#073642, 10%),
+    "dark": #002b36
   ),
   "success": (
     "base": #2ecc71,

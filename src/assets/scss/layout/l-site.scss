@@ -3,15 +3,36 @@
  Description: Main layout components of the site.
 */
 // Config
-
 $l-site-breakpoint-mobile: $base-breakpoint-mobile;
 $l-site-breakpoint-tablet: $base-breakpoint-tablet;
 $l-site-breakpoint-desktop: $base-breakpoint-desktop-lg;
 
-$l-site-color-background: basecolor("background");
+$l-site__grapharea-color-background: basecolor("background", "dark");
+
+$l-site__sidebar-color-background: basecolor("background");
 
 // Main
 #l-site {
 	height: 100%;
-	background-color: $l-site-color-background;
+
+	> #l-site__grapharea, #l-site__sidebar {
+		height: 100%;
+		float: left;
+	}
+
+	> #l-site__grapharea{
+		width: 75%;
+		background-color: $l-site__grapharea-color-background;
+	}
+
+	> #l-site__sidebar{
+		width: 25%;
+		background-color: $l-site__sidebar-color-background;
+
+		box-shadow: -5px 0 5px 0px rgba(0,0,0,0.1);
+
+		> h1 {
+			text-align: center;
+		}
+	}
 }

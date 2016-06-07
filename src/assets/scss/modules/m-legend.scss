@@ -1,0 +1,32 @@
+/*
+ Author: Braden Marshall
+ Description: Main components of site.
+*/
+// Config
+$m-legend-margin: 25px;
+$m-legend-padding: 15px;
+$m-legend-color-background: rgba(0, 0, 0, .4);
+$m-legend-border-radius: 10px;
+$m-legend-opacity: .4;
+$m-legend-transition-time: .5s;
+
+// Main
+.m-legend {
+    float: right;
+
+    margin-top: $m-legend-margin;
+    margin-right: $m-legend-margin;
+    padding: $m-legend-padding;
+
+    list-style-type: none;
+
+    transition: opacity ease-in $m-legend-transition-time;
+
+    opacity: $m-legend-opacity;
+    border-radius: $m-legend-border-radius;
+    background-color: $m-legend-color-background;
+
+    &:hover {
+        opacity: 1;
+    }
+}
