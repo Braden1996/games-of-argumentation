@@ -5,6 +5,6 @@
 # Collected static-files
 /static/
 # Project static CSS
-/src/static/css
+/src/static/css/
 # Project static JS
-/src/static/js
+/src/static/js/
