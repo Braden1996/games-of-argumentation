@@ -1,0 +1,24 @@
+/*
+ Author: Braden Marshall
+ Description: The layout for the grapharea.
+*/
+// Config
+$l-grapharea-color-background: basecolor("background", "dark");
+
+// Main
+#l-grapharea {
+    width: 75%;
+
+    background-color: $l-grapharea-color-background;
+
+    > #l-grapharea__legend {
+        z-index: 1;
+    }
+
+    > #l-grapharea__container {
+        overflow: hidden;
+
+        width: 100%;
+        height: 100%;
+    }
+}

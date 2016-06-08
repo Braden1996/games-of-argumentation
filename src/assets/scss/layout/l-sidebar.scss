@@ -1,0 +1,31 @@
+/*
+ Author: Braden Marshall
+ Description: The layout for the sidebar's components
+*/
+// Config
+$l-sidebar-color-background: basecolor('background');
+$l-sidebar__copyright-margin: 15px;
+
+// Main
+#l-sidebar {
+    position: relative;
+
+    width: 25%;
+
+    background-color: $l-sidebar-color-background;
+    box-shadow: 5px 0 5px 0 rgba(0, 0, 0, .1);
+
+    > h1 {
+        text-align: center;
+    }
+
+    > #l-sidebar__copyright {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        left: 0;
+
+        max-width: 100%;
+        margin: 0 $l-sidebar__copyright-margin;
+    }
+}
