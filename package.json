@@ -42,7 +42,6 @@
     "watchify": "^3.7.0"
   },
   "browser": {
-    "modernizr": "./bower_components/modernizr/modernizr.js",
     "jquery": "./bower_components/jquery/dist/jquery.js",
     "cytoscape": "./bower_components/cytoscape/dist/cytoscape.js"
   },
@@ -50,6 +49,8 @@
     "jquery": "$"
   },
   "browserify": {
-    "transform": [ "browserify-shim" ]
+    "transform": [
+      "browserify-shim"
+    ]
   }
 }

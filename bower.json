@@ -20,13 +20,7 @@
   ],
   "dependencies": {
     "normalize-css": "^4.1.1",
-    "modernizr": "^3.3.1",
     "cytoscape": "^2.7.1",
     "jquery": "^2.2.4"
-  },
-  "overrides": {
-    "modernizr": {
-      "main": "modernizr.js"
-    }
   }
 }

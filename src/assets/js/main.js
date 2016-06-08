@@ -1,6 +1,5 @@
 // Libraries
 // (check package.json for library 'entry-point' information)
-// require("modernizr"); // Doesn't work - need to create a build -_-
 require("jquery");
 
 var cytoscape = require("cytoscape");
