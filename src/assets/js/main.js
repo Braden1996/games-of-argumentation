@@ -6,7 +6,7 @@ var cytoscape = require("cytoscape");
 
 $(document).ready(function() {
 	var cy = cytoscape({
-	  container: $("#l-site__grapharea__container"),
+	  container: $("#l-grapharea__container"),
 
 	  elements: [ // list of graph elements to start with
 	    { // node a
