@@ -3,23 +3,26 @@
  Description: Main layout components of the site.
 */
 // Config
-$base-color-font: basecolor("foreground");
-$base-color-background: basecolor("background");
+$base-color-font: basecolor('foreground');
+$base-color-background: basecolor('background');
 
 // Main
 * {
-	box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 html {
-	height: initial;
-	min-height: 100%;
-	position: relative;
-	color: $base-color-font;
-	background-color: $base-color-background;
+    position: relative;
+
+    height: initial;
+    min-height: 100%;
+
+    color: $base-color-font;
+    background-color: $base-color-background;
 }
 
 body {
-	height: 100%;
-	scroll-behavior: smooth;
+    height: 100%;
+
+    scroll-behavior: smooth;
 }
