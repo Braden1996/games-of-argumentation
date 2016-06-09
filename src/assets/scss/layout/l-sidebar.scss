@@ -4,6 +4,7 @@
 */
 // Config
 $l-sidebar-color-background: basecolor('background');
+$l-sidebar-border: 1px solid basecolor('foreground');
 $l-sidebar__copyright-margin: 15px;
 
 // Main
@@ -19,6 +20,18 @@ $l-sidebar__copyright-margin: 15px;
         text-align: center;
     }
 
+    > #l-sidebar__title, > #l-sidebar__copyright {
+        margin: 0 $l-sidebar__copyright-margin;
+    }
+
+    > #l-sidebar__title {
+        border-bottom: $l-sidebar-border;
+
+        > h1 {
+            text-align: center;
+        }
+    }
+
     > #l-sidebar__copyright {
         position: absolute;
         right: 0;
@@ -26,6 +39,7 @@ $l-sidebar__copyright-margin: 15px;
         left: 0;
 
         max-width: 100%;
-        margin: 0 $l-sidebar__copyright-margin;
+
+        border-top: $l-sidebar-border;
     }
 }

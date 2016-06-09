@@ -4,13 +4,10 @@
 */
 // Config
 $m-copyright-padding: 5px;
-$m-copyright-border: 1px solid basecolor("foreground");
 
 // Main
 .m-copyright {
     padding: $m-copyright-padding 0;
 
     text-align: center;
-
-    border-top: $m-copyright-border;
 }
