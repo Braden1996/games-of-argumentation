@@ -1,0 +1,43 @@
+/*
+ Author: Braden Marshall
+ Description: A button with a few neat features.
+*/
+// Config
+$m-button-width: 48px;
+$m-button-height: 48px;
+$m-button-padding: $m-button-width / 4;
+
+$m-button-color-background: basecolor("background");
+
+$m-button__burgericon-width: $m-button-width - 2*$m-button-padding;
+$m-button__burgericon-height: floor(($m-button-height - 2*$m-button-padding) / 5);
+$m-button__burgericon-gutter: (($m-button-height - 2*$m-button-padding) - 3*$m-button__burgericon-height) / 2;
+$m-button__burgericon-color-background: basecolor("accent");
+
+// Main
+.m-button {
+	width: $m-button-width;
+	height: $m-button-height;
+	padding: $m-button-padding;
+
+	cursor: hand;
+
+	background-color: $m-button-color-background;
+
+	&.m-button--circle {
+		border-radius: 50%;
+	}
+
+	.m-button__burgericon {
+		@include burger(
+			$m-button__burgericon-width,
+			$m-button__burgericon-height,
+			$m-button__burgericon-gutter,
+			$m-button__burgericon-color-background
+		);
+	}
+
+	&.m-button--active .m-button__burgericon {
+		@include burger-to-cross;
+	}
+}

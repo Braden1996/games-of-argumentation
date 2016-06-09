@@ -1,7 +1,2 @@
-@mixin clearfix {
-  &:after {
-    display: table;
-    clear: both;
-    content: "";
-  }
-}
+@import "mixins/burgericon.scss";
+@import "mixins/clearfix.scss";

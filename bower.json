@@ -21,6 +21,7 @@
   "dependencies": {
     "normalize-css": "^4.1.1",
     "cytoscape": "^2.7.1",
-    "jquery": "^2.2.4"
+    "jquery": "^2.2.4",
+    "breakpoint-sass": "compass-breakpoint#^2.7.0"
   }
 }
