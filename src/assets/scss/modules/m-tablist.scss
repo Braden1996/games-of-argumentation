@@ -1,0 +1,53 @@
+/*
+ Author: Braden Marshall
+ Description: An area with tabbed content.
+*/
+// Config
+$m-tablist__navlist-min-width: 64px;
+$m-tablist__navlist-padding: 8px;
+$m-tablist__navlist-color-background: basecolor("primary");
+$m-tablist__navlist-color-background--active: basecolor("accent");
+
+// Main
+.m-tablist {
+    > .m-tablist__navlist {
+        margin-bottom: 0;
+        padding-left: 0;
+
+        list-style-type: none;
+
+        @include clearfix();
+
+        > li {
+            display: inline-block;
+            float: left;
+
+            min-width: $m-tablist__navlist-min-width;
+            padding: $m-tablist__navlist-padding;
+
+            cursor: hand;
+            text-align: center;
+
+            background-color: $m-tablist__navlist-color-background;
+
+            &.m-tablist__navlist--active {
+                background-color: $m-tablist__navlist-color-background--active;
+            }
+        }
+    }
+
+    > .m-tablist__panelist {
+        margin-top: 0;
+        padding-left: 0;
+
+        list-style-type: none;
+
+        > li {
+            display: none;
+
+            &.m-tablist__panelist--active {
+                display: inherit;
+            }
+        }
+    }
+}

@@ -2,6 +2,9 @@
 // (check package.json for library 'entry-point' information)
 require("jquery");
 
+// Load visuals
+require("./visuals/m-tablist.js");
+
 var cytoscape = require("cytoscape");
 
 $(document).ready(function() {
