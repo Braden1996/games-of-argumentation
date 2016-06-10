@@ -7,19 +7,20 @@ For more information regarding the game, please consult the paper (found here: h
 ## Getting Started
 In order to get an instance of the application up and running, our static Javascript and CSS files first need to be generated. This is because we are using several pre-processors to help make development faster, future-proof and more modular.
 
-I have created several [Gulp](http://gulpjs.com/) tasks which can compile all the applications assets in a single command. To set up Gulp, [Node](https://nodejs.org/en/) must first be installed and accessible from the command-line (for Windows, make sure Node is added to the PATH environment-variable).
+I have created several [Gulp](http://gulpjs.com/) tasks which can compile all the application's assets in a single command. To set up Gulp, [Node](https://nodejs.org/en/) must first be installed and accessible from the command-line (for Windows, make sure Node is added to the `PATH` environment-variable).
 
-Once Node has been installed, we can install all the development dependecies simply by entering `npm init` whilst in the application's root directory - it contains `package.json`.
+Once Node has been installed, we can install all the development dependecies simply by entering `npm init` whilst in the application's root directory - should contain `package.json`.
 
 However, Gulp and [Bower](https://babeljs.io/) are required to be accessible from the command-line. To do this easily, simply install them globally by using the following two commands: `npm install bower -g` and `npm install gulp -g`.
 
-Next, we need to download all the third-party packages we are employing. As we use Bower to manage these, they can all be installed easily by entering `bower init` whilst in the application's root directory - it contains `bower.json`.
+Next, we need to download all the third-party packages we are employing. As we use Bower to manage these, they can all be installed easily by entering `bower init` whilst in the application's root directory - should contain `bower.json`.
 
-Finally, we can use Gulp to compile all our assets. This can be done by entering `gulp` in the application's root directory - it contains `gulpfile.js/`.
+Finally, we can use Gulp to compile all our assets. This can be done by entering `gulp` in the application's root directory - should contain `gulpfile.js/`.
 
 To run the application, open `src/index.html` in the browser of your choice.
 
-Please don't hesitate to let me know if you encounter any issues! Just open up a `New issue` in the GitHub repository's [Issue Tracker](https://github.com/Braden1996/grounded-discussion-game/issues).
+Please don't hesitate to let me know if you encounter any issues!
+Just open up a `New issue` in the GitHub repository's [Issue Tracker](https://github.com/Braden1996/grounded-discussion-game/issues).
 
 ## Todo List
 1. Get workflow ([Gulp](http://gulpjs.com/) with [SASS](http://sass-lang.com/), [Browserify](http://browserify.org/) and [Babel](https://babeljs.io/)) up and running. :white_check_mark:
