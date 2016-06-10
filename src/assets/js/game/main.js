@@ -1,7 +1,9 @@
-var cytoscape = require("cytoscape");
+let cytoscape = require("cytoscape");
+let labelling = require("./labelling.js");
+let get_labelling = labelling["get_labelling"];
 
 $(document).ready(function() {
-	var cy = cytoscape({
+	let cy = cytoscape({
 		container: $("#l-grapharea__container"),
 
 		boxSelectionEnabled: false,
@@ -9,8 +11,8 @@ $(document).ready(function() {
 
 		elements: {
 			nodes: [
-				{ data: { id: "a" }, classes: "in" },
-				{ data: { id: "b" }, classes: "minmax" },
+				{ data: { id: "a" } },
+				{ data: { id: "b" } },
 				{ data: { id: "c" } },
 				{ data: { id: "d" } },
 				{ data: { id: "e" } },
@@ -35,20 +37,30 @@ $(document).ready(function() {
 		style: cytoscape.stylesheet()
 			.selector("node")
 				.css({
+					"padding-top": "18px",
+					"padding-right": "18px",
+					"padding-bottom": "18px",
+					"padding-left": "18px",
+					"color": "white",
 					"content": "data(id)",
+					"text-wrap": "wrap",
 					"text-valign": "center",
 					"text-halign": "center"
 				})
-			.selector("node.minmax")
+			.selector("node.in")
 				.css({
-					"padding-top": "5px",
-					"padding-right": "5px",
-					"padding-bottom": "5px",
-					"padding-left": "5px",
-					"color": "white",
-					"text-wrap": "wrap",
-					"content": e => e.attr("id") + "\n(2)",
-					"background-color": "#61bffc",
+					"content": e => e.attr("id") + "\n(in)",
+					"background-color": "#37d077",
+				})
+			.selector("node.out")
+				.css({
+					"content": e => e.attr("id") + "\n(out)",
+					"background-color": "#e74c3c",
+				})
+			.selector("node.undec")
+				.css({
+					"content": e => e.attr("id") + "\n(undec)",
+					"background-color": "#95a5a6",
 				})
 			.selector("edge")
 				.css({
@@ -59,4 +71,13 @@ $(document).ready(function() {
 					"curve-style": "bezier"
 				})
 	});
+
+	let lab = get_labelling(cy);
+	console.log(lab);
+	console.log("in:", lab["in"].id());
+	console.log("out:", lab["out"].id());
+	console.log("undec:", lab["undec"].id());
+	lab["in"].addClass("in");
+	lab["out"].addClass("out");
+	lab["undec"].addClass("undec");
 });
