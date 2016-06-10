@@ -21,8 +21,8 @@ function get_labelling(cy) {
 	while (label_made) {
 		label_made = false;
 		for( let i = 0; i < nodes.length; i++ ) {
-    		let node = nodes[i];
-    		if (!(node.anySame(lab["in"]) || node.anySame(lab["out"]))) {
+			let node = nodes[i];
+			if (!(node.anySame(lab["in"]) || node.anySame(lab["out"]))) {
 				if (should_label_in(node)) {
 					lab["in"] = lab["in"].add(node);
 					label_made = true;
@@ -30,7 +30,7 @@ function get_labelling(cy) {
 					lab["out"] = lab["out"].add(node);
 					label_made = true;
 				}
-    		}
+			}
 		}
 	}
 
