@@ -19,7 +19,7 @@ Finally, we can use Gulp to compile all our assets. This can be done by entering
 
 To run the application, open `src/index.html` in the browser of your choice.
 
-Please don't hesitate to let me know if you encounter any issues!
+Please don't hesitate to let me know if you encounter any issues! 
 Just open up a `New issue` in the GitHub repository's [Issue Tracker](https://github.com/Braden1996/grounded-discussion-game/issues).
 
 ## Todo List
