@@ -27,11 +27,15 @@ $l-sidebar__button-margin: 8px;
 
         width: $l-site__sidebar-width;
 
+        transition: left $base-constant-transition ease-out;
+
         > .m-button {
             position: fixed;
             z-index: 99999;
             top: $l-sidebar__button-margin;
             left: $l-sidebar__button-margin;
+
+            transition: left $base-constant-transition ease-out;
 
             &.m-button--active {
                 left: $l-sidebar__button-margin + $l-site__sidebar-width;
