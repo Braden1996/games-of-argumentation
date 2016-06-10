@@ -22,6 +22,7 @@ function get_labelling(cy) {
 		label_made = false;
 		for( let i = 0; i < nodes.length; i++ ) {
 			let node = nodes[i];
+			// Check that node isn't already labelled
 			if (!(node.anySame(lab["in"]) || node.anySame(lab["out"]))) {
 				if (should_label_in(node)) {
 					lab["in"] = lab["in"].add(node);
@@ -34,6 +35,7 @@ function get_labelling(cy) {
 		}
 	}
 
+	// All nodes that aren't 'in' or 'out' must be 'undec'
 	lab["undec"] = nodes.diff(lab["in"].union(lab["out"]))["left"];
 
 	return lab;
