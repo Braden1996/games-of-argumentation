@@ -16,6 +16,8 @@ $m-legend__title-border: 1px solid basecolor("background");
 
 // Main
 .m-legend {
+    margin-top: 0;
+    margin-bottom: 0;
     padding: $m-legend-padding;
 
     list-style-type: none;
