@@ -1,0 +1,26 @@
+/*
+ Author: Braden Marshall
+ Description: A list containing a group of buttons
+*/
+// Config
+$m-buttongroup__li-margin: 1px;
+
+// Main
+.m-buttongroup {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+
+    list-style-type: none;
+
+    > li {
+        display: inline-block;
+        float: left;
+
+        margin-left: $m-buttongroup__li-margin;
+
+        &:first-child {
+            margin-left: 0;
+        }
+    }
+}

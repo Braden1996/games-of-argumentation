@@ -3,7 +3,6 @@
  Description: A legend detailing the meaning on certain icons.
 */
 // Config
-$m-legend-margin: 25px;
 $m-legend-padding: 15px;
 $m-legend-color-background: rgba(0, 0, 0, .4);
 $m-legend-border-radius: 10px;
@@ -17,11 +16,6 @@ $m-legend__title-border: 1px solid basecolor("background");
 
 // Main
 .m-legend {
-    position: absolute;
-    right: 0;
-
-    margin-top: $m-legend-margin;
-    margin-right: $m-legend-margin;
     padding: $m-legend-padding;
 
     list-style-type: none;

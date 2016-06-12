@@ -3,37 +3,53 @@
  Description: A button with a few neat features.
 */
 // Config
-$m-button-width: 48px;
-$m-button-height: 48px;
-$m-button-padding: $m-button-width / 4;
+$m-button-padding: 12px;
 
+$m-button-color-font: basecolor("accent");
 $m-button-color-background: basecolor("background");
+$m-button-color-background--hover: basecolor("background", "light");
+$m-button-color-background--focus: basecolor("background", "dark");
 
-$m-button__burgericon-width: $m-button-width - 2*$m-button-padding;
-$m-button__burgericon-height: floor(($m-button-height - 2*$m-button-padding) / 5);
-$m-button__burgericon-gutter: (($m-button-height - 2*$m-button-padding) - 3*$m-button__burgericon-height) / 2;
-$m-button__burgericon-color-background: basecolor("accent");
+$m-button__icon-width: 48px;
+$m-button__icon-height: 48px;
+
+$m-button__burgericon-width: $m-button__icon-width - 2*$m-button-padding;
+$m-button__burgericon-height: floor(($m-button__icon-height - 2*$m-button-padding) / 5);
+$m-button__burgericon-gutter: (($m-button__icon-height - 2*$m-button-padding) - 3*$m-button__burgericon-height) / 2;
+$m-button__burgericon-color: $m-button-color-font;
 
 // Main
 .m-button {
-	width: $m-button-width;
-	height: $m-button-height;
+	display: inline-block;
 	padding: $m-button-padding;
 
 	cursor: hand;
+	text-decoration: none;
 
+	color: $m-button-color-font;
 	background-color: $m-button-color-background;
+
+	&:hover {
+		background-color: $m-button-color-background--hover;
+	}
+
+	&:focus {
+		background-color: $m-button-color-background--focus;
+	}
 
 	&.m-button--circle {
 		border-radius: 50%;
 	}
 
 	.m-button__burgericon {
+		width: $m-button__icon-width;
+		height: $m-button__icon-height;
+
 		@include burger(
 			$m-button__burgericon-width,
 			$m-button__burgericon-height,
 			$m-button__burgericon-gutter,
-			$m-button__burgericon-color-background
+			$m-button__burgericon-color
 		);
 	}
 

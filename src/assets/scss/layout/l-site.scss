@@ -9,7 +9,7 @@ $l-site-breakpoint-desktop: $base-breakpoint-desktop-lg;
 
 $l-site__sidebar-width: 384px;
 
-$l-sidebar__button-margin: 8px;
+$l-sidebar__buttongroup-margin: 8px;
 
 // Main
 #l-site {
@@ -29,21 +29,21 @@ $l-sidebar__button-margin: 8px;
 
         transition: left $base-constant-transition ease-out;
 
-        > .m-button {
+        > #l-sidebar__buttongroup {
             position: fixed;
             z-index: 99999;
-            top: $l-sidebar__button-margin;
-            left: $l-sidebar__button-margin;
+            top: $l-sidebar__buttongroup-margin;
+            left: $l-sidebar__buttongroup-margin;
 
             transition: left $base-constant-transition ease-out;
-
-            &.m-button--active {
-                left: $l-sidebar__button-margin + $l-site__sidebar-width;
-            }
         }
 
         &.m-button__target--active {
             left: 0;
+
+            > #l-sidebar__buttongroup {
+                left: $l-sidebar__buttongroup-margin + $l-site__sidebar-width;
+            }
         }
     }
 
