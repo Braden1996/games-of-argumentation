@@ -5,13 +5,12 @@
 // Config
 $l-grapharea-color-background: basecolor("background", "dark");
 $l-grapharea__legend-margin: 8px;
-$l-grapharea__modes-margin: $l-grapharea__legend-margin;
 
 // Main
 #l-grapharea {
     background-color: $l-grapharea-color-background;
 
-    > #l-grapharea__legend, > #l-grapharea__modes {
+    > #l-grapharea__legend {
         position: absolute;
         z-index: 1;
     }
@@ -19,11 +18,6 @@ $l-grapharea__modes-margin: $l-grapharea__legend-margin;
     > #l-grapharea__legend {
     	top: $l-grapharea__legend-margin;
 	    right: $l-grapharea__legend-margin;
-    }
-
-    > #l-grapharea__modes {
-	    left: $l-grapharea__modes-margin;
-	    bottom: $l-grapharea__modes-margin;
     }
 
     > #l-grapharea__container {

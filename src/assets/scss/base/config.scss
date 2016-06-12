@@ -38,10 +38,10 @@ $base-constant-golden: 1.618;
 $base-constant-transition: 0.32s;
 
 // Breakpoints
-$base-breakpoint-mobile: 20.000rem; // >= 320px;
-$base-breakpoint-mobile-lg: 30.063rem; // >= 481px;
-$base-breakpoint-tablet: 40.063rem; // >= 641px;
-$base-breakpoint-tablet-lg: 60.063rem; // >= 961px;
-$base-breakpoint-desktop: 64.063rem; // >= 1025px;
-$base-breakpoint-desktop-lg: 85.438rem; // >= 1367px;
-$base-breakpoint-desktop-xlg: 100.063rem; // >= 1601px;
+$base-breakpoint-mobile: 320px;
+$base-breakpoint-mobile-lg: 481px;
+$base-breakpoint-tablet: 641px;
+$base-breakpoint-tablet-lg: 961px;
+$base-breakpoint-desktop: 1025px;
+$base-breakpoint-desktop-lg: 1367px;
+$base-breakpoint-desktop-xlg: 1601px;

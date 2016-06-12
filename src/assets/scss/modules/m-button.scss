@@ -10,8 +10,8 @@ $m-button-color-background: basecolor("background");
 $m-button-color-background--hover: basecolor("background", "light");
 $m-button-color-background--focus: basecolor("background", "dark");
 
-$m-button__icon-width: 48px;
-$m-button__icon-height: 48px;
+$m-button__icon-width: $l-sidebar__buttongroup__button-width;
+$m-button__icon-height: $m-button__icon-width;
 
 $m-button__burgericon-width: $m-button__icon-width - 2*$m-button-padding;
 $m-button__burgericon-height: floor(($m-button__icon-height - 2*$m-button-padding) / 5);
