@@ -13,7 +13,7 @@ Once Node has been installed, we can install all the development dependecies sim
 
 However, Gulp and [Bower](https://babeljs.io/) are required to be accessible from the command-line. To do this easily, simply install them both globally by running the following command: `npm install bower gulp -g`.
 
-Next, we need to download all the third-party packages we are employing. As we use Bower to manage these, they can all be installed easily by entering `bower init` whilst in the application's root directory - should contain `bower.json`.
+Next, we need to download all the third-party packages we are employing. As we use Bower to manage these, they can all be installed easily by entering `bower install` whilst in the application's root directory - should contain `bower.json`.
 
 Finally, we can use Gulp to compile all our assets. This can be done by entering `gulp` in the application's root directory - should contain `gulpfile.js/`.
 
