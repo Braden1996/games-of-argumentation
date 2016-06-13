@@ -9,7 +9,7 @@ In order to get an instance of the application up and running, our static Javasc
 
 I have created several [Gulp](http://gulpjs.com/) tasks which can compile all the application's assets in a single command. To set up Gulp, [Node](https://nodejs.org/en/) must first be installed and accessible from the command-line (for Windows, make sure Node is added to the `PATH` environment-variable).
 
-Once Node has been installed, we can install all the development dependecies simply by entering `npm init` whilst in the application's root directory - should contain `package.json`.
+Once Node has been installed, we can install all the development dependecies simply by entering `npm install` whilst in the application's root directory - should contain `package.json`.
 
 However, Gulp and [Bower](https://babeljs.io/) are required to be accessible from the command-line. To do this easily, simply install them globally by using the following two commands: `npm install bower -g` and `npm install gulp -g`.
 
