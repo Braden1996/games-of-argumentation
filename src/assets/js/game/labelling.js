@@ -1,4 +1,5 @@
 function get_labelling(cy) {
+	// Note: 'cy.collection()', in this case, is just an empty set.
 	let lab = {"in": cy.collection(), "out": cy.collection(), "undec": cy.collection()};
 
 	var nodes = cy.nodes();
@@ -41,6 +42,13 @@ function get_labelling(cy) {
 	return lab;
 }
 
+function apply_labelling(lab) {
+	lab["in"].addClass("in");
+	lab["out"].addClass("out");
+	lab["undec"].addClass("undec");
+}
+
 module.exports = {
-	"get_labelling": get_labelling
+	"get_labelling": get_labelling,
+	"apply_labelling": apply_labelling
 }
