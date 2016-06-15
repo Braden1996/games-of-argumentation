@@ -1,4 +1,5 @@
 let cytoscape = require("cytoscape");
+let labelling = require("./labelling.js");
 
 function build_stylesheet() {
 	return cytoscape.stylesheet()
@@ -39,6 +40,15 @@ function build_stylesheet() {
 			})
 }
 
+function set_graph(cy, graph) {
+	cy.add(graph);
+	cy.elements().layout({ name: "grid" });
+
+	let lab = labelling.get_labelling(cy);
+	labelling.apply_labelling(lab);
+}
+
 module.exports = {
-	"build_stylesheet": build_stylesheet
+	"build_stylesheet": build_stylesheet,
+	"set_graph": set_graph
 }
