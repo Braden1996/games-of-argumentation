@@ -54,6 +54,10 @@ $l-site__sidebar-width: $l-site-breakpoint-mobile-lg - $l-sidebar__buttongroup__
                 @include breakpoint($l-site-breakpoint-mobile-lg) {
                     position: fixed;
                     left: $l-site__sidebar-width;
+
+                    > li {
+                        float: left;
+                    }
                 }
 
                 @include breakpoint($l-site-breakpoint-tablet) {

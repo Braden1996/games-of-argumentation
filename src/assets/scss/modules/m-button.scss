@@ -10,12 +10,13 @@ $m-button-color-background: basecolor("background");
 $m-button-color-background--hover: basecolor("background", "light");
 $m-button-color-background--focus: basecolor("background", "dark");
 
-$m-button__icon-width: $l-sidebar__buttongroup__button-width;
+$m-button__icon-width: $l-sidebar__buttongroup__button-width - 2*$m-button-padding;
 $m-button__icon-height: $m-button__icon-width;
+$m-button__icon-font-size: 24px;
 
-$m-button__burgericon-width: $m-button__icon-width - 2*$m-button-padding;
-$m-button__burgericon-height: floor(($m-button__icon-height - 2*$m-button-padding) / 5);
-$m-button__burgericon-gutter: (($m-button__icon-height - 2*$m-button-padding) - 3*$m-button__burgericon-height) / 2;
+$m-button__burgericon-width: $m-button__icon-width;
+$m-button__burgericon-height: floor(($m-button__icon-height) / 5);
+$m-button__burgericon-gutter: (($m-button__icon-height) - 3*$m-button__burgericon-height) / 2;
 $m-button__burgericon-color: $m-button-color-font;
 
 // Main
@@ -41,10 +42,19 @@ $m-button__burgericon-color: $m-button-color-font;
 		border-radius: 50%;
 	}
 
-	.m-button__burgericon {
+	.m-button__icon {
+		font-size: $m-button__icon-font-size;
+		font-weight: bold;
+		line-height: $m-button__icon-height;
+
+
 		width: $m-button__icon-width;
 		height: $m-button__icon-height;
 
+		text-align: center;
+	}
+
+	.m-button__icon--burger {
 		@include burger(
 			$m-button__burgericon-width,
 			$m-button__burgericon-height,
@@ -53,7 +63,7 @@ $m-button__burgericon-color: $m-button-color-font;
 		);
 	}
 
-	&.m-button--active .m-button__burgericon {
+	&.m-button--active .m-button__icon--burger {
 		@include burger-to-cross;
 	}
 }
