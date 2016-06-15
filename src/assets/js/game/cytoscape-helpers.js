@@ -49,7 +49,13 @@ function build_stylesheet() {
 			})
 }
 
+function clear_graph(cy) {
+	cy.remove(cy.elements());
+}
+
 function set_graph(cy, graph) {
+	clear_graph(cy);
+
 	cy.add(graph);
 	cy.elements().layout({ name: "grid" });
 
