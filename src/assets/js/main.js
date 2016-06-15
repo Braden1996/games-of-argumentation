@@ -6,5 +6,9 @@ require("jquery");
 require("./visuals/m-button.js");
 require("./visuals/m-tablist.js");
 
+// Load site
+require("./site/onclick.js");
+require("./site/opengraphfile.js");
+
 // Load game
 require("./game/main.js");
