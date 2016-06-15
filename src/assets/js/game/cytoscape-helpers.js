@@ -1,6 +1,15 @@
 let cytoscape = require("cytoscape");
 let labelling = require("./labelling.js");
 
+function create_cytoscape_instance(container) {
+	return cytoscape({
+		container: container,
+
+		boxSelectionEnabled: false,
+		autounselectify: true,
+	});
+}
+
 function build_stylesheet() {
 	return cytoscape.stylesheet()
 		.selector("node")
@@ -49,6 +58,7 @@ function set_graph(cy, graph) {
 }
 
 module.exports = {
+	"create_cytoscape_instance": create_cytoscape_instance,
 	"build_stylesheet": build_stylesheet,
 	"set_graph": set_graph
 }
