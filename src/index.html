@@ -21,9 +21,9 @@
 				</ul>
 				<div id="l-grapharea__container"></div>
 			</section>
-			<aside id="l-sidebar">
+			<aside id="l-sidebar" data-button-id="sidebar">
 				<ul id="l-sidebar__buttongroup" class="m-buttongroup">
-					<li id="l-sidebar__expandbutton" class="m-button m-button--circle" data-target="#l-sidebar">
+					<li id="l-sidebar__expandbutton" class="m-button m-button--circle" data-button-target="sidebar">
 						<div class="m-button__icon m-button__icon--burger"></div>
 					</li>
 					<li class="m-button m-button--circle">
@@ -38,14 +38,14 @@
 				<main id="l-sidebar__content">
 					<div class="m-tablist">
 						<ul class="m-tablist__navlist">
-							<li class="m-tablist__navlist--active" data-tab-id="nodes">Arguments</li>
-							<li data-tab-id="edges">Attacks</li>
+							<li class="m-tablist__navlist--active" data-tablist-id="nodes">Arguments</li>
+							<li data-tablist-id="edges">Attacks</li>
 						</ul>
 						<ul class="m-tablist__panelist">
-							<li class="m-tablist__panelist--active" data-tab-id="nodes">
+							<li class="m-tablist__panelist--active" data-tablist-id="nodes">
 								<b>Each node represents an argument</b>
 							</li>
-							<li data-tab-id="edges">
+							<li data-tablist-id="edges">
 								<b>Each edge represents an attack</b>
 							</li>
 						</ul>
