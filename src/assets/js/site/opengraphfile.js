@@ -25,6 +25,12 @@ $("[data-js='open-graph-file']").change(function() {
 
 				if($("[data-js='graph-view-labelling']").hasClass("m-button--switch__icon--active")) {
 					labelling.show_labelling(cy);
+				} else if($("[data-js='graph-view-minmax']").hasClass("m-button--switch__icon--active")) {
+					labelling.show_minmax(cy);
+
+				} else if($("[data-js='graph-view-labelling-minmax']").hasClass("m-button--switch__icon--active")) {
+					labelling.show_labelling(cy);
+					labelling.show_minmax(cy);
 				}
 			}, false);
 
