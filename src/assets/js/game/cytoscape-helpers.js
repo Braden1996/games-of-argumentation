@@ -39,6 +39,14 @@ function build_stylesheet() {
 				"content": e => e.attr("id") + "\n(undec)",
 				"background-color": "#95a5a6",
 			})
+		.selector("node.minmax")
+			.css({
+				"content": e => {
+					let min_max = e.attr("min_max_numbering");
+					min_max = min_max  === undefined ? "\u221e" : min_max;
+					return e.attr("id") + "\n(" + min_max + ")";
+				}
+			})
 		.selector("edge")
 			.css({
 				"target-arrow-shape": "triangle",
