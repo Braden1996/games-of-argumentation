@@ -49,8 +49,14 @@ function build_stylesheet() {
 			})
 }
 
+function on_graph_change(cy) {
+	cy.lab = labelling.get_labelling(cy);
+}
+
 function clear_graph(cy) {
 	cy.remove(cy.elements());
+
+	on_graph_change(cy);
 }
 
 function set_graph(cy, graph) {
@@ -59,8 +65,7 @@ function set_graph(cy, graph) {
 	cy.add(graph);
 	cy.elements().layout({ name: "grid" });
 
-	let lab = labelling.get_labelling(cy);
-	labelling.apply_labelling(lab);
+	on_graph_change(cy);
 }
 
 module.exports = {

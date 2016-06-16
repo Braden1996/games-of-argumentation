@@ -9,6 +9,7 @@ $(document).ready(function() {
 	require("./visuals/m-tablist.js");
 
 	// Load site
+	require("./site/graph-view-switch.js");
 	require("./site/onclick.js");
 	require("./site/opengraphfile.js");
 

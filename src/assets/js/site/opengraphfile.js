@@ -1,4 +1,5 @@
 let game = require("../game/main.js");
+let labelling = require("../game/labelling.js");
 let cyto_helpers = require("../game/cytoscape-helpers.js");
 let cy = game.cytoscape_instance;
 
@@ -21,6 +22,10 @@ $("[data-js='open-graph-file']").change(function() {
 				let graph_json = reader.result;
 				let graph = JSON.parse(graph_json);
 				cyto_helpers.set_graph(cy, graph);
+
+				if($("[data-js='graph-view-labelling']").hasClass("m-button--switch__icon--active")) {
+					labelling.show_labelling(cy);
+				}
 			}, false);
 
 			if (graph_file) {

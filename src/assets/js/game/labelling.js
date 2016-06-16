@@ -42,13 +42,26 @@ function get_labelling(cy) {
 	return lab;
 }
 
-function apply_labelling(lab) {
-	lab["in"].addClass("in");
-	lab["out"].addClass("out");
-	lab["undec"].addClass("undec");
+function show_labelling(cy) {
+	if(!cy.lab) {
+		return;
+	} else {
+		cy.lab["in"].addClass("in");
+		cy.lab["out"].addClass("out");
+		cy.lab["undec"].addClass("undec");
+	}
+}
+
+function hide_labelling(cy) {
+	if(!cy.lab) {
+		return;
+	} else {
+		cy.nodes().removeClass("in out undec");
+	}
 }
 
 module.exports = {
 	"get_labelling": get_labelling,
-	"apply_labelling": apply_labelling
+	"show_labelling": show_labelling,
+	"hide_labelling": hide_labelling
 }
