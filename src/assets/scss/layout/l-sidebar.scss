@@ -12,10 +12,6 @@ $l-sidebar__copyright-margin: 15px;
     background-color: $l-sidebar-color-background;
     box-shadow: 5px 0 5px 0 rgba(0, 0, 0, .1);
 
-    > h1 {
-        text-align: center;
-    }
-
     > #l-sidebar__title, > #l-sidebar__content, > #l-sidebar__copyright {
         margin: 0 $l-sidebar__copyright-margin;
     }
