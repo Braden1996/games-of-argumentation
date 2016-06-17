@@ -7,6 +7,8 @@ $m-buttongroup__li-margin: 1px;
 
 // Main
 .m-buttongroup {
+    overflow: hidden;
+
     margin-top: 0;
     margin-bottom: 0;
     padding-left: 0;
@@ -21,6 +23,22 @@ $m-buttongroup__li-margin: 1px;
 
         &:first-child {
             margin-left: 0;
+        }
+    }
+
+    &.m-buttongroup--stretch {
+        width: 100%;
+
+        text-align: center;
+
+        > li {
+            width: 100%;
+
+            &:not(.m-button) {
+                > .m-button {
+                    width: 100%;
+                }
+            }
         }
     }
 }
