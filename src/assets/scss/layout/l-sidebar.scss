@@ -5,22 +5,15 @@
 // Config
 $l-sidebar-breakpoint-mobile-lg: $base-breakpoint-mobile-lg;
 $l-sidebar-breakpoint-tablet: $base-breakpoint-tablet;
-
 $l-sidebar-color-background: basecolor('background');
 $l-sidebar-border: 1px solid basecolor('foreground');
-
 $l-sidebar__buttongroup-margin: 8px;
 $l-sidebar__buttongroup__button-width: 48px;
-
 $l-sidebar__copyright-margin: 15px;
-
 $l-sidebar-width: $l-sidebar-breakpoint-mobile-lg - $l-sidebar__buttongroup__button-width;
 
 // Main
 #l-sidebar {
-    background-color: $l-sidebar-color-background;
-    box-shadow: 5px 0 5px 0 rgba(0, 0, 0, .1);
-
     position: absolute;
     z-index: 100;
     left: -100%;
@@ -28,6 +21,15 @@ $l-sidebar-width: $l-sidebar-breakpoint-mobile-lg - $l-sidebar__buttongroup__but
     width: 100%;
 
     transition: left $base-constant-transition ease-out;
+
+    background-color: $l-sidebar-color-background;
+    box-shadow: 5px 0 5px 0 rgba(0, 0, 0, .1);
+
+    @include breakpoint($l-sidebar-breakpoint-mobile-lg) {
+        left: -$l-sidebar-width;
+
+        max-width: $l-sidebar-width;
+    }
 
     // This class is toggled by a button.
     // When active, the sidebar is made visible to the user.
@@ -40,11 +42,6 @@ $l-sidebar-width: $l-sidebar-breakpoint-mobile-lg - $l-sidebar__buttongroup__but
 
                 text-align: center;
 
-                > li {
-                    float: none;
-                    vertical-align: top;
-                }
-
                 @include breakpoint($l-sidebar-breakpoint-mobile-lg) {
                     position: fixed;
                     left: $l-sidebar-width;
@@ -56,6 +53,12 @@ $l-sidebar-width: $l-sidebar-breakpoint-mobile-lg - $l-sidebar__buttongroup__but
                     > li {
                         float: left;
                     }
+                }
+
+                > li {
+                    float: none;
+
+                    vertical-align: top;
                 }
             }
         }
@@ -75,12 +78,12 @@ $l-sidebar-width: $l-sidebar-breakpoint-mobile-lg - $l-sidebar__buttongroup__but
         }
 
         > #l-sidebar__buttongroup {
-            margin: 5px 0;
-
             position: fixed;
             z-index: 1;
             top: $l-sidebar__buttongroup-margin;
             left: $l-sidebar__buttongroup-margin;
+
+            margin: 5px 0;
 
             transition: left $base-constant-transition ease-out;
         }
@@ -95,10 +98,5 @@ $l-sidebar-width: $l-sidebar-breakpoint-mobile-lg - $l-sidebar__buttongroup__but
         max-width: 100%;
 
         border-top: $l-sidebar-border;
-    }
-
-    @include breakpoint($l-sidebar-breakpoint-mobile-lg) {
-        left: -$l-sidebar-width;
-        max-width: $l-sidebar-width;
     }
 }
