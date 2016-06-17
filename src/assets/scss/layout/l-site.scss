@@ -3,13 +3,6 @@
  Description: Main layout components of the site.
 */
 // Config
-$l-site-breakpoint-mobile-lg: $base-breakpoint-mobile-lg;
-$l-site-breakpoint-tablet: $base-breakpoint-tablet;
-
-$l-sidebar__buttongroup-margin: 8px;
-$l-sidebar__buttongroup__button-width: 48px;
-
-$l-site__sidebar-width: $l-site-breakpoint-mobile-lg - $l-sidebar__buttongroup__button-width;
 
 // Main
 #l-site {
@@ -19,58 +12,6 @@ $l-site__sidebar-width: $l-site-breakpoint-mobile-lg - $l-sidebar__buttongroup__
         float: right;
 
         height: 100%;
-    }
-
-    > #l-sidebar {
-        position: absolute;
-        z-index: 100;
-        left: -100%;
-
-        width: 100%;
-
-        transition: left $base-constant-transition ease-out;
-
-        > #l-sidebar__buttongroup {
-            position: fixed;
-            z-index: 1;
-            top: $l-sidebar__buttongroup-margin;
-            left: $l-sidebar__buttongroup-margin;
-
-            transition: left $base-constant-transition ease-out;
-        }
-
-        &.m-button__target--active {
-            left: 0;
-
-            > #l-sidebar__buttongroup {
-                position: initial;
-
-                text-align: center;
-
-                > li {
-                    float: none;
-                    vertical-align: top;
-                }
-
-                @include breakpoint($l-site-breakpoint-mobile-lg) {
-                    position: fixed;
-                    left: $l-site__sidebar-width;
-                }
-
-                @include breakpoint($l-site-breakpoint-tablet) {
-                    left: $l-sidebar__buttongroup-margin + $l-site__sidebar-width;
-
-                    > li {
-                        float: left;
-                    }
-                }
-            }
-        }
-
-        @include breakpoint($l-site-breakpoint-mobile-lg) {
-            left: -$l-site__sidebar-width;
-            max-width: $l-site__sidebar-width;
-        }
     }
 
     > #l-grapharea {
