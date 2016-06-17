@@ -25,7 +25,7 @@ $m-tablist__navlist-color-background--active: basecolor("accent");
             min-width: $m-tablist__navlist-min-width;
             padding: $m-tablist__navlist-padding;
 
-            cursor: hand;
+            cursor: pointer;
             text-align: center;
 
             background-color: $m-tablist__navlist-color-background;
