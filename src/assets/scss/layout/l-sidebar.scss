@@ -40,11 +40,17 @@ $l-sidebar-width: $l-sidebar-breakpoint-mobile-lg - $l-sidebar__buttongroup__but
             > #l-sidebar__buttongroup {
                 position: initial;
 
+                margin-top: $l-sidebar__buttongroup-margin;
+                margin-left: $l-sidebar__buttongroup-margin;
+
                 text-align: center;
 
                 @include breakpoint($l-sidebar-breakpoint-mobile-lg) {
                     position: fixed;
                     left: $l-sidebar-width;
+
+                    margin-top: 0;
+                    margin-left: 0;
                 }
 
                 @include breakpoint($l-sidebar-breakpoint-tablet) {
@@ -82,8 +88,6 @@ $l-sidebar-width: $l-sidebar-breakpoint-mobile-lg - $l-sidebar__buttongroup__but
             z-index: 1;
             top: $l-sidebar__buttongroup-margin;
             left: $l-sidebar__buttongroup-margin;
-
-            margin: 5px 0;
 
             transition: left $base-constant-transition ease-out;
         }
