@@ -83,6 +83,7 @@ $l-sidebar-width: $l-sidebar-breakpoint-mobile-lg - $l-sidebar__buttongroup__but
     }
 
     > main {
+        overflow: hidden;
         flex-grow: 1;
     }
 
