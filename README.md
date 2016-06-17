@@ -26,8 +26,8 @@ Just open up a `New issue` in the GitHub repository's [Issue Tracker](https://gi
 1. Get workflow ([Gulp](http://gulpjs.com/) with [SASS](http://sass-lang.com/), [Browserify](http://browserify.org/) and [Babel](https://babeljs.io/)) up and running. :white_check_mark:
 2. Setup a brief outline of the project's file-structure/architecture. :white_check_mark:
 3. Discover and play about with a decent graphing library. :white_check_mark:
-4. Create, if needed, some handy utility functions that will help us to quickly/easily interface between the Argumentation Framework and the graphing library. :red_circle:
-5. Implement some trivial means of inputting the Argumentation Framework data into the application. :red_circle:
-6. Calculate the grounded labelling for the Argumentation Framework. :red_circle:
-7. Create the functionality to calculate the Min-Max numbering for a particular argument. :red_circle:
-8. ...
+4. Create, if needed, some handy utility functions that will help us to quickly/easily interface between the Argumentation Framework and the graphing library. :white_check_mark:
+5. Implement some trivial means of inputting the Argumentation Framework data into the application. :white_check_mark:
+6. Calculate the grounded labelling for the Argumentation Framework. :white_check_mark:
+7. Create the functionality to calculate the Min-Max numbering for a particular argument. :white_check_mark:
+8. Add functionality which proves, to the user, why a selected node is labelled how it is. :red_circle:
