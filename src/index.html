@@ -22,7 +22,7 @@
 				<div id="l-grapharea__container"></div>
 			</section>
 			<aside id="l-sidebar" data-button-id="sidebar">
-				<header id="l-sidebar__title">
+				<header>
 					<h1>Grounded Discussion Game</h1>
 					<ul id="l-sidebar__buttongroup" class="m-buttongroup">
 						<li id="l-sidebar__expandbutton" class="m-button m-button--circle" data-button-target="sidebar">
@@ -38,56 +38,54 @@
 					</ul>
 				</header>
 
-				<main id="l-sidebar__content">
-					<div class="m-tablist">
-						<ul class="m-tablist__navlist">
-							<li class="m-tablist__navlist--active" data-tablist-id="operations">Operations</li>
-							<li data-tablist-id="nodes">Arguments</li>
-							<li data-tablist-id="edges">Attacks</li>
-						</ul>
-						<ul class="m-tablist__panelist">
-							<li class="m-tablist__panelist--active" data-tablist-id="operations">
-								<ul class="m-buttongroup m-buttongroup--stretch">
-									<li>
-										<button class="m-button" data-onclick-redirect="opengraphfile">Open Graph File</button>
-										<input class="hide" type="file" data-js="open-graph-file" data-onclick-id="opengraphfile" />
-									</li>
-								</ul>
-							</li>
-							<li data-tablist-id="nodes">
-								<b>Each node represents an argument</b>
-								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-								tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-								quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-								consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-								cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-								proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-							</li>
-							<li data-tablist-id="edges">
-								<b>Each edge represents an attack</b>
-								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-								tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-								quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-								consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-								cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-								proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+				<main class="m-tablist">
+					<ul class="m-tablist__navlist">
+						<li class="m-tablist__navlist--active" data-tablist-id="operations">Operations</li>
+						<li data-tablist-id="nodes">Arguments</li>
+						<li data-tablist-id="edges">Attacks</li>
+					</ul>
+					<ul class="m-tablist__panelist">
+						<li class="m-tablist__panelist--active" data-tablist-id="operations">
+							<ul class="m-buttongroup m-buttongroup--stretch">
+								<li>
+									<button class="m-button" data-onclick-redirect="opengraphfile">Open Graph File</button>
+									<input class="hide" type="file" data-js="open-graph-file" data-onclick-id="opengraphfile" />
+								</li>
+							</ul>
+						</li>
+						<li data-tablist-id="nodes">
+							<b>Each node represents an argument</b>
+							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+							tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+							quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+							consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+							cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+							proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+						</li>
+						<li data-tablist-id="edges">
+							<b>Each edge represents an attack</b>
+							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+							tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+							quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+							consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+							cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+							proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
 
-								<p>Lorem ipsum Aute eiusmod proident nisi aliqua nostrud minim cillum voluptate cupidatat esse commodo amet fugiat sunt in elit do sunt sed est laboris eiusmod magna quis officia et Duis commodo.</p>
+							<p>Lorem ipsum Aute eiusmod proident nisi aliqua nostrud minim cillum voluptate cupidatat esse commodo amet fugiat sunt in elit do sunt sed est laboris eiusmod magna quis officia et Duis commodo.</p>
 
-								<p>Lorem ipsum Dolor velit dolor cillum laboris minim laboris aliquip voluptate aliqua laboris in sit laboris Duis sit cupidatat sed non cupidatat amet Excepteur adipisicing fugiat adipisicing Ut elit mollit in magna adipisicing amet in Excepteur est in qui culpa velit ad reprehenderit ut magna commodo Ut Ut aute velit sed et labore et irure commodo sed Excepteur eiusmod eiusmod sint ex eu dolore ea tempor in esse pariatur laborum mollit velit Excepteur Ut nulla non dolor enim sit mollit sint in esse ea ad Duis ea ut sit magna cupidatat irure sunt veniam magna culpa in ullamco quis Duis est dolor Ut ad laborum aliqua ad officia exercitation amet quis veniam id consequat et anim ullamco aliquip irure eu ut eiusmod tempor irure exercitation cillum ut aliqua dolor culpa reprehenderit culpa do esse tempor in dolor quis ullamco reprehenderit officia do irure nisi adipisicing voluptate proident ex qui pariatur dolore quis sunt ut consectetur esse irure magna id fugiat non labore id est deserunt magna et ad ut ut Ut non in sit culpa non ad dolor Excepteur ad sed culpa fugiat est culpa eiusmod non enim pariatur reprehenderit velit deserunt culpa enim culpa ullamco cupidatat ut laborum elit proident culpa incididunt officia qui est fugiat aliquip ad et dolor in commodo pariatur deserunt dolor.</p>
+							<p>Lorem ipsum Dolor velit dolor cillum laboris minim laboris aliquip voluptate aliqua laboris in sit laboris Duis sit cupidatat sed non cupidatat amet Excepteur adipisicing fugiat adipisicing Ut elit mollit in magna adipisicing amet in Excepteur est in qui culpa velit ad reprehenderit ut magna commodo Ut Ut aute velit sed et labore et irure commodo sed Excepteur eiusmod eiusmod sint ex eu dolore ea tempor in esse pariatur laborum mollit velit Excepteur Ut nulla non dolor enim sit mollit sint in esse ea ad Duis ea ut sit magna cupidatat irure sunt veniam magna culpa in ullamco quis Duis est dolor Ut ad laborum aliqua ad officia exercitation amet quis veniam id consequat et anim ullamco aliquip irure eu ut eiusmod tempor irure exercitation cillum ut aliqua dolor culpa reprehenderit culpa do esse tempor in dolor quis ullamco reprehenderit officia do irure nisi adipisicing voluptate proident ex qui pariatur dolore quis sunt ut consectetur esse irure magna id fugiat non labore id est deserunt magna et ad ut ut Ut non in sit culpa non ad dolor Excepteur ad sed culpa fugiat est culpa eiusmod non enim pariatur reprehenderit velit deserunt culpa enim culpa ullamco cupidatat ut laborum elit proident culpa incididunt officia qui est fugiat aliquip ad et dolor in commodo pariatur deserunt dolor.</p>
 
-								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-								tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-								quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-								consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-								cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-								proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-							</li>
-						</ul>
-					</div>
+							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+							tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+							quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+							consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+							cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+							proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+						</li>
+					</ul>
 				</main>
 
-				<footer id="l-sidebar__copyright" class="m-copyright">&copy; Cardiff University</footer>
+				<footer class="m-copyright">&copy; Cardiff University</footer>
 			</aside>
 		</div>
 	</body>

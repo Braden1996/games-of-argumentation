@@ -36,7 +36,7 @@ $l-sidebar-width: $l-sidebar-breakpoint-mobile-lg - $l-sidebar__buttongroup__but
     &.m-button__target--active {
         left: 0;
 
-        > #l-sidebar__title {
+        > header {
             > #l-sidebar__buttongroup {
                 position: initial;
 
@@ -70,11 +70,11 @@ $l-sidebar-width: $l-sidebar-breakpoint-mobile-lg - $l-sidebar__buttongroup__but
         }
     }
 
-    > #l-sidebar__title, > #l-sidebar__content, > #l-sidebar__copyright {
+    > header, > main, > footer {
         margin: 0 $l-sidebar__copyright-margin;
     }
 
-    > #l-sidebar__title {
+    > header {
         border-bottom: $l-sidebar-border;
 
         > h1 {
@@ -93,7 +93,7 @@ $l-sidebar-width: $l-sidebar-breakpoint-mobile-lg - $l-sidebar__buttongroup__but
         }
     }
 
-    > #l-sidebar__copyright {
+    > footer {
         position: absolute;
         right: 0;
         bottom: 0;
