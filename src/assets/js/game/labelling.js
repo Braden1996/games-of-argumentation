@@ -106,6 +106,7 @@ function show_minmax(cy) {
 	if(!cy.lab) {
 		return;
 	} else {
+		show_labelling(cy)
 		cy.nodes().addClass("minmax");
 	}
 }
@@ -114,6 +115,7 @@ function hide_minmax(cy) {
 	if(!cy.lab) {
 		return;
 	} else {
+		hide_labelling(cy)
 		cy.nodes().removeClass("minmax");
 	}
 }

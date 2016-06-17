@@ -28,9 +28,6 @@ $("[data-js='open-graph-file']").change(function() {
 				} else if($("[data-js='graph-view-minmax']").hasClass("m-button--switch__icon--active")) {
 					labelling.show_minmax(cy);
 
-				} else if($("[data-js='graph-view-labelling-minmax']").hasClass("m-button--switch__icon--active")) {
-					labelling.show_labelling(cy);
-					labelling.show_minmax(cy);
 				}
 			}, false);
 
