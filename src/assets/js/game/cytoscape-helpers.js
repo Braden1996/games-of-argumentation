@@ -2,12 +2,18 @@ let cytoscape = require("cytoscape");
 let labelling = require("./labelling.js");
 
 function create_cytoscape_instance(container) {
-	return cytoscape({
+	let cy = cytoscape({
 		container: container,
 
 		boxSelectionEnabled: false,
 		autounselectify: true,
 	});
+
+	cy.on("mouseout", "node", () => container.css("cursor", "default"));
+	cy.on("mouseover", "node", () => container.css("cursor", "pointer"));
+	cy.on("grab", "node", () => container.css("cursor", "pointer"));
+
+	return cy;
 }
 
 function build_stylesheet() {
