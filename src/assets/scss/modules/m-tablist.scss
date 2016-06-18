@@ -8,6 +8,8 @@ $m-tablist__navlist-padding: 8px;
 $m-tablist__navlist-color-background: basecolor("primary");
 $m-tablist__navlist-color-background--active: basecolor("accent");
 
+$m-tablist__panelist__li-padding: 8px;
+
 // Main
 .m-tablist {
     > .m-tablist__navlist {
@@ -43,6 +45,7 @@ $m-tablist__navlist-color-background--active: basecolor("accent");
         list-style-type: none;
 
         > li {
+            padding-top: $m-tablist__panelist__li-padding;
             display: none;
 
             &.m-tablist__panelist--active {
