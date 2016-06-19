@@ -45,16 +45,24 @@ function build_stylesheet() {
 					return e.attr("id") + "\n(" + min_max + ")";
 				}
 			})
+		.selector("node.discuss, node.highlight")
+			.css({
+				"border-width": "4px",
+				"border-style": "solid",
+				"border-opacity": 1
+			})
+		.selector("node.discuss")
+			.css({
+				"border-color": "#3498db"
+			})
 		.selector("node.highlight")
 			.css({
-				"border-width": "8px",
-				"border-style": "solid",
-				"border-color": "#F62459",
-				"border-opacity": 1
+				"border-color": "#E6567A"
 			})
 		.selector("edge.highlight")
 			.css({
-				"line-color": "#F62459"
+				"line-color": "#E6567A",
+				"target-arrow-color": "#E6567A"
 			})
 }
 
