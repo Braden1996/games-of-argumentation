@@ -2,7 +2,7 @@ function get_labelling(cy) {
 	// Note: 'cy.collection()', in this case, is just an empty set.
 	let lab = {"in": cy.collection(), "out": cy.collection(), "undec": cy.collection()};
 
-	var nodes = cy.nodes();
+	let nodes = cy.nodes();
 
 	if(nodes.length != 0) {
 		// A node is labelled 'in' iff all attackers are already labelled 'out'.
@@ -30,8 +30,8 @@ function get_labelling(cy) {
 		let min_max_counter = 1;
 
 		// Perform initial iteration over all nodes, labelling 'in' on those with no attackers.
-		for(var i = 0; i < nodes.length; i++) {
-	    	var node = nodes[i];
+		for(let i = 0; i < nodes.length; i++) {
+	    	let node = nodes[i];
 	    	if (should_label_in(node)) {
 				lab["in"] = lab["in"].add(node);
 				node.data("min_max_numbering", min_max_counter);
@@ -48,13 +48,13 @@ function get_labelling(cy) {
 			next_node_array = [];
 			min_max_counter++;
 
-			for(var i = 0; i < node_array.length; i++) {
-	    		var node = node_array[i];
+			for(let i = 0; i < node_array.length; i++) {
+	    		let node = node_array[i];
 
 				let attacked = node.outgoers().targets();
 
-				for(var j = 0; j < attacked.length; j++) {
-					var attacked_node = attacked[j];
+				for(let j = 0; j < attacked.length; j++) {
+					let attacked_node = attacked[j];
 
 					// Check that attacked_node isn't already labelled
 					if (!(attacked_node.anySame(lab["in"]) || attacked_node.anySame(lab["out"]))) {
