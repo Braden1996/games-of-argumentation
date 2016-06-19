@@ -57,12 +57,12 @@ function build_stylesheet() {
 			})
 		.selector("node.highlight")
 			.css({
-				"border-color": "#E6567A"
+				"border-color": "#8e44ad"
 			})
 		.selector("edge.highlight")
 			.css({
-				"line-color": "#E6567A",
-				"target-arrow-color": "#E6567A"
+				"line-color": "#8e44ad",
+				"target-arrow-color": "#8e44ad"
 			})
 }
 
