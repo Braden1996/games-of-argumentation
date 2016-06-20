@@ -47,6 +47,17 @@ function clear_discuss(cy, discuss_class="discuss", highlight_class="highlight")
 
 function parse_cytoscape_instance(cy) {
 	clear_discuss(cy);
+
+	cy.on("tap", "node", function (evt) {
+		if(evt.cy.play_game === true ) {
+			console.log("Start game");
+		} else {
+			clear_discuss(evt.cy);
+			discuss_log.append_log("Discussing argument '" + evt.cyTarget.id() + "'");
+			discuss(evt.cy, evt.cyTarget);
+		}
+	});
+
 	return cy;
 }
 
