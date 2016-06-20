@@ -41,7 +41,6 @@ $m-button__burgericon-color: $m-button-color-font;
 
 	&.m-button--switch {
 		> ul {
-			width: 100%;
 			padding: 0;
 
 			list-style-type: none;
@@ -62,12 +61,10 @@ $m-button__burgericon-color: $m-button-color-font;
 		border-radius: 50%;
 	}
 
-	& > * {
+	.m-button__icon {
 		width: $m-button__icon-width;
 		height: $m-button__icon-height;
-	}
 
-	.m-button__icon {
 		font-size: $m-button__icon-font-size;
 		font-weight: bold;
 		line-height: $m-button__icon-height;
