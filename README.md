@@ -21,13 +21,3 @@ To run the application, open `src/index.html` in the browser of your choice.
 
 Please don't hesitate to let me know if you encounter any issues! 
 Just open up a `New issue` in the GitHub repository's [Issue Tracker](https://github.com/Braden1996/grounded-discussion-game/issues).
-
-## Todo List
-1. Get workflow ([Gulp](http://gulpjs.com/) with [SASS](http://sass-lang.com/), [Browserify](http://browserify.org/) and [Babel](https://babeljs.io/)) up and running. :white_check_mark:
-2. Setup a brief outline of the project's file-structure/architecture. :white_check_mark:
-3. Discover and play about with a decent graphing library. :white_check_mark:
-4. Create, if needed, some handy utility functions that will help us to quickly/easily interface between the Argumentation Framework and the graphing library. :white_check_mark:
-5. Implement some trivial means of inputting the Argumentation Framework data into the application. :white_check_mark:
-6. Calculate the grounded labelling for the Argumentation Framework. :white_check_mark:
-7. Create the functionality to calculate the Min-Max numbering for a particular argument. :white_check_mark:
-8. Add functionality which proves, to the user, why a selected node is labelled how it is. :red_circle:
