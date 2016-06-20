@@ -12,6 +12,7 @@ $(document).ready(function() {
 	require("./site/graph-view-switch.js");
 	require("./site/onclick.js");
 	require("./site/opengraphfile.js");
+	require("./site/playgame.js");
 
 	// Load game
 	require("./game/main.js");

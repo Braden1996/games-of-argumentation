@@ -93,9 +93,13 @@ function parse_cytoscape_instance(cy) {
 	clear_log();
 
 	cy.on("tap", "node", function (evt) {
-		clear_discuss(evt.cy);
-		append_log("Discussing argument '" + evt.cyTarget.id() + "'");
-		discuss(evt.cy, evt.cyTarget);
+		if(evt.cy.play_game === true ) {
+			console.log("Start game");
+		} else {
+			clear_discuss(evt.cy);
+			append_log("Discussing argument '" + evt.cyTarget.id() + "'");
+			discuss(evt.cy, evt.cyTarget);
+		}
 	});
 	return cy;
 }
