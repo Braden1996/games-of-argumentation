@@ -19,14 +19,9 @@ function create_cytoscape_instance(container) {
 	return cy;
 }
 
-function on_graph_change(cy) {
-	cy.lab = labelling.get_labelling(cy);
-}
-
 function clear_graph(cy) {
 	cy.remove(cy.elements());
-
-	on_graph_change(cy);
+	cy.trigger("graphClear");
 }
 
 function set_graph(cy, graph) {
@@ -35,10 +30,11 @@ function set_graph(cy, graph) {
 	cy.add(graph);
 	cy.elements().layout({ name: "grid" });
 
-	on_graph_change(cy);
+	cy.trigger("graphSet");
 }
 
 module.exports = {
 	"create_cytoscape_instance": create_cytoscape_instance,
+	"clear_graph": clear_graph,
 	"set_graph": set_graph
 }

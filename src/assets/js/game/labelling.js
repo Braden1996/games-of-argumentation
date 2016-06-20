@@ -120,10 +120,22 @@ function hide_minmax(cy) {
 	}
 }
 
+function parse_cytoscape_instance(cy) {
+	let setLabelling = function(evt) {
+		evt.cy.lab = get_labelling(evt.cy)
+	}
+
+	cy.on("graphClear", setLabelling);
+	cy.on("graphSet", setLabelling);
+
+	return cy;
+}
+
 module.exports = {
 	"get_labelling": get_labelling,
 	"show_labelling": show_labelling,
 	"hide_labelling": hide_labelling,
 	"show_minmax": show_minmax,
-	"hide_minmax": hide_minmax
+	"hide_minmax": hide_minmax,
+	"parse_cytoscape_instance": parse_cytoscape_instance
 }
