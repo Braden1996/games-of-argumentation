@@ -38,6 +38,8 @@ function discuss(cy, node, discuss_class="discuss", highlight_class="highlight")
 }
 
 function clear_discuss(cy, discuss_class="discuss", highlight_class="highlight") {
+	cy.discuss_target = undefined;
+
 	discuss_log.clear_log();
 	for(let style_class of [discuss_class, highlight_class]) {
 		cy.nodes().removeClass(style_class);
@@ -49,11 +51,10 @@ function parse_cytoscape_instance(cy) {
 	clear_discuss(cy);
 
 	cy.on("tap", "node", function (evt) {
-		if(evt.cy.play_game !== true) {
+		if(!evt.cy.play_game) {
+			let last_discuss_target = evt.cy.discuss_target;
 			clear_discuss(evt.cy);
-			if(evt.cy.discuss_target === evt.cyTarget) {
-				evt.cy.discuss_target = undefined;
-			} else {
+			if(last_discuss_target !== evt.cyTarget) {
 				evt.cy.discuss_target = evt.cyTarget;
 				discuss_log.append_log("Discussing argument '" + evt.cyTarget.id() + "'");
 				discuss(evt.cy, evt.cyTarget);

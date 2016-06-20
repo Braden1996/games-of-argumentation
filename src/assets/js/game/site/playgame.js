@@ -1,3 +1,5 @@
+let discuss = require("../discuss.js")
+
 function parse_cytoscape_instance(cy) {
 	if(cy.play_game === undefined) {
 		cy.play_game = false;
@@ -15,6 +17,7 @@ function parse_cytoscape_instance(cy) {
 	update_dom(); // Inital update
 
 	$("[data-playgame]").click(function() {
+		discuss.clear_discuss(cy);
 		cy.play_game = !cy.play_game;
 		update_dom();
 	});
