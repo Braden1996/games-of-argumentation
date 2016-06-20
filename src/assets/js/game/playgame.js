@@ -87,7 +87,7 @@ function check_proponent_win(the_move, node, move_stack) {
 		let available_attackers = attackers.filter((i, ele) => {
 			return !(ele.hasClass(playgame_move_class["CB"]) || ele.hasClass(playgame_move_class["RETRACT"]));
 		});
-		return available_attackers.length > 0;
+		return available_attackers.length === 0;
 	}
 	return false;
 }
