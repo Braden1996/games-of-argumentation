@@ -1,5 +1,4 @@
 let cytoscape = require("cytoscape");
-let labelling = require("./labelling.js");
 let stylesheet = require("./stylesheet.js");
 
 function create_cytoscape_instance(container) {
