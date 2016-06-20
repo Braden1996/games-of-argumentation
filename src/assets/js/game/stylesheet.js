@@ -59,6 +59,22 @@ function build_stylesheet() {
 			.css({
 				"border-color": "#8e44ad"
 			})
+		.selector("node.htb")
+			.css({
+				"background-color": "lightgreen"
+			})
+		.selector("node.cb")
+			.css({
+				"background-color": "pink"
+			})
+		.selector("node.concede")
+			.css({
+				"background-color": "green"
+			})
+		.selector("node.retract")
+			.css({
+				"background-color": "red"
+			})
 		.selector("edge.highlight")
 			.css({
 				"line-color": "#8e44ad",
