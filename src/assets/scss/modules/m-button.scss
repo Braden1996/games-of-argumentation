@@ -41,6 +41,7 @@ $m-button__burgericon-color: $m-button-color-font;
 
 	&.m-button--switch {
 		> ul {
+			width: 100%;
 			padding: 0;
 
 			list-style-type: none;
