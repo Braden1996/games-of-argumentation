@@ -1,4 +1,4 @@
-let discuss_log = require("./site/discuss_log.js");
+let discuss_site = require("./site/discuss.js");
 
 function discuss(cy, node, discuss_class="discuss", highlight_class="highlight") {
 	let is_in = node.anySame(cy.lab["in"]);
@@ -28,7 +28,7 @@ function discuss(cy, node, discuss_class="discuss", highlight_class="highlight")
 	highlighted_edges.addClass(highlight_class);
 	highlighted_nodes.addClass(highlight_class);
 
-	discuss_log.create_log_msg(cy, node, highlighted_nodes);
+	discuss_site.create_log_msg(cy, node, highlighted_nodes);
 
 	// Discuss the newly highlighted nodes
 	for(let i = 0; i < highlighted_nodes.length; i++) {
@@ -40,7 +40,7 @@ function discuss(cy, node, discuss_class="discuss", highlight_class="highlight")
 function clear_discuss(cy, discuss_class="discuss", highlight_class="highlight") {
 	cy.discuss_target = undefined;
 
-	discuss_log.clear_log();
+	discuss_site.clear_log();
 	for(let style_class of [discuss_class, highlight_class]) {
 		cy.nodes().removeClass(style_class);
 		cy.edges().removeClass(style_class);
@@ -49,19 +49,13 @@ function clear_discuss(cy, discuss_class="discuss", highlight_class="highlight")
 
 function parse_cytoscape_instance(cy) {
 	clear_discuss(cy);
-
-	cy.on("tap", "node", function (evt) {
-		if(!evt.cy.game_play_playing) {
-			let last_discuss_target = evt.cy.discuss_target;
-			clear_discuss(evt.cy);
-			if(last_discuss_target !== evt.cyTarget) {
-				evt.cy.discuss_target = evt.cyTarget;
-				discuss_log.append_log("Discussing argument '" + evt.cyTarget.id() + "'");
-				discuss(evt.cy, evt.cyTarget);
-			}
+	cy = discuss_site.parse_cytoscape_instance(cy, (new_node, old_node) => {
+		clear_discuss(cy);
+		if(new_node !== old_node) {
+			cy.discuss_target = new_node;
+			discuss(cy, new_node);
 		}
 	});
-
 	return cy;
 }
 

@@ -44,8 +44,24 @@ function clear_log() {
 	$("[data-discuss-list]").empty();
 }
 
+function parse_cytoscape_instance(cy, discuss_callback) {
+	cy.on("tap", "node", (evt) => {
+		if(!evt.cy.game_play_playing) {
+			let old_node = evt.cy.discuss_target;
+			let new_node = evt.cyTarget
+
+			append_log("Discussing argument '" + new_node + "'");
+
+			discuss_callback(new_node, old_node);
+		}
+	});
+
+	return cy;
+}
+
 module.exports = {
 	"create_log_msg": create_log_msg,
 	"append_log": append_log,
-	"clear_log": clear_log
+	"clear_log": clear_log,
+	"parse_cytoscape_instance": parse_cytoscape_instance
 }
