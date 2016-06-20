@@ -49,12 +49,15 @@ function parse_cytoscape_instance(cy) {
 	clear_discuss(cy);
 
 	cy.on("tap", "node", function (evt) {
-		if(evt.cy.play_game === true ) {
-			console.log("Start game");
-		} else {
+		if(evt.cy.play_game !== true) {
 			clear_discuss(evt.cy);
-			discuss_log.append_log("Discussing argument '" + evt.cyTarget.id() + "'");
-			discuss(evt.cy, evt.cyTarget);
+			if(evt.cy.discuss_target === evt.cyTarget) {
+				evt.cy.discuss_target = undefined;
+			} else {
+				evt.cy.discuss_target = evt.cyTarget;
+				discuss_log.append_log("Discussing argument '" + evt.cyTarget.id() + "'");
+				discuss(evt.cy, evt.cyTarget);
+			}
 		}
 	});
 
