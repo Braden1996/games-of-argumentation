@@ -1,5 +1,3 @@
-let discuss = require("../discuss.js")
-
 function parse_cytoscape_instance(cy) {
 	cy.game_play_possible = false;
 	cy.game_play_playing = false;
