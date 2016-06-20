@@ -1,24 +1,33 @@
 let discuss = require("../discuss.js")
 
 function parse_cytoscape_instance(cy) {
-	if(cy.play_game === undefined) {
-		cy.play_game = false;
-	}
+	cy.game_play_possible = false;
+	cy.game_play_playing = false;
+	cy.game_play_preparing = false;
 
 	function update_dom() {
-		if(cy.play_game === true) {
-			$("[data-playgame-ifon]").show();
-			$("[data-playgame-ifoff]").hide();
+		if(cy.game_play_possible) {
+			$("[data-playgame='ifcanplay']").show();
+			if(cy.game_play_preparing) {
+				$("[data-playgame='ifpreparing']").show();
+			} else {
+				$("[data-playgame='ifpreparing']").hide();
+			}
 		} else {
-			$("[data-playgame-ifon]").hide();
-			$("[data-playgame-ifoff]").show();
+			$("[data-playgame='ifcanplay']").hide();
+			$("[data-playgame='ifpreparing']").hide();
 		}
 	}
 	update_dom(); // Inital update
 
-	$("[data-playgame]").click(function() {
-		discuss.clear_discuss(cy);
-		cy.play_game = !cy.play_game;
+	$("[data-playgame='start']").on("m-button-switched", (event, is_on) => {
+		cy.game_play_playing = !is_on;
+		cy.game_play_preparing = cy.game_play_playing1;
+		update_dom();
+	});
+
+	cy.on("graphSet", function(evt) {
+		cy.game_play_possible = true;
 		update_dom();
 	});
 }

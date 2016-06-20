@@ -51,7 +51,7 @@ function parse_cytoscape_instance(cy) {
 	clear_discuss(cy);
 
 	cy.on("tap", "node", function (evt) {
-		if(!evt.cy.play_game) {
+		if(!evt.cy.game_play_playing) {
 			let last_discuss_target = evt.cy.discuss_target;
 			clear_discuss(evt.cy);
 			if(last_discuss_target !== evt.cyTarget) {

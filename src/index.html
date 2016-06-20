@@ -52,12 +52,17 @@
 									<button class="m-button" data-onclick-redirect="opengraphfile">Open Graph File</button>
 									<input class="hide" type="file" data-opengraphfile data-onclick-id="opengraphfile" />
 								</li>
-								<li>
-									<button class="m-button" data-playgame data-opengraphfile-ifloaded>
-										<span data-playgame-ifoff>Play</span>
-										<span data-playgame-ifon>Stop</span>
-										Discussion Game
-									</button>
+								<li class="m-button m-button--switch" data-playgame="ifcanplay">
+									<ul>
+										<li class="m-button--switch__li--active" data-playgame="start">Play Discussion Game</li>
+										<li>Stop Discussion Game</li>
+									</ul>
+								</li>
+								<li class="m-button m-button--switch" data-playgame="ifpreparing">
+									<ul>
+										<li class="m-button--switch__li--active" data-playgame="proponent">Play as Proponent</li>
+										<li data-playgame="opponent">Play as Opponent</li>
+									</ul>
 								</li>
 							</ul>
 						</li>
