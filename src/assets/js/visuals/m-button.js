@@ -17,7 +17,7 @@ $(".m-button--switch").click(function() {
 	let items = button.children("ul").first().children("li");
 
 	if(items.length > 1) {
-		let current_item = button.find(".m-button--switch__icon--active");
+		let current_item = button.find(".m-button--switch__li--active");
 
 		let last_current = false;
 		let new_item = null;
@@ -34,9 +34,9 @@ $(".m-button--switch").click(function() {
 			new_item = items.first();
 		}
 
-		current_item.removeClass("m-button--switch__icon--active");
+		current_item.removeClass("m-button--switch__li--active");
 		current_item.trigger("m-button-switched", false);
-		new_item.addClass("m-button--switch__icon--active");
+		new_item.addClass("m-button--switch__li--active");
 		new_item.trigger("m-button-switched", true);
 	}
 });

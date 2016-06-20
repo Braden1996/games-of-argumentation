@@ -11,11 +11,10 @@ function parse_cytoscape_instance(cy) {
 		let graph = JSON.parse(graph_json);
 		cyto_helpers.set_graph(cy, graph);
 
-		if($("[data-js='graph-view-labelling']").hasClass("m-button--switch__icon--active")) {
+		if($("[data-js='graph-view-labelling']").hasClass("m-button--switch__li--active")) {
 			labelling.show_labelling(cy);
-		} else if($("[data-js='graph-view-minmax']").hasClass("m-button--switch__icon--active")) {
+		} else if($("[data-js='graph-view-minmax']").hasClass("m-button--switch__li--active")) {
 			labelling.show_minmax(cy);
-
 		}
 
 		if(!loaded_once) {
