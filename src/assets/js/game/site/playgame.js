@@ -22,7 +22,7 @@ function parse_cytoscape_instance(cy) {
 
 	$("[data-playgame='start']").on("m-button-switched", (event, is_on) => {
 		cy.game_play_playing = !is_on;
-		cy.game_play_preparing = cy.game_play_playing1;
+		cy.game_play_preparing = cy.game_play_playing;
 		update_dom();
 	});
 
