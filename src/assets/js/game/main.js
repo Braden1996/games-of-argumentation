@@ -3,7 +3,6 @@ let cyto_helpers = require("./cytoscape-helpers.js");
 let config = require("./config.js");
 
 // Load site
-let discuss_site = require("./site/discuss.js");
 let graphviewswitch = require("./site/graphviewswitch.js");
 let opengraphfile = require("./site/opengraphfile.js");
 let playgame = require("./site/playgame.js");
@@ -17,7 +16,6 @@ function ready() {
 	let cy = cyto_helpers.create_cytoscape_instance(cy_container);
 
 	// Parse cy to site
-	discuss_site.parse_cytoscape_instance(cy);
 	graphviewswitch.parse_cytoscape_instance(cy);
 	opengraphfile.parse_cytoscape_instance(cy);
 	playgame.parse_cytoscape_instance(cy);
