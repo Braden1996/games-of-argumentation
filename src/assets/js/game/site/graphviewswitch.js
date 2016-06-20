@@ -16,6 +16,8 @@ function parse_cytoscape_instance(cy) {
 			labelling.hide_minmax(cy);
 		}
 	});
+
+	return cy;
 }
 
 module.exports = {

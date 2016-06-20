@@ -18,6 +18,8 @@ function parse_cytoscape_instance(cy) {
 	$("[data-opengraphfile]").change(function() {
 		openFile(this, callback);
 	});
+
+	return cy;
 }
 
 module.exports = {

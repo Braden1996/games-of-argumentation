@@ -16,13 +16,15 @@ function ready() {
 	let cy = cyto_helpers.create_cytoscape_instance(cy_container);
 
 	// Parse cy to site
-	graphviewswitch.parse_cytoscape_instance(cy);
-	opengraphfile.parse_cytoscape_instance(cy);
+	cy = graphviewswitch.parse_cytoscape_instance(cy);
+	cy = opengraphfile.parse_cytoscape_instance(cy);
 
 	// Parse cy to rest of game
-	discuss.parse_cytoscape_instance(cy);
-	labelling.parse_cytoscape_instance(cy);
-	playgame.parse_cytoscape_instance(cy);
+	cy = discuss.parse_cytoscape_instance(cy);
+	cy = labelling.parse_cytoscape_instance(cy);
+	cy = playgame.parse_cytoscape_instance(cy);
+
+	return cy;
 }
 
 module.exports = {
