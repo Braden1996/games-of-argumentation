@@ -24,6 +24,7 @@ function start_game(cy) {
 function end_game(cy, end_game_callback) {
 	cy.game_play_playing = false;
 	cy.game_play_preparing = false;
+
 	end_game_callback(cy);
 
 	if(!$("[data-playgame='start']").hasClass("m-button--switch__li--active")){
@@ -54,7 +55,11 @@ function parse_cytoscape_instance(cy, move_callback, end_game_callback) {
 			}
 
 			let is_proponent = $("[data-playgame='proponent']").hasClass("m-button--switch__li--active");
-			move_callback(evt.cy, evt.cyTarget, is_proponent);
+			let valid = move_callback(evt.cyTarget, is_proponent);
+
+			if (!valid) {
+				alert("Invalid move!");
+			}
 		}
 	});
 

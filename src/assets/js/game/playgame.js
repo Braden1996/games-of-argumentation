@@ -1,141 +1,111 @@
+let rules = require("./logic/rules.js");
 let playgame_site = require("./site/playgame.js");
+let strategy = require("./logic/strategy.js");
 
-let playgame_move_enums = {
-	"HTB": 0,
-	"CB": 1,
-	"CONCEDE": 2,
-	"RETRACT": 3
-}
-
-let playgame_move_class = {
-	"HTB": "htb",
-	"CB": "cb",
-	"CONCEDE": "concede",
-	"RETRACT": "retract"
-}
-
-function which_move(node, is_proponent) {
-	let the_move = undefined;
-	if(is_proponent) {
-		the_move = playgame_move_enums["HTB"];
-	} else if(!is_proponent) {
-		if(node.hasClass(playgame_move_class["HTB"])) {
-			the_move = playgame_move_enums["CONCEDE"];
-		} else if(node.hasClass(playgame_move_class["CB"])) {
-			the_move = playgame_move_enums["RETRACT"];
-		} else if(!(node.hasClass(playgame_move_class["CONCEDE"]) || node.hasClass(playgame_move_class["RETRACT"]))) {
-			the_move = playgame_move_enums["CB"];
-		}
-	}
-	return the_move;
-}
+// Save a little bit of screenspace...
+let MOVES = rules.MOVES;
+let move_class = rules.move_class;
 
 function valid_move(the_move, node, move_stack) {
-	let last_node = move_stack.slice(-1)[0];
-
-	// If first move, check if HTB
-	if(last_node === undefined) {
-		return the_move === playgame_move_enums["HTB"];
-	} else {
-		// Check if the proposed node is also the last_node
-		if(node === last_node) {
-			if(node.hasClass(playgame_move_class["HTB"])) {  // Check if node is HTB and the_move is CONCEDE
-				return the_move === playgame_move_enums["CONCEDE"];
-			} else if(node.hasClass(playgame_move_class["CB"])) {  // Check if node is CB and the_move is RETRACT
-				return the_move === playgame_move_enums["RETRACT"];
-			}
-		} else {
-			// Check if the proposed node actually attacks the last node
-			let edge = node.edgesTo(last_node);
-			if(edge.length !== 0) {
-				if(the_move === playgame_move_enums["HTB"] && last_node.hasClass(playgame_move_class["CB"])){
-					return true;
-				} else if(the_move === playgame_move_enums["CB"] && last_node.hasClass(playgame_move_class["HTB"])) {
-					return true;
-				}
-			}
-		}
-	}
-
-	return false;
+	return (the_move !== undefined && node !== undefined) &&
+		((the_move === MOVES["HTB"] && rules.can_htb(node, move_stack)) ||
+		(the_move === MOVES["CB"] && rules.can_cb(node, move_stack)) ||
+		(the_move === MOVES["CONCEDE"] && rules.can_concede(node, move_stack)) ||
+		(the_move === MOVES["RETRACT"] && rules.can_retract(node, move_stack)));
 }
 
 function make_move(the_move, node, move_stack) {
-	if(the_move === playgame_move_enums["HTB"]) {
-		node.addClass(playgame_move_class["HTB"]);
-	} else if(the_move === playgame_move_enums["CB"]) {
-		node.addClass(playgame_move_class["CB"]);
-	} else if(the_move === playgame_move_enums["CONCEDE"]) {
-		node.removeClass(playgame_move_class["HTB"]);
-		node.addClass(playgame_move_class["CONCEDE"]);
-	} else if(the_move === playgame_move_enums["RETRACT"]) {
-		node.removeClass(playgame_move_class["CB"]);
-		node.addClass(playgame_move_class["RETRACT"]);
+	if(the_move === MOVES["HTB"]) {
+		node.addClass(move_class("HTB"));
+
+	} else if(the_move === MOVES["CB"]) {
+		node.addClass(move_class("CB"));
+
+	} else if(the_move === MOVES["CONCEDE"]) {
+		node.removeClass(move_class("HTB"));
+		node.addClass(move_class("CONCEDE"));
+
+	} else if(the_move === MOVES["RETRACT"]) {
+		node.removeClass(move_class("CB"));
+		node.addClass(move_class("RETRACT"));
 	}
 
 	let last_node = move_stack.slice(-1)[0];
-	if(node === last_node) {
-		move_stack.pop();
-	} else {
+	if(node !== last_node) {
 		move_stack.push(node);
 	}
 }
 
-function check_proponent_win(the_move, node, move_stack) {
-	if(the_move === playgame_move_enums["CONCEDE"]) {
-		let attackers = node.incomers().sources();
-		let available_attackers = attackers.filter((i, ele) => {
-			return !(ele.hasClass(playgame_move_class["CB"]) || ele.hasClass(playgame_move_class["RETRACT"]));
-		});
-		return available_attackers.length === 0;
+function strategy_move(cy, is_proponent) {
+	if (cy.game_play_stack.length !== 0) {
+		let [the_move, node] = strategy.get_move(cy.game_play_stack, is_proponent);
+		move(the_move, node, cy.game_play_stack);
 	}
-	return false;
 }
 
-function check_opponent_win(the_move, node, move_stack) {
-	if(the_move === playgame_move_enums["CB"]) {
-		let attackers = node.incomers().sources();
-		let available_attackers = attackers.filter((i, ele) => {
-			return !(ele.hasClass(playgame_move_class["HTB"]) || ele.hasClass(playgame_move_class["CONCEDE"]));
-		});
-		return available_attackers.length === 0;
-	}
-	return false;
-}
-
-function move(cy, node, is_proponent) {
-	let new_game = cy.playgame_stack === undefined;
+// Determine the move to make, given a particular node and a
+// boolean indicating if the proposer of the move is the
+// proponent.
+function specific_move(node, is_proponent) {
+	let cy = node.cy();
 
 	let the_move = undefined;
-	if(new_game) {
-		cy.playgame_stack = [];
-		the_move = playgame_move_enums["HTB"];
+	if (is_proponent || cy.game_play_stack.length === 0) {
+		the_move = MOVES["HTB"];
 	} else {
-		the_move = which_move(node, is_proponent);
+		if (rules.has_played(node, MOVES["HTB"])) {
+			the_move = MOVES["CONCEDE"];
+		} else if (rules.has_played(node, MOVES["CB"])) {
+			the_move = MOVES["RETRACT"];
+		} else if (!(rules.has_played(node, MOVES["CONCEDE"]) || rules.has_played(node, MOVES["RETRACT"]))) {
+			the_move = MOVES["CB"];
+		}
 	}
 
-	if(valid_move(the_move, node, cy.playgame_stack)) {
-		make_move(the_move, node, cy.playgame_stack);
+	return move(the_move, node, cy.game_play_stack);
+}
 
-		let proponent_win = check_proponent_win(the_move, node, cy.playgame_stack);
-		let opponent_win = check_opponent_win(the_move, node, cy.playgame_stack);
+function auto_move(node, is_proponent) {
+	let cy = node.cy();
 
-		if(proponent_win || opponent_win) {
-			if(!(proponent_win == is_proponent)) {
+	let new_game = cy.game_play_stack.length === 0;
+
+	let valid = specific_move(node, is_proponent);
+
+	if (valid && !new_game || is_proponent) {
+		strategy_move(cy, !is_proponent);
+	}
+
+	return valid;
+}
+
+function move(the_move, node, move_stack) {
+	if(valid_move(the_move, node, move_stack)) {
+		make_move(the_move, node, move_stack);
+
+		if (rules.check_termination(the_move, node, move_stack)) {
+			let proponent_win = rules.check_proponent_win(the_move, node, move_stack);
+			if(proponent_win) {
 				alert("Proponent Won!");
 			} else {
 				alert("Opponent Won!");
 			}
-			playgame_site.end_game(cy, end_game);
+			node.cy().game_play_gg = true;
 		}
+		return true;
+
 	} else {
-		alert("Invalid move!");
+		return false;
 	}
 }
 
 function end_game(cy) {
-	cy.playgame_stack = undefined;
-	cy.nodes().removeClass("htb cb concede retract");
+	cy.game_play_stack = [];
+	cy.game_play_gg = false;  // Is the game over?
+
+	Object.keys(rules.MOVE_CLASSES).forEach((key) => {
+		cy.nodes().removeClass(rules.MOVE_CLASSES[key]);
+	});
 }
 
 function parse_cytoscape_instance(cy) {
@@ -143,7 +113,9 @@ function parse_cytoscape_instance(cy) {
 	cy.game_play_playing = false;
 	cy.game_play_preparing = false;
 
-	cy = playgame_site.parse_cytoscape_instance(cy, move, end_game);
+	end_game(cy);
+
+	cy = playgame_site.parse_cytoscape_instance(cy, auto_move, end_game);
 
 	return cy;
 }

@@ -1,4 +1,4 @@
-let discuss_site = require("./site/discuss.js");
+let discuss_site = require("../site/discuss.js");
 
 function discuss(cy, node, discuss_class="discuss", highlight_class="highlight") {
 	let is_in = node.anySame(cy.lab["in"]);
