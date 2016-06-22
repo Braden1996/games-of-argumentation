@@ -1,4 +1,4 @@
-let labelling = require("../labelling.js");
+let labelling = require("../logic/labelling.js");
 let cyto_helpers = require("../cytoscape-helpers.js");
 let openFile = require("../util/openfile.js");
 

@@ -7,8 +7,8 @@ let graphviewswitch = require("./site/graphviewswitch.js");
 let opengraphfile = require("./site/opengraphfile.js");
 
 // Load rest of game
-let discuss = require("./discuss.js");
-let labelling = require("./labelling.js");
+let discuss = require("./logic/discuss.js");
+let labelling = require("./logic/labelling.js");
 let playgame = require("./playgame.js");
 
 function ready() {

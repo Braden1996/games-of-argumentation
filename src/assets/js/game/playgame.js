@@ -1,6 +1,5 @@
 let rules = require("./logic/rules.js");
 let playgame_site = require("./site/playgame.js");
-let strategy = require("./logic/strategy.js");
 
 // Save a little bit of screenspace...
 let MOVES = rules.MOVES;
@@ -36,10 +35,42 @@ function make_move(the_move, node, move_stack) {
 	}
 }
 
-function strategy_move(cy, is_proponent) {
-	if (cy.game_play_stack.length !== 0) {
-		let [the_move, node] = strategy.get_move(cy.game_play_stack, is_proponent);
-		move(the_move, node, cy.game_play_stack);
+function strategy_move(move_stack, is_proponent) {
+	if (move_stack.length !== 0) {
+		let the_move = undefined;
+		let node = undefined;
+
+		if (is_proponent) {
+			let htb_nodes = rules.find_htb(move_stack);
+			if (htb_nodes.length > 0) {
+				the_move = MOVES["HTB"];
+				node = rules.get_min_max_node(htb_nodes);
+			}
+		} else {
+			let last_node = move_stack.slice(-1)[0];
+			
+			// As we can only perform a CB move if no CONCEDE, or RETRACT,
+			// move is possible; we check it last.
+			let concede_nodes = rules.find_concede(move_stack);
+			if (concede_nodes.length > 0) {
+				the_move = MOVES["CONCEDE"];
+				node = rules.get_min_max_node(concede_nodes);
+			} else {
+				let retract_nodes = rules.find_retract(move_stack);
+				if (retract_nodes.length > 0) {
+					the_move = MOVES["RETRACT"];
+					node = rules.get_min_max_node(retract_nodes);
+				} else {
+					let cb_nodes = rules.find_cb(move_stack);
+					if (cb_nodes.length > 0) {
+						the_move = MOVES["CB"];
+						node = rules.get_min_max_node(cb_nodes);
+					}
+				}
+			}
+		}
+
+		return move(the_move, node, move_stack);
 	}
 }
 
@@ -50,7 +81,7 @@ function specific_move(node, is_proponent) {
 	let cy = node.cy();
 
 	let the_move = undefined;
-	if (is_proponent || cy.game_play_stack.length === 0) {
+	if (is_proponent) {
 		the_move = MOVES["HTB"];
 	} else {
 		if (rules.has_played(node, MOVES["HTB"])) {
@@ -65,15 +96,28 @@ function specific_move(node, is_proponent) {
 	return move(the_move, node, cy.game_play_stack);
 }
 
+function proponent_turn(move_stack) {
+	return move_stack.length === 0 || rules.find_htb(move_stack).length > 0;
+}
+
 function auto_move(node, is_proponent) {
 	let cy = node.cy();
+	let move_stack = cy.game_play_stack;
 
 	let new_game = cy.game_play_stack.length === 0;
 
-	let valid = specific_move(node, is_proponent);
+	let valid = false;
 
-	if (valid && !new_game || is_proponent) {
-		strategy_move(cy, !is_proponent);
+	if (new_game) {
+		valid = specific_move(node, true);
+	} else {
+		let proponents_turn = proponent_turn(move_stack);
+
+		if (proponents_turn === is_proponent) {
+			valid = specific_move(node, is_proponent);
+		} else {
+			valid = strategy_move(move_stack, !is_proponent);
+		}
 	}
 
 	return valid;

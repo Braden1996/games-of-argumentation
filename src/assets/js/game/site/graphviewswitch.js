@@ -1,4 +1,4 @@
-let labelling = require("../labelling.js");
+let labelling = require("../logic/labelling.js");
 
 function parse_cytoscape_instance(cy) {
 	$("[data-js='graph-view-labelling']").on("m-button-switched", function(event, is_on) {

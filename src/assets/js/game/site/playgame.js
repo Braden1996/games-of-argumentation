@@ -1,4 +1,4 @@
-let discuss = require("../discuss.js");
+let discuss = require("../logic/discuss.js");
 
 function update_dom(cy) {
 	if(cy.game_play_possible) {
