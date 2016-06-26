@@ -34,6 +34,14 @@ $m-buttongroup__li-margin: 4px;
 		> li {
 			width: 100%;
 
+			margin-left: 0;
+
+			margin-top: $m-buttongroup__li-margin;
+
+			&:first-child {
+				margin-top: 0;
+			}
+
 			&:not(.m-button) {
 				> .m-button {
 					width: 100%;
