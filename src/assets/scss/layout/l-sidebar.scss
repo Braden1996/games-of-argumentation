@@ -5,126 +5,144 @@
 // Config
 $l-sidebar-breakpoint-mobile-lg: $base-breakpoint-mobile-lg;
 $l-sidebar-breakpoint-tablet: $base-breakpoint-tablet;
-$l-sidebar-color-background: basecolor('background');
-$l-sidebar-border: 1px solid basecolor('foreground');
+
+$l-sidebar-margin: 16px;
+$l-sidebar-color-background: basecolor("background");
+$l-sidebar-border: 1px solid basecolor("foreground");
+
+$l-sidebar__header-font-family: "Raleway", sans-serif;
+$l-sidebar__header-font-size: 22pt;
+
 $l-sidebar__buttongroup-margin: 8px;
 $l-sidebar__buttongroup__button-width: 48px;
-$l-sidebar__copyright-margin: 15px;
+
 $l-sidebar-width: $l-sidebar-breakpoint-mobile-lg - $l-sidebar__buttongroup__button-width;
 
 // Main
 #l-sidebar {
-    position: absolute;
-    z-index: 100;
-    left: -100%;
+	position: absolute;
+	z-index: 100;
+	left: -100%;
 
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
+	display: flex;
+	flex-direction: column;
+	flex-wrap: nowrap;
 
-    width: 100%;
+	width: 100%;
 
-    transition: left $base-constant-transition ease-out;
+	transition: left $base-constant-transition ease-out;
 
-    background-color: $l-sidebar-color-background;
-    box-shadow: 5px 0 5px 0 rgba(0, 0, 0, .1);
+	background-color: $l-sidebar-color-background;
+	box-shadow: 5px 0 5px 0 rgba(0, 0, 0, .1);
 
-    @include breakpoint($l-sidebar-breakpoint-mobile-lg) {
-        left: -$l-sidebar-width;
+	@include breakpoint($l-sidebar-breakpoint-mobile-lg) {
+		left: -$l-sidebar-width;
 
-        max-width: $l-sidebar-width;
-    }
+		max-width: $l-sidebar-width;
+	}
 
-    // This class is toggled by a button.
-    // When active, the sidebar is made visible to the user.
-    &.m-button__target--active {
-        left: 0;
+	// This class is toggled by a button.
+	// When active, the sidebar is made visible to the user.
+	&.m-button__target--active {
+		left: 0;
 
-        > header {
-            > #l-sidebar__buttongroup {
-                position: initial;
+		> header {
+			> h1 {
+				margin-bottom: 0;
 
-                margin-top: $l-sidebar__buttongroup-margin;
-                margin-left: $l-sidebar__buttongroup-margin;
+				@include breakpoint($l-sidebar-breakpoint-mobile-lg) {
+					margin-bottom: $l-sidebar-margin;
+				}
+			}
 
-                text-align: center;
+			> #l-sidebar__buttongroup {
+				position: initial;
 
-                @include breakpoint($l-sidebar-breakpoint-mobile-lg) {
-                    position: fixed;
-                    left: $l-sidebar-width;
+				text-align: center;
 
-                    margin-top: 0;
-                    margin-left: 0;
-                }
+				@include breakpoint($l-sidebar-width) {
+					position: fixed;
+					left: $l-sidebar-width;
 
-                @include breakpoint($l-sidebar-breakpoint-tablet) {
-                    left: $l-sidebar__buttongroup-margin + $l-sidebar-width;
+					margin-top: $l-sidebar__buttongroup-margin;
+				}
 
-                    > li {
-                        float: left;
-                    }
-                }
+				@include breakpoint($l-sidebar-width + 2*$l-sidebar__buttongroup__button-width + $l-sidebar__buttongroup-margin) {
+					margin-left: $l-sidebar__buttongroup-margin;
+					margin-right: $l-sidebar__buttongroup-margin;
 
-                > li {
-                    float: none;
+					> li {
+						float: left;
+					}
+				}
 
-                    vertical-align: top;
-                }
-            }
-        }
-    }
+				> li {
+					float: none;
 
-    > header, > main, > footer {
-        margin: 0 $l-sidebar__copyright-margin;
-    }
+					vertical-align: top;
+				}
+			}
+		}
+	}
 
-    > header, > footer {
-        flex-shrink: 0;
-    }
+	> header, > main, > footer {
+		margin: 0 $l-sidebar-margin;
+	}
 
-    > main {
-        overflow: hidden;
-        flex-grow: 1;
-    }
+	> header, > footer {
+		flex-shrink: 0;
+	}
 
-    > header {
-        border-bottom: $l-sidebar-border;
+	> main {
+		overflow: hidden;
+		flex-grow: 1;
+	}
 
-        > h1 {
-            margin-bottom: 0;
+	> header {
+		border-bottom: $l-sidebar-border;
 
-            text-align: center;
-        }
+		> h1 {
+			font-size: $l-sidebar__header-font-size;
+			font-family: $l-sidebar__header-font-family;
 
-        > #l-sidebar__buttongroup {
-            position: fixed;
-            z-index: 1;
-            top: $l-sidebar__buttongroup-margin;
-            left: $l-sidebar__buttongroup-margin;
+			margin: $l-sidebar-margin 0;
 
-            transition: left $base-constant-transition ease-out;
-        }
-    }
+			text-align: center;
+		}
 
-    > main {
-        display: flex;
-        flex-direction: column;
-        flex-wrap: nowrap;
 
-        > .m-tablist__navlist {
-            flex-shrink: 0;
-        }
+		> #l-sidebar__buttongroup {
+			position: fixed;
+			z-index: 1;
+			left: 0;
+			top: 0;
 
-        > .m-tablist__panelist {
-            overflow: auto;
+			margin-top: $l-sidebar__buttongroup-margin;
+			margin-left: $l-sidebar__buttongroup-margin;
 
-            flex-grow: 1;
-        }
-    }
+			transition: left $base-constant-transition ease-out;
+		}
+	}
 
-    > footer {
-        max-width: 100%;
+	> main {
+		display: flex;
+		flex-direction: column;
+		flex-wrap: nowrap;
 
-        border-top: $l-sidebar-border;
-    }
+		> .m-tablist__navlist {
+			flex-shrink: 0;
+		}
+
+		> .m-tablist__panelist {
+			overflow: auto;
+
+			flex-grow: 1;
+		}
+	}
+
+	> footer {
+		max-width: 100%;
+
+		border-top: $l-sidebar-border;
+	}
 }

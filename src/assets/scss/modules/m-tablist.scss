@@ -5,10 +5,11 @@
 // Config
 $m-tablist__navlist-min-width: 64px;
 $m-tablist__navlist-padding: 8px;
-$m-tablist__navlist-color-background: basecolor("primary");
-$m-tablist__navlist-color-background--active: basecolor("accent");
+$m-tablist__navlist-color-background: basecolor("background", "light");
+$m-tablist__navlist-color-background--hover: basecolor("background", "lighter");
+$m-tablist__navlist-color-background--active: basecolor("primary");
 
-$m-tablist__panelist__li-padding: 8px;
+$m-tablist__panelist__li-padding: 12px;
 
 // Main
 .m-tablist {
@@ -35,6 +36,10 @@ $m-tablist__panelist__li-padding: 8px;
 			text-align: center;
 
 			background-color: $m-tablist__navlist-color-background;
+
+			&:hover {
+				background-color: $m-tablist__navlist-color-background--hover;
+			}
 
 			&.m-tablist__navlist--active {
 				background-color: $m-tablist__navlist-color-background--active;

@@ -1,41 +1,34 @@
 // Colors
 $base-colors: (
-  "primary": (
-    "base": #434a54,
-    "light": lighten(#434a54, 10%),
-    "dark": #292f33
-  ),
-  "accent": (
-    "base": #1abc9c,
-    "light": lighten(#1abc9c, 10%),
-    "dark": #16a085
-  ),
-  "secondary": (
-    "base": #e6567a,
-    "light": lighten(#e6567a, 10%),
-    "dark": #bf4a67
-  ),
-  "foreground": (
-    "base": #839496,
-    "light": #93a1a1,
-    "dark": #586e75,
-    "darker": #073642
-  ),
-  "background": (
-    "base": #073642,
-    "light": lighten(#073642, 10%),
-    "dark": #002b36
-  ),
-  "success": (
-    "base": #2ecc71,
-    "light": #41c87a,
-    "dark": #27ae60
-  ),
+	"primary": (
+		"base": #1abc9c,
+		"light": lighten(#1abc9c, 10%),
+		"dark": #16a085
+	),
+	"foreground": (
+		"base": #ecf0f1,
+		"light": #fafafa,
+		"dark": #bdc3c7
+	),
+	"background": (
+		"base": #2b2b2b,
+		"light": #2d2d32,
+		"lighter": lighten(#2d2d32, 10%),
+		"dark": #262626
+	),
+	"success": (
+		"base": #2ecc71,
+		"light": lighten(#2ecc71, 10%),
+		"dark": #27ae60
+	)
 );
+
+// Fonts
+@import "https://fonts.googleapis.com/css?family=Raleway:700|Lato";
 
 // Constants
 $base-constant-golden: 1.618;
-$base-constant-transition: 0.32s;
+$base-constant-transition: .32s;
 
 // Breakpoints
 $base-breakpoint-mobile: 320px;
