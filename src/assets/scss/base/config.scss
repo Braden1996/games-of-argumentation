@@ -1,9 +1,9 @@
 // Colors
 $base-colors: (
 	"primary": (
-		"base": #1abc9c,
-		"light": lighten(#1abc9c, 10%),
-		"dark": #16a085
+		"base": #237fbc,
+		"light": #2497e3,
+		"dark": #17758e
 	),
 	"foreground": (
 		"base": #ecf0f1,
@@ -11,10 +11,10 @@ $base-colors: (
 		"dark": #bdc3c7
 	),
 	"background": (
-		"base": #2b2b2b,
-		"light": #2d2d32,
-		"lighter": lighten(#2d2d32, 10%),
-		"dark": #262626
+		"base": #232426,
+		"light": #2a2b2d,
+		"lighter": #2d2d32,
+		"dark": #1d1f21
 	),
 	"success": (
 		"base": #2ecc71,

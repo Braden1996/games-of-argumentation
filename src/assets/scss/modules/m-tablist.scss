@@ -3,11 +3,19 @@
  Description: An area with tabbed content.
 */
 // Config
-$m-tablist__navlist-min-width: 64px;
-$m-tablist__navlist-padding: 8px;
-$m-tablist__navlist-color-background: basecolor("background", "light");
-$m-tablist__navlist-color-background--hover: basecolor("background", "lighter");
-$m-tablist__navlist-color-background--active: basecolor("primary");
+
+$m-tablist__navlist__li-min-width: 64px;
+$m-tablist__navlist__li-padding: 8px;
+
+$m-tablist__navlist__li-color-font: basecolor("foreground", "dark");
+$m-tablist__navlist__li-color-font--hover: basecolor("foreground");
+$m-tablist__navlist__li-color-font--active: basecolor("foreground");
+
+$m-tablist__navlist__li-color-background: basecolor("background", "light");
+$m-tablist__navlist__li-color-background--hover: basecolor("background", "lighter");
+$m-tablist__navlist__li-color-background--active: basecolor("background", "lighter");
+
+$m-tablist__navlist__li-border-bottom--active: 2px solid basecolor("primary");
 
 $m-tablist__panelist__li-padding: 12px;
 
@@ -29,20 +37,24 @@ $m-tablist__panelist__li-padding: 12px;
 			float: left;
 			flex-grow: 1;
 
-			min-width: $m-tablist__navlist-min-width;
-			padding: $m-tablist__navlist-padding;
+			min-width: $m-tablist__navlist__li-min-width;
+			padding: $m-tablist__navlist__li-padding;
 
 			cursor: pointer;
 			text-align: center;
 
-			background-color: $m-tablist__navlist-color-background;
+			color: $m-tablist__navlist__li-color-font;
+			background-color: $m-tablist__navlist__li-color-background;
 
 			&:hover {
-				background-color: $m-tablist__navlist-color-background--hover;
+				color: $m-tablist__navlist__li-color-font--hover;
+				background-color: $m-tablist__navlist__li-color-background--hover;
 			}
 
 			&.m-tablist__navlist--active {
-				background-color: $m-tablist__navlist-color-background--active;
+				color: $m-tablist__navlist__li-color-font--active;
+				border-bottom: $m-tablist__navlist__li-border-bottom--active;
+				background-color: $m-tablist__navlist__li-color-background--active;
 			}
 		}
 	}

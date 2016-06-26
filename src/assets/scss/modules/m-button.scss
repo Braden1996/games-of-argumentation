@@ -5,15 +5,15 @@
 // Config
 $m-button-padding: 12px;
 
-$m-button-color-font: basecolor("primary");
+$m-button-color-font: basecolor("foreground", "dark");
 $m-button-color-background: basecolor("background", "light");
 $m-button-color-background--hover: basecolor("background", "lighter");
 $m-button-color-background--focus: basecolor("background", "lighter");
 
-$m-button__icon-color: basecolor("primary");
 $m-button__icon-width: $l-sidebar__buttongroup__button-width - 2*$m-button-padding;
 $m-button__icon-height: $m-button__icon-width;
 $m-button__icon-font-size: 24px;
+$m-button__icon-color: basecolor("foreground", "dark");
 
 $m-button__burgericon-width: $m-button__icon-width;
 $m-button__burgericon-height: floor(($m-button__icon-height) / 5);
