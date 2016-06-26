@@ -8,7 +8,7 @@ $l-sidebar-breakpoint-tablet: $base-breakpoint-tablet;
 
 $l-sidebar-margin: 16px;
 $l-sidebar-color-background: basecolor("background");
-$l-sidebar-border: 1px solid basecolor("foreground");
+$l-sidebar-border: 1px solid basecolor("foreground", "darker");
 
 $l-sidebar__header-font-family: "Raleway", sans-serif;
 $l-sidebar__header-font-size: 22pt;
