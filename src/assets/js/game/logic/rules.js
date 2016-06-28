@@ -48,9 +48,7 @@ function getRoundState(move_stack) {
 		}
 
 	} else if (hasPlayed(last_node, MOVES["CONCEDE"])) {
-		console.log("Cunt:", last_node.id(), move_stack[0].id(), last_node.same(move_stack[0]));
 		if (last_node.same(move_stack[0])) {
-			console.log("Fucker");
 			return ROUND_STATES["PROPONENT_WIN"];
 		}
 	}
