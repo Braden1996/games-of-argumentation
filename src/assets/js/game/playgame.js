@@ -6,6 +6,23 @@ let MOVES = rules.MOVES;
 let getMoveClass = rules.getMoveClass;
 let ROUND_STATES = rules.ROUND_STATES;
 
+// We need our own 'min' function as Cytoscape JS internally uses 'Infinity',
+// which doesn't work as our 'undec' nodes have a 'min_max_numbering' of 'Infinity'.
+function getMinNode(nodes) {
+	if (nodes.length === 0) {
+		return undefined;
+	} else {
+		let last_node = nodes[0];
+		for(let i = 1; i < nodes.length; i++ ){
+			var node = nodes[i];
+			if (node.data("min_max_numbering") < last_node.data("min_max_numbering")) {
+				last_node = node;
+			}
+		}
+		return last_node
+	}
+}
+
 // Use the min-max numbering to intelligently determine the next move.
 function strategyMove(move_stack, is_proponent) {
 	if (move_stack.length > 0) {
@@ -14,9 +31,10 @@ function strategyMove(move_stack, is_proponent) {
 
 		if (is_proponent) {
 			let htb_nodes = rules.findMoveNodes(MOVES["HTB"], move_stack);
+			console.log("HTB:", htb_nodes);
 			if (htb_nodes.nonempty()) {
 				the_move = MOVES["HTB"];
-				node = htb_nodes.min((ele, i, eles) => ele.data("min_max_numbering")).ele;
+				node = getMinNode(htb_nodes);
 			}
 		} else {
 			let last_node = move_stack.slice(-1)[0];
@@ -26,21 +44,26 @@ function strategyMove(move_stack, is_proponent) {
 			let concede_nodes = rules.findMoveNodes(MOVES["CONCEDE"], move_stack);
 			if (concede_nodes.nonempty()) {
 				the_move = MOVES["CONCEDE"];
-				node = concede_nodes.min((ele, i, eles) => ele.data("min_max_numbering")).ele;
+				node = getMinNode(concede_nodes);
 			} else {
 				let retract_nodes = rules.findMoveNodes(MOVES["RETRACT"], move_stack);
 				if (retract_nodes.nonempty()) {
 					the_move = MOVES["RETRACT"];
-					node = retract_nodes.min((ele, i, eles) => ele.data("min_max_numbering")).ele;
+					node = getMinNode(retract_nodes);
 				} else {
 					let cb_nodes = rules.findMoveNodes(MOVES["CB"], move_stack);
+						console.log("Shoper");
 					if (cb_nodes.nonempty()) {
+						console.log("Pooper", cb_nodes, cb_nodes[0].id());
 						the_move = MOVES["CB"];
-						node = cb_nodes.min((ele, i, eles) => ele.data("min_max_numbering")).ele;
+						node = getMinNode(cb_nodes);
+						console.log(cb_nodes.min((ele, i, eles) => ele.data("min_max_numbering")));
 					}
 				}
 			}
 		}
+
+		console.log(the_move, node);
 
 		let move_valid = move(the_move, node);
 		return {"move": the_move, "node": node, "valid": move_valid, "is_proponent": is_proponent};
