@@ -79,6 +79,7 @@ function get_labelling(cy) {
 
 		// All nodes that aren't 'in' or 'out' must be 'undec'
 		lab["undec"] = nodes.diff(lab["in"].union(lab["out"]))["left"];
+		lab["undec"].data("min_max_numbering", Infinity);
 	}
 
 	return lab;

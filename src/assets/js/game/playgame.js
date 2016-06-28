@@ -3,149 +3,151 @@ let playgame_site = require("./site/playgame.js");
 
 // Save a little bit of screenspace...
 let MOVES = rules.MOVES;
-let move_class = rules.move_class;
+let getMoveClass = rules.getMoveClass;
+let ROUND_STATES = rules.ROUND_STATES;
 
-function valid_move(the_move, node, move_stack) {
-	return (the_move !== undefined && node !== undefined) &&
-		((the_move === MOVES["HTB"] && rules.can_htb(node, move_stack)) ||
-		(the_move === MOVES["CB"] && rules.can_cb(node, move_stack)) ||
-		(the_move === MOVES["CONCEDE"] && rules.can_concede(node, move_stack)) ||
-		(the_move === MOVES["RETRACT"] && rules.can_retract(node, move_stack)));
-}
-
-function make_move(the_move, node, move_stack) {
-	if(the_move === MOVES["HTB"]) {
-		node.addClass(move_class("HTB"));
-
-	} else if(the_move === MOVES["CB"]) {
-		node.addClass(move_class("CB"));
-
-	} else if(the_move === MOVES["CONCEDE"]) {
-		node.removeClass(move_class("HTB"));
-		node.addClass(move_class("CONCEDE"));
-
-	} else if(the_move === MOVES["RETRACT"]) {
-		node.removeClass(move_class("CB"));
-		node.addClass(move_class("RETRACT"));
-	}
-
-	let last_node = move_stack.slice(-1)[0];
-	if(node !== last_node) {
-		move_stack.push(node);
-	}
-}
-
-function strategy_move(move_stack, is_proponent) {
-	if (move_stack.length !== 0) {
+// Use the min-max numbering to intelligently determine the next move.
+function strategyMove(move_stack, is_proponent) {
+	if (move_stack.length > 0) {
 		let the_move = undefined;
 		let node = undefined;
 
 		if (is_proponent) {
-			let htb_nodes = rules.find_htb(move_stack);
-			if (htb_nodes.length > 0) {
+			let htb_nodes = rules.findMoveNodes(MOVES["HTB"], move_stack);
+			if (htb_nodes.nonempty()) {
 				the_move = MOVES["HTB"];
-				node = rules.get_min_max_node(htb_nodes);
+				node = htb_nodes.min((ele, i, eles) => ele.data("min_max_numbering")).ele;
 			}
 		} else {
 			let last_node = move_stack.slice(-1)[0];
 			
 			// As we can only perform a CB move if no CONCEDE, or RETRACT,
 			// move is possible; we check it last.
-			let concede_nodes = rules.find_concede(move_stack);
-			if (concede_nodes.length > 0) {
+			let concede_nodes = rules.findMoveNodes(MOVES["CONCEDE"], move_stack);
+			if (concede_nodes.nonempty()) {
 				the_move = MOVES["CONCEDE"];
-				node = rules.get_min_max_node(concede_nodes);
+				node = concede_nodes.min((ele, i, eles) => ele.data("min_max_numbering")).ele;
 			} else {
-				let retract_nodes = rules.find_retract(move_stack);
-				if (retract_nodes.length > 0) {
+				let retract_nodes = rules.findMoveNodes(MOVES["RETRACT"], move_stack);
+				if (retract_nodes.nonempty()) {
 					the_move = MOVES["RETRACT"];
-					node = rules.get_min_max_node(retract_nodes);
+					node = retract_nodes.min((ele, i, eles) => ele.data("min_max_numbering")).ele;
 				} else {
-					let cb_nodes = rules.find_cb(move_stack);
-					if (cb_nodes.length > 0) {
+					let cb_nodes = rules.findMoveNodes(MOVES["CB"], move_stack);
+					if (cb_nodes.nonempty()) {
 						the_move = MOVES["CB"];
-						node = rules.get_min_max_node(cb_nodes);
+						node = cb_nodes.min((ele, i, eles) => ele.data("min_max_numbering")).ele;
 					}
 				}
 			}
 		}
 
-		return move(the_move, node, move_stack);
+		let move_valid = move(the_move, node);
+		return {"move": the_move, "node": node, "valid": move_valid, "is_proponent": is_proponent};
 	}
+
+	return undefined;
 }
 
 // Determine the move to make, given a particular node and a
 // boolean indicating if the proposer of the move is the
 // proponent.
-function specific_move(node, is_proponent) {
-	let cy = node.cy();
-
+function easyMove(node, is_proponent) {
 	let the_move = undefined;
 	if (is_proponent) {
 		the_move = MOVES["HTB"];
 	} else {
-		if (rules.has_played(node, MOVES["HTB"])) {
+		if (rules.hasPlayed(node, MOVES["HTB"])) {
 			the_move = MOVES["CONCEDE"];
-		} else if (rules.has_played(node, MOVES["CB"])) {
+		} else if (rules.hasPlayed(node, MOVES["CB"])) {
 			the_move = MOVES["RETRACT"];
-		} else if (!(rules.has_played(node, MOVES["CONCEDE"]) || rules.has_played(node, MOVES["RETRACT"]))) {
+		} else if (!(rules.hasPlayed(node, MOVES["CONCEDE"]) || rules.hasPlayed(node, MOVES["RETRACT"]))) {
 			the_move = MOVES["CB"];
 		}
 	}
 
-	return move(the_move, node, cy.game_play_stack);
+	let move_valid = move(the_move, node);
+	return {"move": the_move, "node": node, "valid": move_valid, "is_proponent": is_proponent};
 }
 
-function proponent_turn(move_stack) {
-	return move_stack.length === 0 || rules.find_htb(move_stack).length > 0;
+// Attempt to make the given move on the given node.
+function specifcMove(the_move, node, is_proponent) {
+	let move_valid = move(the_move, node);
+	return {"move": the_move, "node": node, "valid": move_valid, "is_proponent": is_proponent};
 }
 
-function auto_move(node, is_proponent) {
+function autoMove(node, is_proponent) {
+	let move_stack = node.cy().game_play_stack;
+
+	// Check if new game.
+	if (move_stack.length === 0) {
+		return easyMove(node, true);
+	} else {
+		if (rules.isProponentsTurn(move_stack) === is_proponent) {
+			return easyMove(node, is_proponent);
+		} else {
+			return strategyMove(move_stack, !is_proponent);
+		}
+	}
+}
+
+// Perform the given move on the given node.
+// This function does not check if the move is valid.
+function makeMove(the_move, node) {
 	let cy = node.cy();
 	let move_stack = cy.game_play_stack;
 
-	let new_game = cy.game_play_stack.length === 0;
+	if(the_move === MOVES["HTB"]) {
+		node.addClass(getMoveClass("HTB"));
 
-	let valid = false;
+	} else if(the_move === MOVES["CB"]) {
+		node.addClass(getMoveClass("CB"));
 
-	if (new_game) {
-		valid = specific_move(node, true);
-	} else {
-		let proponents_turn = proponent_turn(move_stack);
+	} else if(the_move === MOVES["CONCEDE"]) {
+		node.removeClass(getMoveClass("HTB"));
+		node.addClass(getMoveClass("CONCEDE"));
 
-		if (proponents_turn === is_proponent) {
-			valid = specific_move(node, is_proponent);
-		} else {
-			valid = strategy_move(move_stack, !is_proponent);
-		}
+	} else if(the_move === MOVES["RETRACT"]) {
+		node.removeClass(getMoveClass("CB"));
+		node.addClass(getMoveClass("RETRACT"));
 	}
 
-	return valid;
+	let last_node = move_stack.slice(-1)[0];
+	if(node !== last_node) {
+		move_stack.push(node);
+		cy.game_play_stack = move_stack;
+	}
 }
 
-function move(the_move, node, move_stack) {
-	if(valid_move(the_move, node, move_stack)) {
-		make_move(the_move, node, move_stack);
+// Check if the given move is valid. If so, perform the move
+// and update the round state.
+function move(the_move, node) {
+	if (rules.isValidMove(the_move, node)) {
+		makeMove(the_move, node);
 
-		if (rules.check_termination(the_move, node, move_stack)) {
-			let proponent_win = rules.check_proponent_win(the_move, node, move_stack);
-			if(proponent_win) {
-				alert("Proponent Won!");
-			} else {
-				alert("Opponent Won!");
-			}
-			node.cy().game_play_gg = true;
-		}
+		let cy = node.cy();
+		let move_stack = cy.game_play_stack;
+		cy.game_play_state = rules.getRoundState(move_stack);
+
 		return true;
-
 	} else {
 		return false;
 	}
 }
 
-function end_game(cy) {
+// Initiate the game's start variables.
+function startGame(cy) {
+	cy.game_play_playing = true;
+	cy.game_play_preparing = true;
+
 	cy.game_play_stack = [];
-	cy.game_play_gg = false;  // Is the game over?
+	cy.game_play_state = ROUND_STATES["PLAYING"];  // Current round state
+}
+
+// Reset the game's start variables.
+function endGame(cy) {
+	cy.game_play_playing = false;
+	cy.game_play_preparing = false;
 
 	Object.keys(rules.MOVE_CLASSES).forEach((key) => {
 		cy.nodes().removeClass(rules.MOVE_CLASSES[key]);
@@ -153,13 +155,17 @@ function end_game(cy) {
 }
 
 function parse_cytoscape_instance(cy) {
-	cy.game_play_possible = false;
-	cy.game_play_playing = false;
-	cy.game_play_preparing = false;
+	endGame(cy);
 
-	end_game(cy);
+	let playgame_exports = {
+		"move": specifcMove,
+		"autoMove": autoMove,
+		"strategyMove": strategyMove,
+		"startGameCallback": startGame,
+		"endGameCallback": endGame
+	}
 
-	cy = playgame_site.parse_cytoscape_instance(cy, auto_move, end_game);
+	cy = playgame_site.parse_cytoscape_instance(cy, playgame_exports);
 
 	return cy;
 }

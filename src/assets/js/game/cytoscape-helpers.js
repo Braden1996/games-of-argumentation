@@ -50,9 +50,14 @@ function get_cy(element) {
 	return cy;
 }
 
+function attacks(attacker, victim) {
+	return attacker.edgesTo(victim).nonempty();
+}
+
 module.exports = {
 	"create_cytoscape_instance": create_cytoscape_instance,
 	"clear_graph": clear_graph,
 	"set_graph": set_graph,
-	"get_cy": get_cy
+	"get_cy": get_cy,
+	"attacks": attacks
 }

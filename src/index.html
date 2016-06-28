@@ -58,10 +58,21 @@
 							</ul>
 						</li>
 						<li data-tablist-id="log">
-							<b>Discussion of an Argument:</b><br />
-							<span data-discuss-empty>To discuss the labelling of a particular argument, please select it on the graph.</span>
-							<ul data-discuss-list>
-							</ul>
+							<div data-playgame="ifplaying">
+								<b>Played Moves:</b><br />
+								<span data-playgame="ifpreparing">Please initiate the game by playing a 'HTB' move.</span>
+								<ol data-playgame-movelist>
+								</ol>
+								<br />
+								<label>Move: <input type="text" data-playgame-moveinput /></label>
+								<button class="m-button" data-playgame="!ifpreparing" data-playgame-moveai>Take AI Turn</button>
+							</div>
+							<div data-playgame="!ifplaying">
+								<b>Discussion of an Argument:</b><br />
+								<span data-discuss-empty>To discuss the labelling of a particular argument, please select it on the graph.</span>
+								<ul data-discuss-list>
+								</ul>
+							</div>
 						</li>
 					</ul>
 				</main>
