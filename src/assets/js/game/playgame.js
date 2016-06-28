@@ -1,3 +1,4 @@
+let cyto_helpers = require("./cytoscape-helpers.js");
 let rules = require("./logic/rules.js");
 let playgame_site = require("./site/playgame.js");
 
@@ -24,46 +25,40 @@ function getMinNode(nodes) {
 }
 
 // Use the min-max numbering to intelligently determine the next move.
-function strategyMove(move_stack, is_proponent) {
-	if (move_stack.length > 0) {
+function strategyMove(node_stack, is_proponent) {
+	if (node_stack.length > 0) {
 		let the_move = undefined;
 		let node = undefined;
 
 		if (is_proponent) {
-			let htb_nodes = rules.findMoveNodes(MOVES["HTB"], move_stack);
-			console.log("HTB:", htb_nodes);
+			let htb_nodes = rules.findMoveNodes(MOVES["HTB"], node_stack);
 			if (htb_nodes.nonempty()) {
 				the_move = MOVES["HTB"];
 				node = getMinNode(htb_nodes);
 			}
 		} else {
-			let last_node = move_stack.slice(-1)[0];
+			let last_node = node_stack.slice(-1)[0];
 			
 			// As we can only perform a CB move if no CONCEDE, or RETRACT,
 			// move is possible; we check it last.
-			let concede_nodes = rules.findMoveNodes(MOVES["CONCEDE"], move_stack);
+			let concede_nodes = rules.findMoveNodes(MOVES["CONCEDE"], node_stack);
 			if (concede_nodes.nonempty()) {
 				the_move = MOVES["CONCEDE"];
 				node = getMinNode(concede_nodes);
 			} else {
-				let retract_nodes = rules.findMoveNodes(MOVES["RETRACT"], move_stack);
+				let retract_nodes = rules.findMoveNodes(MOVES["RETRACT"], node_stack);
 				if (retract_nodes.nonempty()) {
 					the_move = MOVES["RETRACT"];
 					node = getMinNode(retract_nodes);
 				} else {
-					let cb_nodes = rules.findMoveNodes(MOVES["CB"], move_stack);
-						console.log("Shoper");
+					let cb_nodes = rules.findMoveNodes(MOVES["CB"], node_stack);
 					if (cb_nodes.nonempty()) {
-						console.log("Pooper", cb_nodes, cb_nodes[0].id());
 						the_move = MOVES["CB"];
 						node = getMinNode(cb_nodes);
-						console.log(cb_nodes.min((ele, i, eles) => ele.data("min_max_numbering")));
 					}
 				}
 			}
 		}
-
-		console.log(the_move, node);
 
 		let move_valid = move(the_move, node);
 		return {"move": the_move, "node": node, "valid": move_valid, "is_proponent": is_proponent};
@@ -100,16 +95,17 @@ function specifcMove(the_move, node, is_proponent) {
 }
 
 function autoMove(node, is_proponent) {
-	let move_stack = node.cy().game_play_stack;
+	let cy =  cyto_helpers.get_cy(node);
+	let node_stack = cy.game_play_node_stack;
 
 	// Check if new game.
-	if (move_stack.length === 0) {
+	if (node_stack.length === 0) {
 		return easyMove(node, true);
 	} else {
-		if (rules.isProponentsTurn(move_stack) === is_proponent) {
+		if (rules.isProponentsTurn(node_stack) === is_proponent) {
 			return easyMove(node, is_proponent);
 		} else {
-			return strategyMove(move_stack, !is_proponent);
+			return strategyMove(node_stack, !is_proponent);
 		}
 	}
 }
@@ -117,8 +113,9 @@ function autoMove(node, is_proponent) {
 // Perform the given move on the given node.
 // This function does not check if the move is valid.
 function makeMove(the_move, node) {
-	let cy = node.cy();
-	let move_stack = cy.game_play_stack;
+	let cy =  cyto_helpers.get_cy(node);
+	let node_stack = cy.game_play_node_stack;
+	let move_stack = cy.game_play_move_stack;
 
 	if(the_move === MOVES["HTB"]) {
 		node.addClass(getMoveClass("HTB"));
@@ -135,24 +132,28 @@ function makeMove(the_move, node) {
 		node.addClass(getMoveClass("RETRACT"));
 	}
 
-	let last_node = move_stack.slice(-1)[0];
-	if(node !== last_node) {
-		move_stack.push(node);
-		cy.game_play_stack = move_stack;
-	}
+	move_stack.push(the_move);
+	node_stack.push(node);
+	cy.game_play_move_stack = move_stack;
+	cy.game_play_node_stack = node_stack;
 }
 
 // Check if the given move is valid. If so, perform the move
 // and update the round state.
 function move(the_move, node) {
 	if (rules.isValidMove(the_move, node)) {
-		makeMove(the_move, node);
+		let cy = cyto_helpers.get_cy(node);
+		if (cy.game_play_state === ROUND_STATES["PLAYING"]) {
+			makeMove(the_move, node);
 
-		let cy = node.cy();
-		let move_stack = cy.game_play_stack;
-		cy.game_play_state = rules.getRoundState(move_stack);
+	console.log("POOP");
+			let node_stack = cy.game_play_node_stack;
+			cy.game_play_state = rules.getRoundState(node_stack);
 
-		return true;
+			return true;
+		} else {
+			return false;
+		}
 	} else {
 		return false;
 	}
@@ -163,7 +164,9 @@ function startGame(cy) {
 	cy.game_play_playing = true;
 	cy.game_play_preparing = true;
 
-	cy.game_play_stack = [];
+	cy.game_play_move_stack = [];
+	cy.game_play_node_stack = [];
+
 	cy.game_play_state = ROUND_STATES["PLAYING"];  // Current round state
 }
 

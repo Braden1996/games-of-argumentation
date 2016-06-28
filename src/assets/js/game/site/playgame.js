@@ -1,3 +1,4 @@
+let cyto_helpers = require("../cytoscape-helpers.js");
 let discuss = require("../logic/discuss.js");
 let rules = require("../logic/rules.js");
 let ifShowHide = require("../util/ifshowhide.js");
@@ -54,7 +55,7 @@ function endGame(cy, endGameCallback) {
 
 function PostMove(moveObject) {
 	if (moveObject["node"] !== undefined) {
-		let cy = moveObject["node"].cy();
+		let cy = cyto_helpers.get_cy(moveObject["node"]);
 
 		if (cy.game_play_preparing) {
 			cy.game_play_preparing = false;
@@ -118,7 +119,7 @@ function parse_cytoscape_instance(cy, playgame_exports) {
 
 	$("[data-playgame-moveai]").click(function() {
 		let is_proponent = $("[data-playgame='proponent']").hasClass("m-button--switch__li--active");
-		let moveObject = playgame_exports.strategyMove(cy.game_play_stack, !is_proponent);
+		let moveObject = playgame_exports.strategyMove(cy.game_play_node_stack, !is_proponent);
 		PostMove(moveObject);
 	});
 
