@@ -41,7 +41,7 @@ function build_stylesheet() {
 			.css({
 				"content": e => {
 					let min_max = e.attr("min_max_numbering");
-					min_max = min_max  === undefined ? "\u221e" : min_max;
+					min_max = min_max  === Infinity ? "\u221e" : min_max;
 					return e.attr("id") + "\n(" + min_max + ")";
 				}
 			})
