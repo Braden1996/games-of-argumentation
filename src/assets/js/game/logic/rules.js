@@ -14,9 +14,14 @@ MOVE_CLASSES[MOVES["CONCEDE"]] = "concede";
 MOVE_CLASSES[MOVES["RETRACT"]] = "retract";
 
 let ROUND_STATES = {
+	"UNKNOWN": -1,
 	"PLAYING": 0,
-	"PROPONENT_WIN": 1,
-	"OPPONENT_WIN": 2
+	// Proponent win states
+	"INITIAL_CONCEDED": 1,
+	// Opponent win states
+	"HTB_REPEAT": 2,
+	"CB_REPEAT": 3,
+	"CB_EMPTY_ATTACKERS": 4
 }
 
 function hasPlayed(node, move) {
@@ -56,14 +61,14 @@ function getRoundState(node_stack) {
 	if (last_move === MOVES["HTB"]) {
 		let htb_played = hasPlayed(last_node, MOVES["HTB"]);
 		if (htb_played > 1) {
-			return ROUND_STATES["OPPONENT_WIN"];
+			return ROUND_STATES["HTB_REPEAT"];
 		}
 
 	} else {
 		if (last_move === MOVES["CB"]) {
 			let cb_played = hasPlayed(last_node, MOVES["CB"])
 			if (cb_played > 1) {
-				return ROUND_STATES["OPPONENT_WIN"];
+				return ROUND_STATES["CB_REPEAT"];
 			} else {
 				let attackers = last_node.incomers().sources();
 				let available_attackers = attackers.filter((i, ele) => {
@@ -71,13 +76,13 @@ function getRoundState(node_stack) {
 				});
 
 				if (available_attackers.empty() && !isValidMove(MOVES["RETRACT"], last_node)) {
-					return ROUND_STATES["OPPONENT_WIN"];
+					return ROUND_STATES["CB_EMPTY_ATTACKERS"];
 				}
 			}
 
 		} else if (last_move === MOVES["CONCEDE"]) {
 			if (last_node.same(node_stack[0])) {
-				return ROUND_STATES["PROPONENT_WIN"];
+				return ROUND_STATES["INITIAL_CONCEDED"];
 			}
 		}
 	}

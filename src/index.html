@@ -5,7 +5,7 @@
 
 		<title>Grounded Discussion Game</title>
   		<meta name="description" content="Web-demo Grounded Discussion Game (argumentation theory - discussion game for grounded semantics).">
-		
+
 		<link rel="stylesheet" href="static/css/main.css">
 		<script type="text/javascript" src="static/js/main.js"></script>
 	</head>
@@ -60,12 +60,12 @@
 						<li data-tablist-id="log">
 							<div data-playgame="ifplaying">
 								<b>Played Moves:</b><br />
-								<span data-playgame="ifpreparing">Please initiate the game by playing a 'HTB' move.</span>
+								<span data-playgame="!ifpreparing">Please initiate the game by playing a 'HTB' move.</span>
 								<ol data-playgame-movelist>
 								</ol>
 								<br />
 								<label>Move: <input type="text" data-playgame-moveinput /></label>
-								<button class="m-button" data-playgame="!ifpreparing" data-playgame-moveai>Take AI Turn</button>
+								<button class="m-button" data-playgame="ifaiturn" data-playgame-moveai>Take AI Turn</button>
 							</div>
 							<div data-playgame="!ifplaying">
 								<b>Discussion of an Argument:</b><br />
