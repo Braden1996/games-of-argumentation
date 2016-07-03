@@ -7,16 +7,17 @@ let MOVES = rules.MOVES;
 let getMoveClass = rules.getMoveClass;
 let ROUND_STATES = rules.ROUND_STATES;
 
-// We need our own 'min' function as Cytoscape JS internally uses 'Infinity',
-// which doesn't work as our 'undec' nodes have a 'min_max_numbering' of 'Infinity'.
-function getMinNode(nodes) {
-	if (nodes.length === 0) {
+// We need our own min/max function as Cytoscape JS internally uses 'Infinity',
+// which conflicts with our 'undec' nodes - as their 'min_max_numbering' is 'Infinity'.
+function getMinMaxNode(nodes, max=false) {
+	if (nodes.empty()) {
 		return undefined;
 	} else {
 		let last_node = nodes[0];
-		for(let i = 1; i < nodes.length; i++ ){
+		for(let i = 1; i < nodes.size(); i++ ) {
 			var node = nodes[i];
-			if (node.data("min_max_numbering") < last_node.data("min_max_numbering")) {
+			if ((max && node.data("min_max_numbering") > last_node.data("min_max_numbering")) ||
+				(!max && node.data("min_max_numbering") < last_node.data("min_max_numbering"))) {
 				last_node = node;
 			}
 		}
@@ -34,7 +35,7 @@ function strategyMove(node_stack, is_proponent) {
 			let htb_nodes = rules.findMoveNodes(MOVES["HTB"], node_stack);
 			if (htb_nodes.nonempty()) {
 				the_move = MOVES["HTB"];
-				node = getMinNode(htb_nodes);
+				node = getMinMaxNode(htb_nodes);
 			}
 		} else {
 			let last_node = node_stack.slice(-1)[0];
@@ -44,17 +45,29 @@ function strategyMove(node_stack, is_proponent) {
 			let concede_nodes = rules.findMoveNodes(MOVES["CONCEDE"], node_stack);
 			if (concede_nodes.nonempty()) {
 				the_move = MOVES["CONCEDE"];
-				node = getMinNode(concede_nodes);
+				node = getMinMaxNode(concede_nodes, true);
 			} else {
 				let retract_nodes = rules.findMoveNodes(MOVES["RETRACT"], node_stack);
 				if (retract_nodes.nonempty()) {
 					the_move = MOVES["RETRACT"];
-					node = getMinNode(retract_nodes);
+					node = getMinMaxNode(retract_nodes, true);
 				} else {
 					let cb_nodes = rules.findMoveNodes(MOVES["CB"], node_stack);
 					if (cb_nodes.nonempty()) {
 						the_move = MOVES["CB"];
-						node = getMinNode(cb_nodes);
+
+						node = getMinMaxNode(cb_nodes, true);
+
+						// Check if any other possible move would end the game.
+						for(let i = 1; i < cb_nodes.size(); i++ ) {
+							var maybe_cb = cb_nodes[i];
+							let attackers = maybe_cb.incomers().sources();
+							let valid_attackers = attackers.filter((i, attacker) => rules.isValidMove(MOVES["HTB"], attacker));
+							if (valid_attackers.empty()) {
+								node = maybe_cb;
+								break;
+							}
+						}
 					}
 				}
 			}
