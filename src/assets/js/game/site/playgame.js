@@ -17,7 +17,30 @@ MOVE_STRINGS[MOVES["RETRACT"]] = "RETRACT";
 function updateDom(cy) {
 	ifShowHide("data-playgame", "ifcanplay", cy.game_play_possible);
 	ifShowHide("data-playgame", "ifplaying", cy.game_play_possible && cy.game_play_playing);
-	ifShowHide("data-playgame", "ifpreparing", cy.game_play_possible && cy.game_play_playing && cy.game_play_preparing);
+	ifShowHide("data-playgame", "ifpreparing", cy.game_play_possible && cy.game_play_playing && cy.game_play_move_stack.length === 1);
+
+	let is_proponent = $("[data-playgame='proponent']").hasClass("m-button--switch__li--active");
+
+	console.log("UPDATE DOM:",
+		cy.game_play_possible,
+		cy.game_play_playing,
+		cy.game_play_move_stack.length >= 1,
+		!is_proponent === rules.isProponentsTurn(cy.game_play_node_stack),
+		cy.game_play_state === ROUND_STATES["PLAYING"],
+		(cy.game_play_possible &&
+		cy.game_play_playing &&
+		cy.game_play_move_stack.length >= 1 &&
+		(!is_proponent === rules.isProponentsTurn(cy.game_play_node_stack)) &&
+		cy.game_play_state === ROUND_STATES["PLAYING"])
+	);
+
+	ifShowHide("data-playgame", "ifaiturn",
+		cy.game_play_possible &&
+		cy.game_play_playing &&
+		cy.game_play_move_stack.length >= 1 &&
+		(!is_proponent === rules.isProponentsTurn(cy.game_play_node_stack)) &&
+		cy.game_play_state === ROUND_STATES["PLAYING"]
+	);
 }
 
 function buildLogMoveMessage(the_move, node, is_proponent) {
@@ -57,22 +80,38 @@ function PostMove(moveObject) {
 	if (moveObject["node"] !== undefined) {
 		let cy = cyto_helpers.get_cy(moveObject["node"]);
 
-		if (cy.game_play_preparing) {
-			cy.game_play_preparing = false;
-			updateDom(cy);
-		}
+		updateDom(cy);
 
 		if (moveObject["valid"]) {
 			let log_str = buildLogMoveMessage(moveObject["move"], moveObject["node"], moveObject["is_proponent"]);
 			$("[data-playgame-movelist]").append("<li>" + log_str + "</li>");
 
-			if (cy.game_play_state === ROUND_STATES["PROPONENT_WIN"]) {
-				alert("The Proponent has won the game!");
-			} else if (cy.game_play_state === ROUND_STATES["OPPONENT_WIN"]) {
-				alert("The Opponent has won the game!");
+			// We force a render here as the alert prompt blocks the renderer from rendering
+			// the next frame.
+			if (cy.game_play_state !== ROUND_STATES["PLAYING"]) {
+				switch (cy.game_play_state) {
+					case ROUND_STATES["INITIAL_CONCEDED"]:
+						alert("The Proponent has won as their initial argument has been conceded!");
+						break;
+					case ROUND_STATES["HTB_REPEAT"]:
+						alert("The OPPONENT has won as a HTB repeat has occurred!");
+						break;
+					case ROUND_STATES["CB_REPEAT"]:
+						alert("The OPPONENT has won as a CB repeat has occurred!");
+						break;
+					case ROUND_STATES["CB_EMPTY_ATTACKERS"]:
+						alert("The OPPONENT has won as their last CB argument has no valid attackers!");
+						break;
+					default:
+						alert("The game has terminated for some unknown reason.");
+				}
 			}
 		} else {
-			alert("That is an invalid move!");
+			if (cy.game_play_state === ROUND_STATES["PLAYING"]) {
+				alert("That is an invalid move!");
+			} else {
+				alert("The game has already ended!");
+			}
 		}
 	}
 }
@@ -122,6 +161,8 @@ function parse_cytoscape_instance(cy, playgame_exports) {
 		let moveObject = playgame_exports.strategyMove(cy.game_play_node_stack, !is_proponent);
 		PostMove(moveObject);
 	});
+
+	$("[data-playgame='proponent']").on("m-button-switched", (evt, is_on) => updateDom(cy));
 
 	return cy;
 }

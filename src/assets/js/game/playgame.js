@@ -38,7 +38,7 @@ function strategyMove(node_stack, is_proponent) {
 			}
 		} else {
 			let last_node = node_stack.slice(-1)[0];
-			
+
 			// As we can only perform a CB move if no CONCEDE, or RETRACT,
 			// move is possible; we check it last.
 			let concede_nodes = rules.findMoveNodes(MOVES["CONCEDE"], node_stack);
@@ -146,7 +146,6 @@ function move(the_move, node) {
 		if (cy.game_play_state === ROUND_STATES["PLAYING"]) {
 			makeMove(the_move, node);
 
-	console.log("POOP");
 			let node_stack = cy.game_play_node_stack;
 			cy.game_play_state = rules.getRoundState(node_stack);
 
@@ -162,7 +161,6 @@ function move(the_move, node) {
 // Initiate the game's start variables.
 function startGame(cy) {
 	cy.game_play_playing = true;
-	cy.game_play_preparing = true;
 
 	cy.game_play_move_stack = [];
 	cy.game_play_node_stack = [];
@@ -173,7 +171,8 @@ function startGame(cy) {
 // Reset the game's start variables.
 function endGame(cy) {
 	cy.game_play_playing = false;
-	cy.game_play_preparing = false;
+
+	cy.game_play_state = -1;
 
 	Object.keys(rules.MOVE_CLASSES).forEach((key) => {
 		cy.nodes().removeClass(rules.MOVE_CLASSES[key]);
@@ -181,6 +180,7 @@ function endGame(cy) {
 }
 
 function parse_cytoscape_instance(cy) {
+	startGame(cy);
 	endGame(cy);
 
 	let playgame_exports = {
