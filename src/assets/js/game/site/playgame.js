@@ -21,19 +21,6 @@ function updateDom(cy) {
 
 	let is_proponent = $("[data-playgame='proponent']").hasClass("m-button--switch__li--active");
 
-	console.log("UPDATE DOM:",
-		cy.game_play_possible,
-		cy.game_play_playing,
-		cy.game_play_move_stack.length >= 1,
-		!is_proponent === rules.isProponentsTurn(cy.game_play_node_stack),
-		cy.game_play_state === ROUND_STATES["PLAYING"],
-		(cy.game_play_possible &&
-		cy.game_play_playing &&
-		cy.game_play_move_stack.length >= 1 &&
-		(!is_proponent === rules.isProponentsTurn(cy.game_play_node_stack)) &&
-		cy.game_play_state === ROUND_STATES["PLAYING"])
-	);
-
 	ifShowHide("data-playgame", "ifaiturn",
 		cy.game_play_possible &&
 		cy.game_play_playing &&
