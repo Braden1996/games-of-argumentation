@@ -17,7 +17,9 @@ MOVE_STRINGS[MOVES["RETRACT"]] = "RETRACT";
 function updateDom(cy) {
 	ifShowHide("data-playgame", "ifcanplay", cy.game_play_possible);
 	ifShowHide("data-playgame", "ifplaying", cy.game_play_possible && cy.game_play_playing);
-	ifShowHide("data-playgame", "ifpreparing", cy.game_play_possible && cy.game_play_playing && cy.game_play_move_stack.length === 1);
+	ifShowHide("data-playgame", "ifmoves<1", cy.game_play_move_stack.length < 1);
+	ifShowHide("data-playgame", "ifmoves==1", cy.game_play_move_stack.length === 1);
+	ifShowHide("data-playgame", "ifmoves>1", cy.game_play_move_stack.length > 1);
 
 	let is_proponent = $("[data-playgame='proponent']").hasClass("m-button--switch__li--active");
 
@@ -64,43 +66,47 @@ function endGame(cy, endGameCallback) {
 }
 
 function PostMove(moveObject) {
-	if (moveObject["node"] !== undefined) {
-		let cy = cyto_helpers.get_cy(moveObject["node"]);
+	// SHAME: awful hacky way to prevent our alert prompts from blocking Cytoscape
+	// from rendering the frame corresponding with the most recent move.
+	window.setTimeout(() => {
+		if (moveObject["node"] !== undefined) {
+			let cy = cyto_helpers.get_cy(moveObject["node"]);
 
-		updateDom(cy);
+			updateDom(cy);
 
-		if (moveObject["valid"]) {
-			let log_str = buildLogMoveMessage(moveObject["move"], moveObject["node"], moveObject["is_proponent"]);
-			$("[data-playgame-movelist]").append("<li>" + log_str + "</li>");
+			if (moveObject["valid"]) {
+				let log_str = buildLogMoveMessage(moveObject["move"], moveObject["node"], moveObject["is_proponent"]);
+				$("[data-playgame-movelist]").append("<li>" + log_str + "</li>");
 
-			// We force a render here as the alert prompt blocks the renderer from rendering
-			// the next frame.
-			if (cy.game_play_state !== ROUND_STATES["PLAYING"]) {
-				switch (cy.game_play_state) {
-					case ROUND_STATES["INITIAL_CONCEDED"]:
-						alert("The Proponent has won as their initial argument has been conceded!");
-						break;
-					case ROUND_STATES["HTB_REPEAT"]:
-						alert("The OPPONENT has won as a HTB repeat has occurred!");
-						break;
-					case ROUND_STATES["CB_REPEAT"]:
-						alert("The OPPONENT has won as a CB repeat has occurred!");
-						break;
-					case ROUND_STATES["CB_EMPTY_ATTACKERS"]:
-						alert("The OPPONENT has won as their last CB argument has no valid attackers!");
-						break;
-					default:
-						alert("The game has terminated for some unknown reason.");
+				if (cy.game_play_state !== ROUND_STATES["PLAYING"]) {
+					let end_msg = "The game has terminated for some unknown reason.";
+					switch (cy.game_play_state) {
+						case ROUND_STATES["INITIAL_CONCEDED"]:
+							end_msg = "The Proponent has won as their initial argument has been conceded!";
+							break;
+						case ROUND_STATES["HTB_REPEAT"]:
+							end_msg = "The OPPONENT has won as a HTB repeat has occurred!";
+							break;
+						case ROUND_STATES["CB_REPEAT"]:
+							end_msg = "The OPPONENT has won as a CB repeat has occurred!";
+							break;
+						case ROUND_STATES["CB_EMPTY_ATTACKERS"]:
+							end_msg = "The OPPONENT has won as their last CB argument has no valid attackers!";
+							break;
+					}
+
+					$("[data-playgame-movelist]").append("<li>" + end_msg + "</li>");
+					alert(end_msg);
+				}
+			} else {
+				if (cy.game_play_state === ROUND_STATES["PLAYING"]) {
+					alert("That is an invalid move!");
+				} else {
+					alert("The game has already ended!");
 				}
 			}
-		} else {
-			if (cy.game_play_state === ROUND_STATES["PLAYING"]) {
-				alert("That is an invalid move!");
-			} else {
-				alert("The game has already ended!");
-			}
 		}
-	}
+	}, 50);
 }
 
 function parse_cytoscape_instance(cy, playgame_exports) {
@@ -132,6 +138,8 @@ function parse_cytoscape_instance(cy, playgame_exports) {
 			let is_proponent = $("[data-playgame='proponent']").hasClass("m-button--switch__li--active");
 			let moveObject = playgame_exports.move(move, node, is_proponent);
 			PostMove(moveObject);
+
+			$(this).val("");
 		}
 	});
 
@@ -147,6 +155,15 @@ function parse_cytoscape_instance(cy, playgame_exports) {
 		let is_proponent = $("[data-playgame='proponent']").hasClass("m-button--switch__li--active");
 		let moveObject = playgame_exports.strategyMove(cy.game_play_node_stack, !is_proponent);
 		PostMove(moveObject);
+	});
+
+	$("[data-playgame-undo]").click(function() {
+		if (cy.game_play_state !== ROUND_STATES["PLAYING"]) {
+			$("[data-playgame-movelist] > li:last").remove();
+		}
+
+		let moveObject = playgame_exports.undoLastMove(cy.game_play_node_stack);
+		$("[data-playgame-movelist] > li:last").remove();
 	});
 
 	$("[data-playgame='proponent']").on("m-button-switched", (evt, is_on) => updateDom(cy));

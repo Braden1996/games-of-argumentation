@@ -130,25 +130,45 @@ function makeMove(the_move, node) {
 	let node_stack = cy.game_play_node_stack;
 	let move_stack = cy.game_play_move_stack;
 
-	if(the_move === MOVES["HTB"]) {
-		node.addClass(getMoveClass("HTB"));
-
-	} else if(the_move === MOVES["CB"]) {
-		node.addClass(getMoveClass("CB"));
-
-	} else if(the_move === MOVES["CONCEDE"]) {
-		node.removeClass(getMoveClass("HTB"));
-		node.addClass(getMoveClass("CONCEDE"));
-
-	} else if(the_move === MOVES["RETRACT"]) {
-		node.removeClass(getMoveClass("CB"));
-		node.addClass(getMoveClass("RETRACT"));
-	}
-
 	move_stack.push(the_move);
 	node_stack.push(node);
 	cy.game_play_move_stack = move_stack;
 	cy.game_play_node_stack = node_stack;
+
+	if(the_move === MOVES["CONCEDE"]) {
+		node.removeClass(getMoveClass("HTB"));
+	} else if(the_move === MOVES["RETRACT"]) {
+		node.removeClass(getMoveClass("CB"));
+	}
+
+	node.addClass(rules.MOVE_CLASSES[the_move]);
+}
+
+function undoLastMove(node_stack) {
+	let cy =  cyto_helpers.get_cy(node_stack);
+	let move_stack = cy.game_play_move_stack;
+
+	// As all other states are terminating states, 'PLAYING' will
+	// ALWAYS be the previous state.
+	if (cy.game_play_state !== ROUND_STATES["PLAYING"]) {
+		cy.game_play_state = ROUND_STATES["PLAYING"];
+	}
+
+	let last_move = move_stack.pop();
+	let last_node = node_stack.pop();
+	cy.game_play_move_stack = move_stack;
+	cy.game_play_node_stack = node_stack;
+
+	if(last_move === MOVES["CONCEDE"]) {
+		last_node.addClass(getMoveClass("HTB"));
+
+	} else if(last_move === MOVES["RETRACT"]) {
+		last_node.addClass(getMoveClass("CB"));
+	}
+
+	if (!rules.hasPlayed(last_node, last_move)) {
+		last_node.removeClass(rules.MOVE_CLASSES[last_move]);
+	}
 }
 
 // Check if the given move is valid. If so, perform the move
@@ -187,9 +207,7 @@ function endGame(cy) {
 
 	cy.game_play_state = -1;
 
-	Object.keys(rules.MOVE_CLASSES).forEach((key) => {
-		cy.nodes().removeClass(rules.MOVE_CLASSES[key]);
-	});
+	Object.keys(rules.MOVE_CLASSES).forEach((key) => cy.nodes().removeClass(rules.MOVE_CLASSES[key]));
 }
 
 function parse_cytoscape_instance(cy) {
@@ -200,6 +218,7 @@ function parse_cytoscape_instance(cy) {
 		"move": specifcMove,
 		"autoMove": autoMove,
 		"strategyMove": strategyMove,
+		"undoLastMove": undoLastMove,
 		"startGameCallback": startGame,
 		"endGameCallback": endGame
 	}

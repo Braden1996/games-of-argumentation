@@ -49,7 +49,7 @@
 										<li>Stop Discussion Game</li>
 									</ul>
 								</li>
-								<li class="m-button m-button--switch" data-playgame="ifpreparing">
+								<li class="m-button m-button--switch" data-playgame="ifmoves==1">
 									<ul>
 										<li class="m-button--switch__li--active" data-playgame="proponent">Play as Proponent</li>
 										<li data-playgame="opponent">Play as Opponent</li>
@@ -60,12 +60,22 @@
 						<li data-tablist-id="log">
 							<div data-playgame="ifplaying">
 								<b>Played Moves:</b><br />
-								<span data-playgame="!ifpreparing">Please initiate the game by playing a 'HTB' move.</span>
+								<span data-playgame="ifmoves<1">Please initiate the game by playing a 'HTB' move.</span>
 								<ol data-playgame-movelist>
 								</ol>
+
 								<br />
 								<label>Move: <input type="text" data-playgame-moveinput /></label>
-								<button class="m-button" data-playgame="ifaiturn" data-playgame-moveai>Take AI Turn</button>
+								<br /><br />
+
+								<ul class="m-buttongroup m-buttongroup--stretch">
+									<li>
+										<button class="m-button" data-playgame="ifaiturn" data-playgame-moveai>Take AI Turn</button>
+									</li>
+									<li>
+										<button class="m-button" data-playgame="ifmoves>1" data-playgame-undo>Undo Last Move</button>
+									</li>
+								</ul>
 							</div>
 							<div data-playgame="!ifplaying">
 								<b>Discussion of an Argument:</b><br />
