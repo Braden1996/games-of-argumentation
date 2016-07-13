@@ -43,7 +43,7 @@ function getMoveClass(move) {
 	return MOVE_CLASSES[MOVES[move]];
 }
 
-function getMoveNodes(node_stack, move) {
+function getMoveNodes(move, node_stack) {
 	let move_nodes = node_stack.filter((node, i, nodes) => hasPlayed(node, move));
 	let cy = cyto_helpers.get_cy(node_stack);
 	return cy.collection(move_nodes);
@@ -112,8 +112,8 @@ function isValidMove(the_move, node) {
 		} else if (the_move === MOVES["CB"]) {
 			let cy = cyto_helpers.get_cy(node);
 			let node_stack = cy.game_play_node_stack;
-			let last_htb = getMoveNodes(node_stack, MOVES["HTB"])
-				.difference(getMoveNodes(node_stack, MOVES["CONCEDE"]))
+			let last_htb = getMoveNodes(MOVES["HTB"], node_stack)
+				.difference(getMoveNodes(MOVES["CONCEDE"], node_stack))
 				.last();
 
 			return last_htb.nonempty() && (
@@ -175,8 +175,8 @@ function findMoveNodes(the_move, node_stack) {
 	} else if (the_move === MOVES["CB"]) {
 		let last_node = node_stack.slice(-1)[0];
 
-		let last_htb = getMoveNodes(node_stack, MOVES["HTB"])
-			.difference(getMoveNodes(node_stack, MOVES["CONCEDE"]))
+		let last_htb = getMoveNodes(MOVES["HTB"], node_stack)
+			.difference(getMoveNodes(MOVES["CONCEDE"], node_stack))
 			.last();
 		let htb_attackers = last_htb.incomers().sources();
 		return htb_attackers.filter((i, node) => isValidMove(MOVES["CB"], node));
@@ -185,14 +185,14 @@ function findMoveNodes(the_move, node_stack) {
 	// As we know a CONCEDE move can only be played against a HTB move,
 	// we only need to filter the existing HTB moves.
 	} else if (the_move === MOVES["CONCEDE"]) {
-		let htb_nodes = getMoveNodes(node_stack, MOVES["HTB"]);
+		let htb_nodes = getMoveNodes(MOVES["HTB"], node_stack);
 		return htb_nodes.filter((i, node) => isValidMove(MOVES["CONCEDE"], node));
 
 	// Find the nodes that can be used to play the RETRACT move.
 	// As we know a RETRACT move can only be played against a CB move,
 	// we only need to filter the existing CB moves.
 	} else if (the_move === MOVES["RETRACT"]) {
-		let cb_nodes = getMoveNodes(node_stack, MOVES["CB"]);
+		let cb_nodes = getMoveNodes(MOVES["CB"], node_stack);
 		return cb_nodes.filter((i, node) => isValidMove(MOVES["RETRACT"], node));
 	}
 
