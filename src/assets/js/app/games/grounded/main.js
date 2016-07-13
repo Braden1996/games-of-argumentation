@@ -1,6 +1,6 @@
-let cyto_helpers = require("./cytoscape-helpers.js");
-let rules = require("./logic/rules.js");
-let playgame_site = require("./site/playgame.js");
+let cyto_helpers = require("../../util/cytoscape-helpers.js");
+let rules = require("./rules.js");
+let view = require("./view.js");
 
 // Save a little bit of screenspace...
 let MOVES = rules.MOVES;
@@ -223,7 +223,7 @@ function parse_cytoscape_instance(cy) {
 		"endGameCallback": endGame
 	}
 
-	cy = playgame_site.parse_cytoscape_instance(cy, playgame_exports);
+	cy = view.parse_cytoscape_instance(cy, playgame_exports);
 
 	return cy;
 }

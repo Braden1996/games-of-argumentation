@@ -1,7 +1,7 @@
-let cyto_helpers = require("../cytoscape-helpers.js");
-let discuss = require("../logic/discuss.js");
-let rules = require("../logic/rules.js");
-let ifShowHide = require("../util/ifshowhide.js");
+let cyto_helpers = require("../../util/cytoscape-helpers.js");
+let discuss = require("../discuss/main.js");
+let rules = require("./rules.js");
+let ifShowHide = require("../../util/ifshowhide.js");
 
 // Save a little bit of screenspace...
 let MOVES = rules.MOVES;

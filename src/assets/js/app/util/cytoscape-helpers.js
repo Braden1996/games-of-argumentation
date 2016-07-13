@@ -1,14 +1,11 @@
 let cytoscape = require("cytoscape");
-let stylesheet = require("./stylesheet.js");
 
 function create_cytoscape_instance(container) {
 	let cy = cytoscape({
 		container: container,
 
 		boxSelectionEnabled: false,
-		autounselectify: true,
-
-		style: stylesheet.build_stylesheet()
+		autounselectify: true
 	});
 
 	cy.on("mouseout", "node", () => container.css("cursor", "default"));

@@ -1,4 +1,4 @@
-let cyto_helpers = require("../cytoscape-helpers.js");
+let cyto_helpers = require("../../util/cytoscape-helpers.js");
 
 let MOVES = {
 	"HTB":     0,

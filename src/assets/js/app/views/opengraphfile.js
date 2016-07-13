@@ -1,5 +1,5 @@
 let labelling = require("../logic/labelling.js");
-let cyto_helpers = require("../cytoscape-helpers.js");
+let cyto_helpers = require("../util/cytoscape-helpers.js");
 let openFile = require("../util/openfile.js");
 
 function parse_cytoscape_instance(cy) {
