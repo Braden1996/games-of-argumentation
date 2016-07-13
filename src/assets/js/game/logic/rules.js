@@ -19,8 +19,7 @@ let ROUND_STATES = {
 	// Proponent win states
 	"INITIAL_CONCEDED": 1,
 	// Opponent win states
-	"HTB_REPEAT": 2,
-	"CB_REPEAT": 3,
+	"HTB/CB_REPEAT": 2,
 	"CB_EMPTY_ATTACKERS": 4
 }
 
@@ -58,26 +57,20 @@ function getRoundState(node_stack) {
 	let last_node = node_stack.slice(-1)[0];
 	let last_move = move_stack.slice(-1)[0];
 
-	if (last_move === MOVES["HTB"]) {
+	if (last_move === MOVES["HTB"] || last_move === MOVES["CB"]) {
+		let cb_played = hasPlayed(last_node, MOVES["CB"]);
 		let htb_played = hasPlayed(last_node, MOVES["HTB"]);
-		if (htb_played > 1) {
-			return ROUND_STATES["HTB_REPEAT"];
+		if (htb_played + cb_played > 1) {
+			return ROUND_STATES["HTB/CB_REPEAT"];
 		}
 
 	} else {
 		if (last_move === MOVES["CB"]) {
-			let cb_played = hasPlayed(last_node, MOVES["CB"])
-			if (cb_played > 1) {
-				return ROUND_STATES["CB_REPEAT"];
-			} else {
-				let attackers = last_node.incomers().sources();
-				let available_attackers = attackers.filter((i, ele) => {
-					return !hasPlayed(ele, MOVES["CONCEDE"]);
-				});
+			let attackers = last_node.incomers().sources();
+			let available_attackers = attackers.filter((i, ele) => isValidMove(MOVES["HTB"], ele));
 
-				if (available_attackers.empty() && !isValidMove(MOVES["RETRACT"], last_node)) {
-					return ROUND_STATES["CB_EMPTY_ATTACKERS"];
-				}
+			if (available_attackers.empty() && !isValidMove(MOVES["RETRACT"], last_node)) {
+				return ROUND_STATES["CB_EMPTY_ATTACKERS"];
 			}
 
 		} else if (last_move === MOVES["CONCEDE"]) {
@@ -101,10 +94,14 @@ function isValidMove(the_move, node) {
 		// 	- Preceding move was CB(B), where A attacks B.
 		//	- No CONCEDE or RETRACT move is applicable.
 		if (the_move === MOVES["HTB"]) {
-			let node_stack = node.cy().game_play_node_stack;
+			let cy = cyto_helpers.get_cy(node);
+			let node_stack = cy.game_play_node_stack;
+			let move_stack = cy.game_play_move_stack;
 			let last_node = node_stack.slice(-1)[0];
+			let last_move = move_stack.slice(-1)[0];
+
 			return node_stack.length === 0 || (
-				(hasPlayed(last_node, MOVES["CB"]) && cyto_helpers.attacks(node, last_node)) &&
+				(last_move === MOVES["CB"] && cyto_helpers.attacks(node, last_node)) &&
 				(findMoveNodes(MOVES["CONCEDE"], node_stack).empty() && findMoveNodes(MOVES["RETRACT"], node_stack).empty())
 			);
 
@@ -113,8 +110,12 @@ function isValidMove(the_move, node) {
 		//	- B has not yet been played RETRACT.
 		//	- No CONCEDE or RETRACT move is applicable.
 		} else if (the_move === MOVES["CB"]) {
-			let node_stack = node.cy().game_play_node_stack;
-			let last_htb = getMoveNodes(node_stack, MOVES["HTB"]).last();
+			let cy = cyto_helpers.get_cy(node);
+			let node_stack = cy.game_play_node_stack;
+			let last_htb = getMoveNodes(node_stack, MOVES["HTB"])
+				.difference(getMoveNodes(node_stack, MOVES["CONCEDE"]))
+				.last();
+
 			return last_htb.nonempty() && (
 				cyto_helpers.attacks(node, last_htb) && !hasPlayed(node, MOVES["RETRACT"]) &&
 				(findMoveNodes(MOVES["CONCEDE"], node_stack).empty() && findMoveNodes(MOVES["RETRACT"], node_stack).empty())
@@ -169,19 +170,16 @@ function findMoveNodes(the_move, node_stack) {
 		}
 
 	// Find the nodes that can be used to play the CB move.
-	// As we know a CB move can only be played against the last HTB move,
-	// we only need to filter the attackers of that previous HTB move.
+	// As we know a CB move can only be played against the last non-conceded HTB move,
+	// we only need to filter the attackers of that previous move.
 	} else if (the_move === MOVES["CB"]) {
 		let last_node = node_stack.slice(-1)[0];
 
-		if (hasPlayed(last_node, MOVES["CB"])) {
-			let cy = cyto_helpers.get_cy(node_stack);
-			return cy.collection();
-		} else {
-			let last_htb = getMoveNodes(node_stack, MOVES["HTB"]).last();
-			let htb_attackers = last_htb.incomers().sources();
-			return htb_attackers.filter((i, node) => isValidMove(MOVES["CB"], node));
-		}
+		let last_htb = getMoveNodes(node_stack, MOVES["HTB"])
+			.difference(getMoveNodes(node_stack, MOVES["CONCEDE"]))
+			.last();
+		let htb_attackers = last_htb.incomers().sources();
+		return htb_attackers.filter((i, node) => isValidMove(MOVES["CB"], node));
 
 	// Find the nodes that can be used to play the CONCEDE move.
 	// As we know a CONCEDE move can only be played against a HTB move,

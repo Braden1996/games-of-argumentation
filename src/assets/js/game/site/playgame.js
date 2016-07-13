@@ -27,7 +27,7 @@ function updateDom(cy) {
 		cy.game_play_possible &&
 		cy.game_play_playing &&
 		cy.game_play_move_stack.length >= 1 &&
-		(!is_proponent === rules.isProponentsTurn(cy.game_play_node_stack)) &&
+		(is_proponent !== rules.isProponentsTurn(cy.game_play_node_stack)) &&
 		cy.game_play_state === ROUND_STATES["PLAYING"]
 	);
 }
@@ -84,11 +84,8 @@ function PostMove(moveObject) {
 						case ROUND_STATES["INITIAL_CONCEDED"]:
 							end_msg = "The Proponent has won as their initial argument has been conceded!";
 							break;
-						case ROUND_STATES["HTB_REPEAT"]:
-							end_msg = "The OPPONENT has won as a HTB repeat has occurred!";
-							break;
-						case ROUND_STATES["CB_REPEAT"]:
-							end_msg = "The OPPONENT has won as a CB repeat has occurred!";
+						case ROUND_STATES["HTB/CB_REPEAT"]:
+							end_msg = "The OPPONENT has won as a HTB/CB repeat has occurred!";
 							break;
 						case ROUND_STATES["CB_EMPTY_ATTACKERS"]:
 							end_msg = "The OPPONENT has won as their last CB argument has no valid attackers!";
