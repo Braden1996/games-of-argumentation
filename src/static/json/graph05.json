@@ -1,9 +1,9 @@
 {
 	"nodes": [
-		{ "data": { "id": "a" } },
-		{ "data": { "id": "b" } },
-		{ "data": { "id": "c" } },
-		{ "data": { "id": "d" } }
+		{ "data": { "id": "a" }, "position": { "x": 0, "y": 0 } },
+		{ "data": { "id": "b" }, "position": { "x": 500, "y": 0 } },
+		{ "data": { "id": "c" }, "position": { "x": 500, "y": 500 } },
+		{ "data": { "id": "d" }, "position": { "x": 0, "y": 500 } }
 	],
 
 	"edges": [
