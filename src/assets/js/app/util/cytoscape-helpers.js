@@ -24,7 +24,23 @@ function set_graph(cy, graph) {
 	clear_graph(cy);
 
 	cy.add(graph);
-	cy.elements().layout({ name: "grid" });
+
+	let position_elements = graph["nodes"].filter((ele, i, arr) => "position" in ele);
+	let element_positions = {}
+
+	position_elements.forEach((ele, i, arr) => element_positions[ele.data.id] = Object.assign({}, ele.position));
+
+	if (position_elements.length !== graph.length) {
+		let random_layout = cy.makeLayout({ name: "random" });
+		random_layout.run();
+		random_layout.stop();
+	}
+
+	let layout = cy.makeLayout({ name: "preset", positions: (node) => {
+		return node.id() in element_positions ? element_positions[node.id()] : node.position();
+	}});
+
+	layout.run();
 
 	cy.trigger("graphSet");
 }
