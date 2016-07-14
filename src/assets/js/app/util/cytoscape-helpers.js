@@ -1,6 +1,10 @@
 let cytoscape = require("cytoscape");
+let edgehandles = require("cytoscape-edgehandles");
 
 function create_cytoscape_instance(container) {
+	// Register cytoscape-edgehandles
+	edgehandles(cytoscape, $);
+
 	let cy = cytoscape({
 		container: container,
 
@@ -11,6 +15,23 @@ function create_cytoscape_instance(container) {
 	cy.on("mouseout", "node", () => container.css("cursor", "default"));
 	cy.on("mouseover", "node", () => container.css("cursor", "pointer"));
 	cy.on("grab", "node", () => container.css("cursor", "pointer"));
+
+	// Configure cytoscape-edgehandles
+	var defaults = {
+		toggleOffOnLeave: true,
+		loopAllowed: function(node) {
+			// for the specified node, return whether edges from itself to itself are allowed
+			return true;
+		},
+		complete: function(sourceNode, targetNodes, addedEntities) {
+			// fired when edgehandles is done and entities are added
+			if (addedEntities.nonempty()) {
+				cy.trigger("graphSet");
+			}
+		}
+	};
+
+	cy.edgehandles(defaults);
 
 	return cy;
 }

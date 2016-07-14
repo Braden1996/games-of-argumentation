@@ -6,7 +6,7 @@ config.destinationFilename = "main.js";
 
 config.browserifyOptions = {
   debug: true,
-  noparse: ["jquery", "cytoscape"]  // We don't need to bundle these libs
+  noparse: ["jquery", "cytoscape", "cytoscape-edgehandles"]  // We don't need to bundle these libs
 };
 
 config.babelifyOptions = {

@@ -174,6 +174,7 @@ function undoLastMove(node_stack) {
 // Check if the given move is valid. If so, perform the move
 // and update the round state.
 function move(the_move, node) {
+	console.log("Move:", the_move, node.id())
 	if (rules.isValidMove(the_move, node)) {
 		let cy = cyto_helpers.get_cy(node);
 		if (cy.game_play_state === ROUND_STATES["PLAYING"]) {

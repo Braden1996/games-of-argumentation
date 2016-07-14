@@ -85,10 +85,19 @@ function get_labelling(cy) {
 	return lab;
 }
 
+function is_labelling_shown(cy) {
+	return cy.lab["in"].hasClass("in") || cy.lab["out"].hasClass("out") || cy.lab["undec"].hasClass("undec");
+}
+
+function is_minmax_shown(cy) {
+	return cy.nodes().hasClass("minmax");
+}
+
 function show_labelling(cy) {
 	if(!cy.lab) {
 		return;
 	} else {
+		hide_labelling(cy);
 		cy.lab["in"].addClass("in");
 		cy.lab["out"].addClass("out");
 		cy.lab["undec"].addClass("undec");
@@ -107,6 +116,7 @@ function show_minmax(cy) {
 	if(!cy.lab) {
 		return;
 	} else {
+		hide_minmax(cy);
 		show_labelling(cy)
 		cy.nodes().addClass("minmax");
 	}
@@ -124,6 +134,9 @@ function hide_minmax(cy) {
 function parse_cytoscape_instance(cy) {
 	let setLabelling = function(evt) {
 		evt.cy.lab = get_labelling(evt.cy)
+		if (is_labelling_shown(cy)) {
+			show_labelling(cy);
+		}
 	}
 
 	cy.on("graphClear", setLabelling);
@@ -134,6 +147,8 @@ function parse_cytoscape_instance(cy) {
 
 module.exports = {
 	"get_labelling": get_labelling,
+	"is_labelling_shown": is_labelling_shown,
+	"is_minmax_shown": is_minmax_shown,
 	"show_labelling": show_labelling,
 	"hide_labelling": hide_labelling,
 	"show_minmax": show_minmax,
