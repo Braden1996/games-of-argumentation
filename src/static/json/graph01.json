@@ -1,18 +1,24 @@
 {
 	"nodes": [
-		{ "data": { "id": "a" } },
-		{ "data": { "id": "b" } },
-		{ "data": { "id": "c" } },
-		{ "data": { "id": "d" } },
-		{ "data": { "id": "e" } }
+		{ "data": { "id": "a" }, "position": { "x": 0, "y": 500} },
+		{ "data": { "id": "b" }, "position": { "x": 500, "y": 500}  },
+		{ "data": { "id": "c" }, "position": { "x": 500, "y": 0}  },
+		{ "data": { "id": "d" }, "position": { "x": 1000, "y": 0}  },
+		{ "data": { "id": "e" }, "position": { "x": 1500, "y": 500}  },
+		{ "data": { "id": "f" }, "position": { "x": 0, "y": 0}  },
+		{ "data": { "id": "g" }, "position": { "x": 2000, "y": 0}  },
+		{ "data": { "id": "h" }, "position": { "x": 2000, "y": 500}  }
 	],
 
 	"edges": [
 		{ "data": { "id": "ab", "source": "a", "target": "b" } },
+		{ "data": { "id": "af", "source": "a", "target": "f" } },
 		{ "data": { "id": "bc", "source": "b", "target": "c" } },
-		{ "data": { "id": "cc", "source": "c", "target": "c" } },
+		{ "data": { "id": "be", "source": "b", "target": "e" } },
+		{ "data": { "id": "bf", "source": "b", "target": "f" } },
 		{ "data": { "id": "cd", "source": "c", "target": "d" } },
-		{ "data": { "id": "dd", "source": "d", "target": "d" } },
-		{ "data": { "id": "ed", "source": "e", "target": "d" } }
+		{ "data": { "id": "de", "source": "d", "target": "e" } },
+		{ "data": { "id": "gh", "source": "g", "target": "h" } },
+		{ "data": { "id": "hg", "source": "j", "target": "g" } }
 	]
 }
