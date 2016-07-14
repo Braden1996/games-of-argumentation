@@ -111,7 +111,7 @@ function parse_cytoscape_instance(cy, playgame_exports) {
 
 	updateDom(cy); // Inital update
 
-	cy.on("graphSet", (evt) => {
+	let graphUpdated = function(evt) {
 		cy.game_play_possible = true;
 
 		if (cy.game_play_playing) {
@@ -119,7 +119,10 @@ function parse_cytoscape_instance(cy, playgame_exports) {
 		} else {
 			updateDom(cy);
 		}
-	});
+	}
+
+	cy.on("remove", graphUpdated);
+	cy.on("add", graphUpdated);
 
 	cy.on("tap", "node", (evt) => {
 		if (evt.cy.game_play_playing) {

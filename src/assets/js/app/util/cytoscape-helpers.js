@@ -22,14 +22,28 @@ function create_cytoscape_instance(container) {
 		loopAllowed: function(node) {
 			// for the specified node, return whether edges from itself to itself are allowed
 			return true;
-		},
-		complete: function(sourceNode, targetNodes, addedEntities) {
-			// fired when edgehandles is done and entities are added
-			if (addedEntities.nonempty()) {
-				cy.trigger("graphSet");
-			}
 		}
 	};
+
+	// Create functionality to create new nodes
+	cy.on("tap", (evt) => {
+		if (evt.cyTarget === cy) {
+			let finished = false;
+			while (!finished) {
+				let node_id = prompt("Please enter an id for your new argument:");
+				if (node_id === "") {
+					finished = true;
+				} else if (cy.getElementById(node_id).empty()) {
+					finished = true;
+
+					let node = { "data": { "id": node_id }, "position": evt.cyPosition };
+					cy.add(node);
+				} else {
+					alert("An argument already exists with the id '" + node_id + "'.\nPlease try again - or leave empty to cancel.");
+				}
+			}
+		}
+	});
 
 	cy.edgehandles(defaults);
 
@@ -62,8 +76,6 @@ function set_graph(cy, graph) {
 	}});
 
 	layout.run();
-
-	cy.trigger("graphSet");
 }
 
 // To help prevent us from passing 'cy' around.

@@ -139,8 +139,8 @@ function parse_cytoscape_instance(cy) {
 		}
 	}
 
-	cy.on("graphClear", setLabelling);
-	cy.on("graphSet", setLabelling);
+	cy.on("remove", setLabelling);
+	cy.on("add", setLabelling);
 
 	return cy;
 }
