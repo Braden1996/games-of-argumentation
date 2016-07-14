@@ -64,19 +64,18 @@ function getRoundState(node_stack) {
 			return ROUND_STATES["HTB/CB_REPEAT"];
 		}
 
-	} else {
-		if (last_move === MOVES["CB"]) {
-			let attackers = last_node.incomers().sources();
-			let available_attackers = attackers.filter((i, ele) => isValidMove(MOVES["HTB"], ele));
+	}
 
-			if (available_attackers.empty() && !isValidMove(MOVES["RETRACT"], last_node)) {
-				return ROUND_STATES["CB_EMPTY_ATTACKERS"];
-			}
+	if (last_move === MOVES["CB"]) {
+		let attackers = last_node.incomers().sources();
+		let available_attackers = attackers.filter((i, ele) => isValidMove(MOVES["HTB"], ele));
+		if (available_attackers.empty() && !isValidMove(MOVES["RETRACT"], last_node)) {
+			return ROUND_STATES["CB_EMPTY_ATTACKERS"];
+		}
 
-		} else if (last_move === MOVES["CONCEDE"]) {
-			if (last_node.same(node_stack[0])) {
-				return ROUND_STATES["INITIAL_CONCEDED"];
-			}
+	} else if (last_move === MOVES["CONCEDE"]) {
+		if (last_node.same(node_stack[0])) {
+			return ROUND_STATES["INITIAL_CONCEDED"];
 		}
 	}
 
