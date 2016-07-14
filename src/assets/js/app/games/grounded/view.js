@@ -161,6 +161,7 @@ function parse_cytoscape_instance(cy, playgame_exports) {
 
 		let moveObject = playgame_exports.undoLastMove(cy.game_play_node_stack);
 		$("[data-playgame-movelist] > li:last").remove();
+		updateDom(cy);
 	});
 
 	$("[data-playgame='proponent']").on("m-button-switched", (evt, is_on) => updateDom(cy));
