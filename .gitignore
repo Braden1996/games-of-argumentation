@@ -2,8 +2,8 @@
 /node_modules/
 # Installed Bower components
 /bower_components/
-# Collected static-files
-/static/
+# Production static-files
+/src/production-static/
 # Project static CSS
 /src/static/css/
 # Project static JS

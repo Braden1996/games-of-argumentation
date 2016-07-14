@@ -1,6 +1,6 @@
 var config = require("../");
 
 module.exports = {
-  source: config.projectCollectStatic,
-  destination: config.projectCollectStatic
+  source: config.projectStatic,
+  destination: config.project + "/production-static/"
 };
