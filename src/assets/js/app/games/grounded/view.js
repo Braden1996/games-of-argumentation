@@ -23,6 +23,7 @@ function updateDom(cy) {
 
 	let is_proponent = $("[data-playgame='proponent']").hasClass("m-button--switch__li--active");
 
+	ifShowHide("data-playgame", "ifproponent", is_proponent);
 	ifShowHide("data-playgame", "ifaiturn",
 		cy.game_play_possible &&
 		cy.game_play_playing &&

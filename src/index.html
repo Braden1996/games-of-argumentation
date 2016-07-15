@@ -41,7 +41,7 @@
 							<ul class="m-buttongroup m-buttongroup--stretch">
 								<li>
 									<button class="m-button" data-onclick-redirect="opengraphfile">Open Graph File</button>
-									<input class="hide" type="file" data-opengraphfile data-onclick-id="opengraphfile" />
+									<input class="hide" type="file" data-opengraphfile data-onclick-id="opengraphfile"/>
 								</li>
 								<li><button class="m-button" data-viewgraphfile>View Graph File</button></li>
 								<li class="m-button m-button--switch" data-playgame="ifcanplay">
@@ -71,7 +71,9 @@
 										</ul>
 									</li>
 									<li>
-										<button class="m-button" data-playgame="ifaiturn" data-playgame-moveai>Take AI Turn</button>
+										<button class="m-button" data-playgame="ifaiturn" data-playgame-moveai>
+											Take AI Turn for <span data-playgame="ifproponent">Opponent</span><span data-playgame="!ifproponent">Proponent</span>
+										</button>
 									</li>
 									<li>
 										<button class="m-button" data-playgame="ifmoves>1" data-playgame-undo>Undo Last Move</button>
