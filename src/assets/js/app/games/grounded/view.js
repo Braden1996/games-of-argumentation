@@ -35,11 +35,14 @@ function updateDom(cy) {
 
 function buildLogMoveMessage(the_move, node, is_proponent) {
 	return (is_proponent ? "P) " : "O)") +
-		("<em>" + MOVE_STRINGS[the_move] + "</em> ") +
-		("<em>" + node.id() + "</em> ");
+		("<em>" + MOVE_STRINGS[the_move] + "</em>(") +
+		("<em>" + node.id() + "</em>)");
 }
 
 function parseMoveString(cy, str) {
+	str = str.replace("(", " ");
+	str = str.replace(")", "");
+
 	let tokens = str.split(" ");
 	let move = MOVES[tokens.splice(0, 1)[0].toUpperCase()];
 	let node_id = tokens.join(" ");
