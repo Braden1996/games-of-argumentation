@@ -24,13 +24,13 @@ let ROUND_STATES = {
 }
 
 function hasPlayed(node, move) {
-	let cy = cyto_helpers.get_cy(node);
-	let node_stack = cy.game_play_node_stack;
-	let move_stack = cy.game_play_move_stack;
+	let cy = cyto_helpers.getCy(node);
+	let move_stack = cy.app_data.grounded["move_stack"];
+	let node_stack = cy.app_data.grounded["node_stack"];
 
 	let found_count = 0;
 
-	for(let i = 0; i < node_stack.length; i++) {
+	for (let i = 0; i < node_stack.length; i++) {
 		if (node_stack[i] === node && move_stack[i] === move) {
 			found_count++;
 		}
@@ -45,14 +45,14 @@ function getMoveClass(move) {
 
 function getMoveNodes(move, node_stack) {
 	let move_nodes = node_stack.filter((node, i, nodes) => hasPlayed(node, move));
-	let cy = cyto_helpers.get_cy(node_stack);
+	let cy = cyto_helpers.getCy(node_stack);
 	return cy.collection(move_nodes);
 }
 
 // The discussion is terminated iff no next move is possible.
 function getRoundState(node_stack) {
-	let cy = cyto_helpers.get_cy(node_stack);
-	let move_stack = cy.game_play_move_stack;
+	let cy = cyto_helpers.getCy(node_stack);
+	let move_stack = cy.app_data.grounded["move_stack"];
 
 	let last_node = node_stack.slice(-1)[0];
 	let last_move = move_stack.slice(-1)[0];
@@ -93,11 +93,13 @@ function isValidMove(the_move, node) {
 		// 	- Preceding move was CB(B), where A attacks B.
 		//	- No CONCEDE or RETRACT move is applicable.
 		if (the_move === MOVES["HTB"]) {
-			let cy = cyto_helpers.get_cy(node);
-			let node_stack = cy.game_play_node_stack;
-			let move_stack = cy.game_play_move_stack;
-			let last_node = node_stack.slice(-1)[0];
+			let cy = cyto_helpers.getCy(node);
+
+			let move_stack = cy.app_data.grounded["move_stack"];
 			let last_move = move_stack.slice(-1)[0];
+
+			let node_stack = cy.app_data.grounded["node_stack"];
+			let last_node = node_stack.slice(-1)[0];
 
 			return node_stack.length === 0 || (
 				(last_move === MOVES["CB"] && cyto_helpers.attacks(node, last_node)) &&
@@ -109,8 +111,9 @@ function isValidMove(the_move, node) {
 		//	- B has not yet been played RETRACT.
 		//	- No CONCEDE or RETRACT move is applicable.
 		} else if (the_move === MOVES["CB"]) {
-			let cy = cyto_helpers.get_cy(node);
-			let node_stack = cy.game_play_node_stack;
+			let cy = cyto_helpers.getCy(node);
+
+			let node_stack = cy.app_data.grounded["node_stack"];
 			let last_htb = getMoveNodes(MOVES["HTB"], node_stack)
 				.difference(getMoveNodes(MOVES["CONCEDE"], node_stack))
 				.last();
@@ -164,7 +167,7 @@ function findMoveNodes(the_move, node_stack) {
 			let possible_nodes = last_node.incomers().sources();
 			return possible_nodes.filter((i, node) =>  isValidMove(MOVES["HTB"], node));
 		} else {
-			let cy = cyto_helpers.get_cy(node_stack);
+			let cy = cyto_helpers.getCy(node_stack);
 			return cy.collection();
 		}
 
@@ -177,6 +180,7 @@ function findMoveNodes(the_move, node_stack) {
 		let last_htb = getMoveNodes(MOVES["HTB"], node_stack)
 			.difference(getMoveNodes(MOVES["CONCEDE"], node_stack))
 			.last();
+
 		let htb_attackers = last_htb.incomers().sources();
 		return htb_attackers.filter((i, node) => isValidMove(MOVES["CB"], node));
 

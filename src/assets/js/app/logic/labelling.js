@@ -15,7 +15,7 @@ function shouldLabelIn(node, lab) {
 }
 
 function getGroundedLabelling(nodes) {
-	let cy = cyto_helpers.get_cy(nodes);
+	let cy = cyto_helpers.getCy(nodes);
 
 	// Note: 'cy.collection()', in this case, is just an empty set.
 	let lab = {"in": cy.collection(), "out": cy.collection(), "undec": cy.collection()};
@@ -86,7 +86,9 @@ function getGroundedLabelling(nodes) {
 }
 
 function isLabellingShown(cy) {
-	return cy.lab["in"].hasClass("in") || cy.lab["out"].hasClass("out") || cy.lab["undec"].hasClass("undec");
+	return cy.app_data.labelling["grounded"]["in"].hasClass("in") ||
+		cy.app_data.labelling["grounded"]["out"].hasClass("out") ||
+		cy.app_data.labelling["grounded"]["undec"].hasClass("undec");
 }
 
 function isMinMaxShown(cy) {
@@ -94,18 +96,18 @@ function isMinMaxShown(cy) {
 }
 
 function showLabelling(cy) {
-	if(!cy.lab) {
+	if(!cy.app_data.labelling["grounded"]) {
 		return;
 	} else {
 		hideLabelling(cy);
-		cy.lab["in"].addClass("in");
-		cy.lab["out"].addClass("out");
-		cy.lab["undec"].addClass("undec");
+		cy.app_data.labelling["grounded"]["in"].addClass("in");
+		cy.app_data.labelling["grounded"]["out"].addClass("out");
+		cy.app_data.labelling["grounded"]["undec"].addClass("undec");
 	}
 }
 
 function hideLabelling(cy) {
-	if(!cy.lab) {
+	if(!cy.app_data.labelling["grounded"]) {
 		return;
 	} else {
 		cy.nodes().removeClass("in out undec");
@@ -113,7 +115,7 @@ function hideLabelling(cy) {
 }
 
 function showMinMax(cy) {
-	if(!cy.lab) {
+	if(!cy.app_data.labelling["grounded"]) {
 		return;
 	} else {
 		hideMinMax(cy);
@@ -123,7 +125,7 @@ function showMinMax(cy) {
 }
 
 function hideMinMax(cy) {
-	if(!cy.lab) {
+	if(!cy.app_data.labelling["grounded"]) {
 		return;
 	} else {
 		hideLabelling(cy)
@@ -131,9 +133,11 @@ function hideMinMax(cy) {
 	}
 }
 
-function parse_cytoscape_instance(cy) {
+function parseCytoscapeInstance(cy) {
+	cy.app_data.labelling = {};
+
 	let setLabelling = function(evt) {
-		evt.cy.lab = getGroundedLabelling(evt.cy.nodes());
+		evt.cy.app_data.labelling["grounded"] = getGroundedLabelling(evt.cy.nodes());
 		if (isLabellingShown(cy)) {
 			showLabelling(cy);
 		}
@@ -153,5 +157,5 @@ module.exports = {
 	"hideLabelling": hideLabelling,
 	"showMinMax": showMinMax,
 	"hideMinMax": hideMinMax,
-	"parse_cytoscape_instance": parse_cytoscape_instance
+	"parseCytoscapeInstance": parseCytoscapeInstance
 }

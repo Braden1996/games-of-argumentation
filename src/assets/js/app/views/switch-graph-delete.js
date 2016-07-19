@@ -1,12 +1,12 @@
+function parseCytoscapeInstance(cy) {
+	cy.app_data.switch_graph_delete = {};
 
-
-function parse_cytoscape_instance(cy) {
-	$("[data-js='graph-delete-mode']").on("m-button-switched", function(event, is_on) {
-		cy.graph_delete_mode = is_on;
+	$("[data-switch-graph-delete]").on("m-button-switched", function(event, is_on) {
+		cy.app_data.switch_graph_delete["delete_mode"] = is_on;
 	});
 
 	function tryRemoveElement(evt) {
-		if (cy.graph_delete_mode) {
+		if (cy.app_data.switch_graph_delete["delete_mode"]) {
 			evt.cyTarget.remove();
 		}
 	}
@@ -18,5 +18,5 @@ function parse_cytoscape_instance(cy) {
 }
 
 module.exports = {
-	"parse_cytoscape_instance": parse_cytoscape_instance
+	"parseCytoscapeInstance": parseCytoscapeInstance
 }

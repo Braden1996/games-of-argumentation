@@ -14,7 +14,7 @@ function getMinMaxNode(nodes, max=false) {
 		return undefined;
 	} else {
 		let last_node = nodes[0];
-		for(let i = 1; i < nodes.size(); i++ ) {
+		for (let i = 1; i < nodes.size(); i++ ) {
 			var node = nodes[i];
 			if ((max && node.data("min_max_numbering") > last_node.data("min_max_numbering")) ||
 				(!max && node.data("min_max_numbering") < last_node.data("min_max_numbering"))) {
@@ -59,7 +59,7 @@ function strategyMove(node_stack, is_proponent) {
 						node = getMinMaxNode(cb_nodes, true);
 
 						// Check if any other possible move would end the game.
-						for(let i = 1; i < cb_nodes.size(); i++ ) {
+						for (let i = 1; i < cb_nodes.size(); i++ ) {
 							var maybe_cb = cb_nodes[i];
 							let attackers = maybe_cb.incomers().sources();
 							let valid_attackers = attackers.filter((i, attacker) => rules.isValidMove(MOVES["HTB"], attacker));
@@ -108,8 +108,8 @@ function specifcMove(the_move, node, is_proponent) {
 }
 
 function autoMove(node, is_proponent) {
-	let cy =  cyto_helpers.get_cy(node);
-	let node_stack = cy.game_play_node_stack;
+	let cy = cyto_helpers.getCy(node);
+	let node_stack = cy.app_data.grounded["node_stack"];
 
 	// Check if new game.
 	if (node_stack.length === 0) {
@@ -126,14 +126,14 @@ function autoMove(node, is_proponent) {
 // Perform the given move on the given node.
 // This function does not check if the move is valid.
 function makeMove(the_move, node) {
-	let cy =  cyto_helpers.get_cy(node);
-	let node_stack = cy.game_play_node_stack;
-	let move_stack = cy.game_play_move_stack;
+	let cy = cyto_helpers.getCy(node);
+	let move_stack = cy.app_data.grounded["move_stack"];
+	let node_stack = cy.app_data.grounded["node_stack"];
 
 	move_stack.push(the_move);
 	node_stack.push(node);
-	cy.game_play_move_stack = move_stack;
-	cy.game_play_node_stack = node_stack;
+	cy.app_data.grounded["move_stack"] = move_stack;
+	cy.app_data.grounded["node_stack"] = node_stack;
 
 	if(the_move === MOVES["CONCEDE"]) {
 		node.removeClass(getMoveClass("HTB"));
@@ -145,19 +145,19 @@ function makeMove(the_move, node) {
 }
 
 function undoLastMove(node_stack) {
-	let cy =  cyto_helpers.get_cy(node_stack);
-	let move_stack = cy.game_play_move_stack;
+	let cy = cyto_helpers.getCy(node_stack);
+	let move_stack = cy.app_data.grounded["move_stack"];
 
 	// As all other states are terminating states, 'PLAYING' will
 	// ALWAYS be the previous state.
-	if (cy.game_play_state !== ROUND_STATES["PLAYING"]) {
-		cy.game_play_state = ROUND_STATES["PLAYING"];
+	if (cy.app_data.grounded["state"] !== ROUND_STATES["PLAYING"]) {
+		cy.app_data.grounded["state"] = ROUND_STATES["PLAYING"];
 	}
 
 	let last_move = move_stack.pop();
 	let last_node = node_stack.pop();
-	cy.game_play_move_stack = move_stack;
-	cy.game_play_node_stack = node_stack;
+	cy.app_data.grounded["move_stack"] = move_stack;
+	cy.app_data.grounded["node_stack"] = node_stack;
 
 	if(last_move === MOVES["CONCEDE"]) {
 		last_node.addClass(getMoveClass("HTB"));
@@ -174,14 +174,13 @@ function undoLastMove(node_stack) {
 // Check if the given move is valid. If so, perform the move
 // and update the round state.
 function move(the_move, node) {
-	console.log("Move:", the_move, node.id())
 	if (rules.isValidMove(the_move, node)) {
-		let cy = cyto_helpers.get_cy(node);
-		if (cy.game_play_state === ROUND_STATES["PLAYING"]) {
+		let cy = cyto_helpers.getCy(node);
+		if (cy.app_data.grounded["state"] === ROUND_STATES["PLAYING"]) {
 			makeMove(the_move, node);
 
-			let node_stack = cy.game_play_node_stack;
-			cy.game_play_state = rules.getRoundState(node_stack);
+			let node_stack = cy.app_data.grounded["node_stack"];
+			cy.app_data.grounded["state"] = rules.getRoundState(node_stack);
 
 			return true;
 		} else {
@@ -194,24 +193,25 @@ function move(the_move, node) {
 
 // Initiate the game's start variables.
 function startGame(cy) {
-	cy.game_play_playing = true;
+	cy.app_data.grounded["move_stack"] = [];
+	cy.app_data.grounded["node_stack"] = [];
 
-	cy.game_play_move_stack = [];
-	cy.game_play_node_stack = [];
-
-	cy.game_play_state = ROUND_STATES["PLAYING"];  // Current round state
+	cy.app_data.grounded["state"] = ROUND_STATES["PLAYING"];
 }
 
 // Reset the game's start variables.
 function endGame(cy) {
-	cy.game_play_playing = false;
-
-	cy.game_play_state = -1;
+	cy.app_data.grounded["state"] = ROUND_STATES["UNKNOWN"];
 
 	Object.keys(rules.MOVE_CLASSES).forEach((key) => cy.nodes().removeClass(rules.MOVE_CLASSES[key]));
 }
 
-function parse_cytoscape_instance(cy) {
+function parseCytoscapeInstance(cy) {
+	cy.app_data.grounded = {};
+
+	// To prevent other 'modules' from having to 'require("./rules.js")'.
+	cy.app_data.grounded["UNKNOWN_STATE"] = ROUND_STATES["UNKNOWN"];
+
 	startGame(cy);
 	endGame(cy);
 
@@ -224,11 +224,11 @@ function parse_cytoscape_instance(cy) {
 		"endGameCallback": endGame
 	}
 
-	cy = view.parse_cytoscape_instance(cy, playgame_exports);
+	cy = view.parseCytoscapeInstance(cy, playgame_exports);
 
 	return cy;
 }
 
 module.exports = {
-	"parse_cytoscape_instance": parse_cytoscape_instance
+	"parseCytoscapeInstance": parseCytoscapeInstance
 }

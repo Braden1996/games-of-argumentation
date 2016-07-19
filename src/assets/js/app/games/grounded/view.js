@@ -15,21 +15,24 @@ MOVE_STRINGS[MOVES["CONCEDE"]] = "CONCEDE";
 MOVE_STRINGS[MOVES["RETRACT"]] = "RETRACT";
 
 function updateDom(cy) {
-	ifShowHide("data-playgame", "ifcanplay", cy.game_play_possible);
-	ifShowHide("data-playgame", "ifplaying", cy.game_play_possible && cy.game_play_playing);
-	ifShowHide("data-playgame", "ifmoves<1", cy.game_play_move_stack.length < 1);
-	ifShowHide("data-playgame", "ifmoves==1", cy.game_play_move_stack.length === 1);
-	ifShowHide("data-playgame", "ifmoves>1", cy.game_play_move_stack.length > 1);
+	ifShowHide("data-playgame", "ifcanplay", cy.app_data.grounded["possible"]);
+	ifShowHide("data-playgame", "ifplaying",
+		cy.app_data.grounded["possible"] &&
+		cy.app_data.grounded["state"] !== ROUND_STATES["UNKNOWN"]
+	);
+
+	ifShowHide("data-playgame", "ifmoves<1", cy.app_data.grounded["move_stack"].length < 1);
+	ifShowHide("data-playgame", "ifmoves==1", cy.app_data.grounded["move_stack"].length === 1);
+	ifShowHide("data-playgame", "ifmoves>1", cy.app_data.grounded["move_stack"].length > 1);
 
 	let is_proponent = $("[data-playgame='proponent']").hasClass("m-button--switch__li--active");
 
 	ifShowHide("data-playgame", "ifproponent", is_proponent);
 	ifShowHide("data-playgame", "ifaiturn",
-		cy.game_play_possible &&
-		cy.game_play_playing &&
-		cy.game_play_move_stack.length >= 1 &&
-		(is_proponent !== rules.isProponentsTurn(cy.game_play_node_stack)) &&
-		cy.game_play_state === ROUND_STATES["PLAYING"]
+		cy.app_data.grounded["possible"] &&
+		cy.app_data.grounded["move_stack"].length >= 1 &&
+		(is_proponent !== rules.isProponentsTurn(cy.app_data.grounded["node_stack"])) &&
+		cy.app_data.grounded["state"] === ROUND_STATES["PLAYING"]
 	);
 }
 
@@ -54,7 +57,7 @@ function startGame(cy, startGameCallback) {
 	startGameCallback(cy);
 
 	$("[data-playgame-movelist]").empty();
-	discuss.clear_discuss(cy);
+	discuss.clearDiscuss(cy);
 	updateDom(cy);
 }
 
@@ -74,7 +77,7 @@ function PostMove(moveObject) {
 	// from rendering the frame corresponding with the most recent move.
 	window.setTimeout(() => {
 		if (moveObject["node"] !== undefined) {
-			let cy = cyto_helpers.get_cy(moveObject["node"]);
+			let cy = cyto_helpers.getCy(moveObject["node"]);
 
 			updateDom(cy);
 
@@ -82,9 +85,9 @@ function PostMove(moveObject) {
 				let log_str = buildLogMoveMessage(moveObject["move"], moveObject["node"], moveObject["is_proponent"]);
 				$("[data-playgame-movelist]").append("<li>" + log_str + "</li>");
 
-				if (cy.game_play_state !== ROUND_STATES["PLAYING"]) {
+				if (cy.app_data.grounded["state"] !== ROUND_STATES["PLAYING"]) {
 					let end_msg = "The game has terminated for some unknown reason.";
-					switch (cy.game_play_state) {
+					switch (cy.app_data.grounded["state"]) {
 						case ROUND_STATES["INITIAL_CONCEDED"]:
 							end_msg = "The Proponent has won as their initial argument has been conceded!";
 							break;
@@ -100,7 +103,7 @@ function PostMove(moveObject) {
 					alert(end_msg);
 				}
 			} else {
-				if (cy.game_play_state === ROUND_STATES["PLAYING"]) {
+				if (cy.app_data.grounded["state"] === ROUND_STATES["PLAYING"]) {
 					alert("That is an invalid move!");
 				} else {
 					alert("The game has already ended!");
@@ -110,18 +113,18 @@ function PostMove(moveObject) {
 	}, 50);
 }
 
-function parse_cytoscape_instance(cy, playgame_exports) {
-	cy.game_play_possible = false;
+function parseCytoscapeInstance(cy, playgame_exports) {
+	cy.app_data.grounded["possible"] = false;
 
 	updateDom(cy); // Inital update
 
 	let graphUpdated = function(evt) {
-		cy.game_play_possible = true;
+		evt.cy.app_data.grounded["possible"] = true;
 
-		if (cy.game_play_playing) {
-			endGame(cy, playgame_exports.endGameCallback);
+		if (evt.cy.app_data.grounded["state"] !== ROUND_STATES["UNKNOWN"]) {
+			endGame(evt.cy, playgame_exports.endGameCallback);
 		} else {
-			updateDom(cy);
+			updateDom(evt.cy);
 		}
 	}
 
@@ -129,7 +132,7 @@ function parse_cytoscape_instance(cy, playgame_exports) {
 	cy.on("add", graphUpdated);
 
 	cy.on("tap", "node", (evt) => {
-		if (evt.cy.game_play_playing) {
+		if (evt.cy.app_data.grounded["state"] !== ROUND_STATES["UNKNOWN"]) {
 			let is_proponent = $("[data-playgame='proponent']").hasClass("m-button--switch__li--active");
 			let moveObject = playgame_exports.autoMove(evt.cyTarget, is_proponent);
 			PostMove(moveObject);
@@ -157,16 +160,16 @@ function parse_cytoscape_instance(cy, playgame_exports) {
 
 	$("[data-playgame-moveai]").click(function() {
 		let is_proponent = $("[data-playgame='proponent']").hasClass("m-button--switch__li--active");
-		let moveObject = playgame_exports.strategyMove(cy.game_play_node_stack, !is_proponent);
+		let moveObject = playgame_exports.strategyMove(cy.app_data.grounded["node_stack"], !is_proponent);
 		PostMove(moveObject);
 	});
 
 	$("[data-playgame-undo]").click(function() {
-		if (cy.game_play_state !== ROUND_STATES["PLAYING"]) {
+		if (cy.app_data.grounded["state"] !== ROUND_STATES["PLAYING"]) {
 			$("[data-playgame-movelist] > li:last").remove();
 		}
 
-		let moveObject = playgame_exports.undoLastMove(cy.game_play_node_stack);
+		let moveObject = playgame_exports.undoLastMove(cy.app_data.grounded["node_stack"]);
 		$("[data-playgame-movelist] > li:last").remove();
 		updateDom(cy);
 	});
@@ -177,5 +180,5 @@ function parse_cytoscape_instance(cy, playgame_exports) {
 }
 
 module.exports = {
-	"parse_cytoscape_instance": parse_cytoscape_instance
+	"parseCytoscapeInstance": parseCytoscapeInstance
 }

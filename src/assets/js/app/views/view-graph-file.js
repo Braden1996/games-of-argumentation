@@ -1,5 +1,5 @@
 // A rather poor implementation of copying the current graph into to the clipboard...
-function parse_cytoscape_instance(cy) {
+function parseCytoscapeInstance(cy) {
 	$("[data-viewgraphfile]").click((evt) => {
 		let eles = cy.elements().jsons();
 
@@ -20,7 +20,7 @@ function parse_cytoscape_instance(cy) {
 
 			out_eles[ele.group].push(out_ele);
 		}
-		console.log(out_eles, JSON.stringify(out_eles));
+
 		window.prompt("Copy to clipboard: Ctrl+C, Enter", JSON.stringify(out_eles));
 	});
 
@@ -28,5 +28,5 @@ function parse_cytoscape_instance(cy) {
 }
 
 module.exports = {
-	"parse_cytoscape_instance": parse_cytoscape_instance
+	"parseCytoscapeInstance": parseCytoscapeInstance
 }

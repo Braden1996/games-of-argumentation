@@ -1,6 +1,6 @@
 let cytoscape = require("cytoscape");
 
-function get_stylesheet() {
+function getStylesheet() {
 	return cytoscape.stylesheet()
 		.selector("node")
 			.css({
@@ -84,5 +84,5 @@ function get_stylesheet() {
 
 module.exports = {
 	"cytoscape_container": "#l-grapharea__container",
-	"cytoscape_stylesheet": get_stylesheet()
+	"cytoscapeStylesheet": getStylesheet()
 }

@@ -1,7 +1,7 @@
 let cytoscape = require("cytoscape");
 let edgehandles = require("cytoscape-edgehandles");
 
-function create_cytoscape_instance(container) {
+function createCytoscapeInstance(container) {
 	// Register cytoscape-edgehandles
 	edgehandles(cytoscape, $);
 
@@ -31,7 +31,7 @@ function create_cytoscape_instance(container) {
 			let finished = false;
 			while (!finished) {
 				let node_id = prompt("Please enter an id for your new argument:");
-				if (node_id === "") {
+				if (node_id === "" || node_id === null) {
 					finished = true;
 				} else if (cy.getElementById(node_id).empty()) {
 					finished = true;
@@ -47,16 +47,18 @@ function create_cytoscape_instance(container) {
 
 	cy.edgehandles(defaults);
 
+	cy.app_data = {};
+
 	return cy;
 }
 
-function clear_graph(cy) {
+function clearGraph(cy) {
 	cy.remove(cy.elements());
 	cy.trigger("graphClear");
 }
 
-function set_graph(cy, graph) {
-	clear_graph(cy);
+function setGraph(cy, graph) {
+	clearGraph(cy);
 
 	cy.add(graph);
 
@@ -79,12 +81,12 @@ function set_graph(cy, graph) {
 }
 
 // To help prevent us from passing 'cy' around.
-function get_cy(element) {
+function getCy(element) {
 	let cy = undefined;
 
 	if (Array.isArray(element)) {
 		for(let ele of element) {
-			cy = get_cy(ele);
+			cy = getCy(ele);
 			if (cy !== undefined) {
 				break;
 			}
@@ -101,9 +103,9 @@ function attacks(attacker, victim) {
 }
 
 module.exports = {
-	"create_cytoscape_instance": create_cytoscape_instance,
-	"clear_graph": clear_graph,
-	"set_graph": set_graph,
-	"get_cy": get_cy,
+	"createCytoscapeInstance": createCytoscapeInstance,
+	"clearGraph": clearGraph,
+	"setGraph": setGraph,
+	"getCy": getCy,
 	"attacks": attacks
 }
