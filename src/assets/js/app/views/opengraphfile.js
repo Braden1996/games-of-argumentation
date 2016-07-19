@@ -9,9 +9,9 @@ function parse_cytoscape_instance(cy) {
 		cyto_helpers.set_graph(cy, graph);
 
 		if($("[data-js='graph-view-labelling']").hasClass("m-button--switch__li--active")) {
-			labelling.show_labelling(cy);
+			labelling.showLabelling(cy);
 		} else if($("[data-js='graph-view-minmax']").hasClass("m-button--switch__li--active")) {
-			labelling.show_minmax(cy);
+			labelling.showMinMax(cy);
 		}
 	}
 
