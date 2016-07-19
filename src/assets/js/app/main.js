@@ -7,6 +7,7 @@ let cyto_helpers = require("./util/cytoscape-helpers.js");
 // Load views
 let graphviewswitch = require("./views/graphviewswitch.js");
 let opengraphfile = require("./views/opengraphfile.js");
+let switchgraphdelete = require("./views/switch-graph-delete.js");
 let viewgraphfile = require("./views/viewgraphfile.js");
 
 // Load logic
@@ -17,7 +18,7 @@ let discuss = require("./games/discuss/main.js");
 let grounded = require("./games/grounded/main.js");
 
 // The modules which we parse our Cytoscape instance into.
-let parse_cytoscape_modules = [graphviewswitch, opengraphfile, viewgraphfile, labelling, discuss, grounded];
+let parse_cytoscape_modules = [graphviewswitch, opengraphfile, switchgraphdelete, viewgraphfile, labelling, discuss, grounded];
 
 function ready() {
 	let cy_container = $(config.cytoscape_container);
