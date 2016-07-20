@@ -9,6 +9,7 @@ let parse_cytoscape_modules = [
 	// Load views
 	require("./views/open-graph-file.js"),
 	require("./views/save-graph-file.js"),
+	require("./views/save-graph-png.js"),
 	require("./views/switch-graph-delete.js"),
 	require("./views/switch-graph-view.js"),
 
