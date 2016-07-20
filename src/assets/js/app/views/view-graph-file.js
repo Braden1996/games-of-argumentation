@@ -1,5 +1,8 @@
-// A rather poor implementation of copying the current graph into to the clipboard...
+let fileSaver = require("file-saver");
+
 function parseCytoscapeInstance(cy) {
+	let textFile = null;
+
 	$("[data-viewgraphfile]").click((evt) => {
 		let eles = cy.elements().jsons();
 
@@ -21,7 +24,9 @@ function parseCytoscapeInstance(cy) {
 			out_eles[ele.group].push(out_ele);
 		}
 
-		window.prompt("Copy to clipboard: Ctrl+C, Enter", JSON.stringify(out_eles));
+		let text = JSON.stringify(out_eles);
+		let textBlob = new Blob([text], {type: "text/plain"});
+		fileSaver.saveAs(textBlob, "graph.json");
 	});
 
 	return cy;

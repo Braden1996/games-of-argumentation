@@ -45,7 +45,8 @@
   "browser": {
     "jquery": "./bower_components/jquery/dist/jquery.js",
     "cytoscape": "./bower_components/cytoscape/dist/cytoscape.js",
-    "cytoscape-edgehandles": "./bower_components/cytoscape-edgehandles/cytoscape-edgehandles.js"
+    "cytoscape-edgehandles": "./bower_components/cytoscape-edgehandles/cytoscape-edgehandles.js",
+    "file-saver": "./bower_components/file-saver/FileSaver.js"
   },
   "browserify-shim": {
     "jquery": "$"
