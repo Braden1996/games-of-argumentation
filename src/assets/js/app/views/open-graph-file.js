@@ -15,7 +15,7 @@ function parseCytoscapeInstance(cy) {
 		}
 	}
 
-	$("[data-opengraphfile]").change(function() {
+	$("[data-open-graph-file]").change(function() {
 		openFile(this, callback);
 	});
 

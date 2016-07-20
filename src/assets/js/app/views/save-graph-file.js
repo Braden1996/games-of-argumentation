@@ -3,7 +3,7 @@ let fileSaver = require("file-saver");
 function parseCytoscapeInstance(cy) {
 	let textFile = null;
 
-	$("[data-viewgraphfile]").click((evt) => {
+	$("[data-save-graph-file]").click((evt) => {
 		let eles = cy.elements().jsons();
 
 		let out_eles = {};
