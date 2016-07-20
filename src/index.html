@@ -49,15 +49,15 @@
 									<button class="m-button" data-onclick-redirect="opengraphfile">Open Graph File</button>
 									<input class="hide" type="file" data-open-graph-file data-onclick-id="opengraphfile"/>
 								</li>
-								<li><button class="m-button" data-save-graph-file>Save Graph File</button></li>
-								<li><button class="m-button" data-save-graph-png>Save Graph Image</button></li>
-								<li class="m-button m-button--switch" data-grounded="ifcanplay" data-socratic="!ifplaying">
+								<li><button class="m-button" data-save-graph-file data-cytoscape="ifgraphset">Save Graph File</button></li>
+								<li><button class="m-button" data-save-graph-png data-cytoscape="ifgraphset">Save Graph Image</button></li>
+								<li class="m-button m-button--switch" data-cytoscape="ifgraphset" data-socratic="!ifplaying">
 									<ul>
 										<li class="m-button--switch__li--active" data-grounded="start">Play Grounded Discussion</li>
 										<li>Stop Grounded Discussion</li>
 									</ul>
 								</li>
-								<li class="m-button m-button--switch" data-socratic="ifcanplay" data-grounded="!ifplaying">
+								<li class="m-button m-button--switch" data-cytoscape="ifgraphset" data-grounded="!ifplaying">
 									<ul>
 										<li class="m-button--switch__li--active" data-socratic="start">Play Socratic Discussion</li>
 										<li>Stop Socratic Discussion</li>

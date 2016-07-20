@@ -15,11 +15,7 @@ MOVE_STRINGS[MOVES["CONCEDE"]] = "CONCEDE";
 MOVE_STRINGS[MOVES["RETRACT"]] = "RETRACT";
 
 function updateDom(cy) {
-	ifShowHide("data-grounded", "ifcanplay", cy.app_data.grounded["possible"]);
-	ifShowHide("data-grounded", "ifplaying",
-		cy.app_data.grounded["possible"] &&
-		cy.app_data.grounded["state"] !== ROUND_STATES["UNKNOWN"]
-	);
+	ifShowHide("data-grounded", "ifplaying", cy.app_data.grounded["state"] !== ROUND_STATES["UNKNOWN"]);
 
 	ifShowHide("data-grounded", "ifmoves<1", cy.app_data.grounded["move_stack"].length < 1);
 	ifShowHide("data-grounded", "ifmoves==1", cy.app_data.grounded["move_stack"].length === 1);
@@ -29,7 +25,6 @@ function updateDom(cy) {
 
 	ifShowHide("data-grounded", "ifproponent", is_proponent);
 	ifShowHide("data-grounded", "ifaiturn",
-		cy.app_data.grounded["possible"] &&
 		cy.app_data.grounded["move_stack"].length >= 1 &&
 		(is_proponent !== rules.isProponentsTurn(cy.app_data.grounded["node_stack"])) &&
 		cy.app_data.grounded["state"] === ROUND_STATES["PLAYING"]
@@ -121,13 +116,9 @@ function PostMove(moveObject) {
 }
 
 function parseCytoscapeInstance(cy, playgame_exports) {
-	cy.app_data.grounded["possible"] = false;
-
 	updateDom(cy); // Inital update
 
 	let graphUpdated = function(evt) {
-		evt.cy.app_data.grounded["possible"] = true;
-
 		if (evt.cy.app_data.grounded["state"] !== ROUND_STATES["UNKNOWN"]) {
 			endGame(evt.cy, playgame_exports.endGameCallback);
 		} else {

@@ -10,11 +10,7 @@ let MOVE_STRINGS = {};
 MOVE_STRINGS[MOVES["TEST"]] = "TEST";
 
 function updateDom(cy) {
-	ifShowHide("data-socratic", "ifcanplay", cy.app_data.socratic["possible"]);
-	ifShowHide("data-socratic", "ifplaying",
-		cy.app_data.socratic["possible"] &&
-		cy.app_data.socratic["state"] !== ROUND_STATES["UNKNOWN"]
-	);
+	ifShowHide("data-socratic", "ifplaying", cy.app_data.socratic["state"] !== ROUND_STATES["UNKNOWN"]);
 
 	ifShowHide("data-socratic", "ifmoves<1", cy.app_data.socratic["move_stack"].length < 1);
 	ifShowHide("data-socratic", "ifmoves==1", cy.app_data.socratic["move_stack"].length === 1);
@@ -24,7 +20,6 @@ function updateDom(cy) {
 
 	ifShowHide("data-socratic", "ifsocrates", is_socrates);
 	ifShowHide("data-socratic", "ifaiturn",
-		cy.app_data.socratic["possible"] &&
 		cy.app_data.socratic["move_stack"].length >= 1 &&
 		cy.app_data.socratic["state"] === ROUND_STATES["PLAYING"]
 	);
@@ -68,13 +63,9 @@ function endGame(cy, endGameCallback) {
 }
 
 function parseCytoscapeInstance(cy, socratic_exports) {
-	cy.app_data.socratic["possible"] = false;
-
 	updateDom(cy); // Inital update
 
 	let graphUpdated = function(evt) {
-		evt.cy.app_data.socratic["possible"] = true;
-
 		if (evt.cy.app_data.socratic["state"] !== ROUND_STATES["UNKNOWN"]) {
 			endGame(evt.cy, socratic_exports.endGameCallback);
 		} else {

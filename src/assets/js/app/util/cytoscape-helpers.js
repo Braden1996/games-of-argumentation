@@ -1,5 +1,6 @@
 let cytoscape = require("cytoscape");
 let edgehandles = require("cytoscape-edgehandles");
+let ifShowHide = require("./ifshowhide.js");
 
 function createCytoscapeInstance(container) {
 	// Register cytoscape-edgehandles
@@ -49,12 +50,16 @@ function createCytoscapeInstance(container) {
 
 	cy.app_data = {};
 
+	ifShowHide("data-cytoscape", "ifgraphset", false);
+
 	return cy;
 }
 
 function clearGraph(cy) {
 	cy.remove(cy.elements());
 	cy.trigger("graphClear");
+
+	ifShowHide("data-cytoscape", "ifgraphset", false);
 }
 
 function setGraph(cy, graph) {
@@ -78,6 +83,8 @@ function setGraph(cy, graph) {
 	}});
 
 	layout.run();
+	console.log("POOP");
+	ifShowHide("data-cytoscape", "ifgraphset", true);
 }
 
 // To help prevent us from passing 'cy' around.
