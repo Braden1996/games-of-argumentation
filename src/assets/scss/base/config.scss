@@ -21,6 +21,11 @@ $base-colors: (
 		"base": #2ecc71,
 		"light": lighten(#2ecc71, 10%),
 		"dark": #27ae60
+	),
+	"danger": (
+		"base": #ef4a4a,
+		"light": #f36363,
+		"dark": #d32d2d
 	)
 );
 

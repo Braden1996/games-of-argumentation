@@ -31,7 +31,7 @@
 						<li class="m-button m-button--circle m-button--switch">
 							<ul>
 								<li class="m-button__icon m-button--switch__li--active">C</li>
-								<li class="m-button__icon" data-switch-graph-delete>D</li>
+								<li class="m-button__icon m-button--switch__li--danger" data-switch-graph-delete>D</li>
 							</ul>
 						</li>
 					</ul>
@@ -49,44 +49,44 @@
 									<button class="m-button" data-onclick-redirect="opengraphfile">Open Graph File</button>
 									<input class="hide" type="file" data-opengraphfile data-onclick-id="opengraphfile"/>
 								</li>
-								<li><button class="m-button" data-viewgraphfile>View Graph File</button></li>
-								<li class="m-button m-button--switch" data-playgame="ifcanplay">
+								<li><button class="m-button" data-viewgraphfile>Save Graph File</button></li>
+								<li class="m-button m-button--switch" data-grounded="ifcanplay">
 									<ul>
-										<li class="m-button--switch__li--active" data-playgame="start">Play Discussion Game</li>
+										<li class="m-button--switch__li--active" data-grounded="start">Play Discussion Game</li>
 										<li>Stop Discussion Game</li>
 									</ul>
 								</li>
 							</ul>
 						</li>
 						<li data-tablist-id="log">
-							<div data-playgame="ifplaying">
+							<div data-grounded="ifplaying">
 								<b>Played Moves:</b><br />
-								<span data-playgame="ifmoves<1">Please initiate the game by playing a 'HTB' move.</span>
-								<ol data-playgame-movelist>
+								<span data-grounded="ifmoves<1">Please initiate the game by playing a 'HTB' move.</span>
+								<ol data-grounded-movelist>
 								</ol>
 
 								<br />
-								<label>Move: <input type="text" data-playgame-moveinput /></label>
+								<label>Move: <input type="text" data-grounded-moveinput /></label>
 								<br /><br />
 
 								<ul class="m-buttongroup m-buttongroup--stretch">
-									<li class="m-button m-button--switch" data-playgame="ifmoves==1">
+									<li class="m-button m-button--switch" data-grounded="ifmoves==1">
 										<ul>
-											<li class="m-button--switch__li--active" data-playgame="proponent">Play as Proponent</li>
-											<li data-playgame="opponent">Play as Opponent</li>
+											<li class="m-button--switch__li--active" data-grounded="proponent">Play as Proponent</li>
+											<li data-grounded="opponent">Play as Opponent</li>
 										</ul>
 									</li>
 									<li>
-										<button class="m-button" data-playgame="ifaiturn" data-playgame-moveai>
-											Take AI Turn for <span data-playgame="ifproponent">Opponent</span><span data-playgame="!ifproponent">Proponent</span>
+										<button class="m-button" data-grounded="ifaiturn" data-grounded-moveai>
+											Take AI Turn for <span data-grounded="ifproponent">Opponent</span><span data-grounded="!ifproponent">Proponent</span>
 										</button>
 									</li>
 									<li>
-										<button class="m-button" data-playgame="ifmoves>1" data-playgame-undo>Undo Last Move</button>
+										<button class="m-button" data-grounded="ifmoves>1" data-grounded-undo>Undo Last Move</button>
 									</li>
 								</ul>
 							</div>
-							<div data-playgame="!ifplaying">
+							<div data-grounded="!ifplaying">
 								<b>Discussion of an Argument:</b><br />
 								<span data-discuss-empty>To discuss the labelling of a particular argument, please select it on the graph.</span>
 								<ul data-discuss-list>

@@ -8,9 +8,9 @@ let cyto_helpers = require("./util/cytoscape-helpers.js");
 let parse_cytoscape_modules = [
 	// Load views
 	require("./views/open-graph-file.js"),
+	require("./views/save-graph-file.js"),
 	require("./views/switch-graph-delete.js"),
 	require("./views/switch-graph-view.js"),
-	require("./views/view-graph-file.js"),
 
 	// Load logic
 	 require("./logic/labelling.js"),
