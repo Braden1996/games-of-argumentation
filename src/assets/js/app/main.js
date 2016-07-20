@@ -17,7 +17,8 @@ let parse_cytoscape_modules = [
 
 	// Load games
 	require("./games/discuss/main.js"),
-	require("./games/grounded/main.js")
+	require("./games/grounded/main.js"),
+	require("./games/socratic/main.js")
 ];
 
 function ready() {

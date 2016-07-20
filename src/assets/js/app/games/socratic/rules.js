@@ -1,0 +1,17 @@
+let MOVES = {
+	"TEST": 0
+}
+
+let MOVE_CLASSES = {}
+MOVE_CLASSES[MOVES["TEST"]] = "test";
+
+let ROUND_STATES = {
+	"UNKNOWN": -1,
+	"PLAYING": 0
+}
+
+module.exports = {
+	"MOVES": MOVES,
+	"MOVE_CLASSES": MOVE_CLASSES,
+	"ROUND_STATES": ROUND_STATES
+}

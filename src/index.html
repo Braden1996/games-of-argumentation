@@ -50,16 +50,28 @@
 									<input class="hide" type="file" data-opengraphfile data-onclick-id="opengraphfile"/>
 								</li>
 								<li><button class="m-button" data-viewgraphfile>Save Graph File</button></li>
-								<li class="m-button m-button--switch" data-grounded="ifcanplay">
+								<li class="m-button m-button--switch" data-grounded="ifcanplay" data-socratic="!ifplaying">
 									<ul>
-										<li class="m-button--switch__li--active" data-grounded="start">Play Discussion Game</li>
-										<li>Stop Discussion Game</li>
+										<li class="m-button--switch__li--active" data-grounded="start">Play Grounded Discussion</li>
+										<li>Stop Grounded Discussion</li>
+									</ul>
+								</li>
+								<li class="m-button m-button--switch" data-socratic="ifcanplay" data-grounded="!ifplaying">
+									<ul>
+										<li class="m-button--switch__li--active" data-socratic="start">Play Socratic Discussion</li>
+										<li>Stop Socratic Discussion</li>
 									</ul>
 								</li>
 							</ul>
 						</li>
 						<li data-tablist-id="log">
-							<div data-grounded="ifplaying">
+							<div data-grounded="!ifplaying" data-socratic="!ifplaying">
+								<b>Discussion of an Argument:</b><br />
+								<span data-discuss-empty>To discuss the labelling of a particular argument, please select it on the graph.</span>
+								<ul data-discuss-list>
+								</ul>
+							</div>
+							<div data-grounded="ifplaying" data-socratic="!ifplaying">
 								<b>Played Moves:</b><br />
 								<span data-grounded="ifmoves<1">Please initiate the game by playing a 'HTB' move.</span>
 								<ol data-grounded-movelist>
@@ -86,10 +98,31 @@
 									</li>
 								</ul>
 							</div>
-							<div data-grounded="!ifplaying">
-								<b>Discussion of an Argument:</b><br />
-								<span data-discuss-empty>To discuss the labelling of a particular argument, please select it on the graph.</span>
-								<ul data-discuss-list>
+							<div data-grounded="!ifplaying" data-socratic="ifplaying">
+								<b>Played Moves:</b><br />
+								<span data-socratic="ifmoves<1">Please initiate the game by playing a ... move.</span>
+								<ol data-socratic-movelist>
+								</ol>
+
+								<br />
+								<label>Move: <input type="text" data-socratic-moveinput /></label>
+								<br /><br />
+
+								<ul class="m-buttongroup m-buttongroup--stretch">
+									<li class="m-button m-button--switch" data-socratic="ifmoves==1">
+										<ul>
+											<li class="m-button--switch__li--active" data-socratic="socrates">Play as Socrates</li>
+											<li data-socratic="menexenus">Play as Menexenus</li>
+										</ul>
+									</li>
+									<li>
+										<button class="m-button" data-socratic="ifaiturn" data-socratic-moveai>
+											Take AI Turn for <span data-socratic="ifsocrates">Menexenus</span><span data-socratic="!ifsocrates">Socrates</span>
+										</button>
+									</li>
+									<li>
+										<button class="m-button" data-socratic="ifmoves>1" data-socratic-undo>Undo Last Move</button>
+									</li>
 								</ul>
 							</div>
 						</li>

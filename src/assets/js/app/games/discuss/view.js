@@ -51,7 +51,8 @@ function clearLog() {
 
 function parseCytoscapeInstance(cy, discussCallback) {
 	cy.on("tap", "node", (evt) => {
-		if(!cy.app_data.grounded || cy.app_data.grounded["state"] === cy.app_data.grounded["UNKNOWN_STATE"]) {
+		if((!cy.app_data.grounded || cy.app_data.grounded["state"] === cy.app_data.grounded["UNKNOWN_STATE"]) &&
+			!cy.app_data.socratic || cy.app_data.socratic["state"] === cy.app_data.socratic["UNKNOWN_STATE"]) {
 			let old_node = evt.cy.app_data.discuss["target"];
 			let new_node = evt.cyTarget
 
