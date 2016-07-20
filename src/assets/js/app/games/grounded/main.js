@@ -102,7 +102,7 @@ function easyMove(node, is_proponent) {
 }
 
 // Attempt to make the given move on the given node.
-function specifcMove(the_move, node, is_proponent) {
+function specificMove(the_move, node, is_proponent) {
 	let move_valid = move(the_move, node);
 	return {"move": the_move, "node": node, "valid": move_valid, "is_proponent": is_proponent};
 }
@@ -216,7 +216,7 @@ function parseCytoscapeInstance(cy) {
 	endGame(cy);
 
 	let playgame_exports = {
-		"move": specifcMove,
+		"move": specificMove,
 		"autoMove": autoMove,
 		"strategyMove": strategyMove,
 		"undoLastMove": undoLastMove,
