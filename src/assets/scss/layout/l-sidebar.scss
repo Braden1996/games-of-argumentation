@@ -9,6 +9,7 @@ $l-sidebar-breakpoint-tablet: $base-breakpoint-tablet;
 $l-sidebar-margin: 16px;
 $l-sidebar-color-background: basecolor("background");
 $l-sidebar-border: 1px solid basecolor("foreground", "darker");
+$l-sidebar-opacity: 0.95;
 
 $l-sidebar__header-font-family: "Raleway", sans-serif;
 $l-sidebar__header-font-size: 22pt;
@@ -32,6 +33,7 @@ $l-sidebar-width: $l-sidebar-breakpoint-mobile-lg - $l-sidebar__buttongroup__but
 
 	transition: left $base-constant-transition ease-out;
 
+	opacity: $l-sidebar-opacity;
 	background-color: $l-sidebar-color-background;
 	box-shadow: 5px 0 5px 0 rgba(0, 0, 0, .1);
 
