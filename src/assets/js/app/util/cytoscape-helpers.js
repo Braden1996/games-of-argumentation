@@ -83,7 +83,7 @@ function setGraph(cy, graph) {
 	}});
 
 	layout.run();
-	console.log("POOP");
+
 	ifShowHide("data-cytoscape", "ifgraphset", true);
 }
 
