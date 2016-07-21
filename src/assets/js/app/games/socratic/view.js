@@ -77,7 +77,9 @@ function parseCytoscapeInstance(cy, socratic_exports) {
 	cy.on("add", graphUpdated);
 
 	cy.on("tap", "node", (evt) => {
-		console.log("Node", evt.cyTarget.id(), "has been clicked!");
+		if (evt.cy.app_data.socratic["state"] !== ROUND_STATES["UNKNOWN"]) {
+			console.log("Node", evt.cyTarget.id(), "has been clicked!");
+		}
 	});
 
 	$("[data-socratic-moveinput]").keyup(function(e) {
