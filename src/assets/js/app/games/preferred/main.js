@@ -15,31 +15,31 @@ function move(the_move, node) {
 
 // Initiate the game's start variables.
 function startGame(cy) {
-	cy.app_data.socratic["move_stack"] = [];
-	cy.app_data.socratic["node_stack"] = [];
+	cy.app_data.preferred["move_stack"] = [];
+	cy.app_data.preferred["node_stack"] = [];
 
-	cy.app_data.socratic["state"] = ROUND_STATES["PLAYING"];
+	cy.app_data.preferred["state"] = ROUND_STATES["PLAYING"];
 }
 
 // Reset the game's start variables.
 function endGame(cy) {
-	cy.app_data.socratic["state"] = ROUND_STATES["UNKNOWN"];
+	cy.app_data.preferred["state"] = ROUND_STATES["UNKNOWN"];
 }
 
 function parseCytoscapeInstance(cy) {
-	cy.app_data.socratic = {};
-	cy.app_data.socratic["UNKNOWN_STATE"] = ROUND_STATES["UNKNOWN"];
+	cy.app_data.preferred = {};
+	cy.app_data.preferred["UNKNOWN_STATE"] = ROUND_STATES["UNKNOWN"];
 
 	startGame(cy);
 	endGame(cy);
 
-	let socratic_exports = {
+	let preferred_exports = {
 		"move": specificMove,
 		"startGameCallback": startGame,
 		"endGameCallback": endGame
 	};
 
-	cy = view.parseCytoscapeInstance(cy, socratic_exports);
+	cy = view.parseCytoscapeInstance(cy, preferred_exports);
 
 	return cy;
 }
