@@ -7,8 +7,10 @@ let MOVES = rules.MOVES;
 let getMoveClass = rules.getMoveClass;
 let ROUND_STATES = rules.ROUND_STATES;
 
-// We need our own min/max function as Cytoscape JS internally uses 'Infinity',
-// which conflicts with our 'undec' nodes - as their 'min_max_numbering' is 'Infinity'.
+// From a collection of nodes, determine the node with either the lowest - or highest -
+// 'min_max_numbering'.
+// Sadly, we cannot use Cytoscape JS's 'eles.min()' function as it internally uses
+// 'Infinity' - which conflicts with the 'min_max_numbering' of our 'undec' nodes.
 function getMinMaxNode(nodes, max=false) {
 	if (nodes.empty()) {
 		return undefined;
@@ -25,7 +27,9 @@ function getMinMaxNode(nodes, max=false) {
 	}
 }
 
-// Use the min-max numbering to intelligently determine the next move.
+// Strategically identify and play the best move possible proposed by the
+// player indicated by the boolean value 'is_proponent'.
+// This strategy makes use of our pre-calculated 'min_max_numbering'.
 function strategyMove(node_stack, is_proponent) {
 	if (node_stack.length > 0) {
 		let the_move = undefined;
@@ -80,9 +84,8 @@ function strategyMove(node_stack, is_proponent) {
 	return undefined;
 }
 
-// Determine the move to make, given a particular node and a
-// boolean indicating if the proposer of the move is the
-// proponent.
+// Determine the move to make, given a particular node and a boolean
+// indicating if the proposer of the move is the proponent.
 function easyMove(node, is_proponent) {
 	let the_move = undefined;
 	if (is_proponent) {
@@ -107,6 +110,8 @@ function specificMove(the_move, node, is_proponent) {
 	return {"move": the_move, "node": node, "valid": move_valid, "is_proponent": is_proponent};
 }
 
+// Play the appropriate move given a target node and a boolean indicating if
+// the move is to be proposed by the Proponent or Opponent.
 function autoMove(node, is_proponent) {
 	let cy = cyto_helpers.getCy(node);
 	let node_stack = cy.app_data.grounded["node_stack"];
@@ -144,6 +149,7 @@ function makeMove(the_move, node) {
 	node.addClass(rules.MOVE_CLASSES[the_move]);
 }
 
+// Undo the most-recently played move.
 function undoLastMove(node_stack) {
 	let cy = cyto_helpers.getCy(node_stack);
 	let move_stack = cy.app_data.grounded["move_stack"];
@@ -171,8 +177,9 @@ function undoLastMove(node_stack) {
 	}
 }
 
-// Check if the given move is valid. If so, perform the move
-// and update the round state.
+// Play the given move.
+// We first check that the move is valid, if so, we next call for the move
+// to be performed and then update the round state.
 function move(the_move, node) {
 	if (rules.isValidMove(the_move, node)) {
 		let cy = cyto_helpers.getCy(node);
@@ -191,7 +198,7 @@ function move(the_move, node) {
 	}
 }
 
-// Initiate the game's start variables.
+// Initiate everything in preparation for a fresh game.
 function startGame(cy) {
 	cy.app_data.grounded["move_stack"] = [];
 	cy.app_data.grounded["node_stack"] = [];
@@ -199,7 +206,8 @@ function startGame(cy) {
 	cy.app_data.grounded["state"] = ROUND_STATES["PLAYING"];
 }
 
-// Reset the game's start variables.
+// Reset everything which has occurred, so we return to the state prior to the
+// start of the game.
 function endGame(cy) {
 	cy.app_data.grounded["state"] = ROUND_STATES["UNKNOWN"];
 
