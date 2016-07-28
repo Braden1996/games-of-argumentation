@@ -68,61 +68,47 @@
 						<li data-tablist-id="log">
 							<div data-grounded="!ifplaying" data-preferred="!ifplaying">
 								<b>Discussion of an Argument:</b><br />
-								<span data-discuss-empty>To discuss the labelling of a particular argument, please select it on the graph.</span>
-								<ul data-discuss-list>
-								</ul>
+								<span>To begin a discussion game, please first start your chosen game from within the 'Operations' tab.</span>
 							</div>
-							<div data-grounded="ifplaying" data-preferred="!ifplaying">
+							<div data-grounded="ifplaying" data-preferred="ifplaying" data-ifshowhide-mode="weak">
 								<b>Played Moves:</b><br />
 								<span data-grounded="ifmoves<1">Please initiate the game by playing a 'HTB' move.</span>
-								<ol data-grounded-movelist>
-								</ol>
-
-								<br />
-								<label>Move: <input type="text" data-grounded-moveinput /></label>
-								<br /><br />
-
-								<ul class="m-buttongroup m-buttongroup--stretch">
-									<li class="m-button m-button--switch" data-grounded="ifmoves==1">
-										<ul>
-											<li class="m-button--switch__li--active" data-grounded="proponent">Play as Proponent</li>
-											<li data-grounded="opponent">Play as Opponent</li>
-										</ul>
-									</li>
-									<li>
-										<button class="m-button" data-grounded="ifaiturn" data-grounded-moveai>
-											Take AI Turn for <span data-grounded="ifproponent">Opponent</span><span data-grounded="!ifproponent">Proponent</span>
-										</button>
-									</li>
-									<li>
-										<button class="m-button" data-grounded="ifmoves>1" data-grounded-undo>Undo Last Move</button>
-									</li>
-								</ul>
-							</div>
-							<div data-grounded="!ifplaying" data-preferred="ifplaying">
-								<b>Played Moves:</b><br />
 								<span data-preferred="ifmoves<1">Please initiate the game by playing an 'in' move.</span>
-								<ol data-preferred-movelist>
+								<ol data-grounded-movelist data-preferred-movelist>
 								</ol>
 
 								<br />
-								<label>Move: <input type="text" data-preferred-moveinput /></label>
+								<label>Move: <input type="text" data-grounded-moveinput data-preferred-moveinput/></label>
 								<br /><br />
 
 								<ul class="m-buttongroup m-buttongroup--stretch">
-									<li class="m-button m-button--switch" data-preferred="ifmoves==1">
+									<li class="m-button m-button--switch" data-grounded="ifmoves==1" data-preferred="ifmoves==1" data-ifshowhide-mode="weak">
 										<ul>
-											<li class="m-button--switch__li--active" data-preferred="menexenus">Play as Menexenus</li>
-											<li data-preferred="socrates">Play as Socrates</li>
+											<li class="m-button--switch__li--active" data-grounded="proponent" data-preferred="menexenus">
+												Play as <span data-grounded="ifplaying">Proponent</span><span data-preferred="ifplaying">Menexenus</span>
+											</li>
+											<li data-grounded="opponent" data-preferred="socrates">
+												Play as <span data-grounded="ifplaying">Opponent</span><span data-preferred="ifplaying">Socrates</span>
+											</li>
 										</ul>
 									</li>
 									<li>
-										<button class="m-button" data-preferred="ifaiturn" data-preferred-moveai>
-											Take AI Turn for <span data-preferred="ifsocrates">Menexenus</span><span data-preferred="!ifsocrates">Socrates</span>
+										<button class="m-button" data-grounded="ifaiturn" data-grounded-moveai  data-preferred="ifaiturn" data-preferred-moveai data-ifshowhide-mode="weak">
+											Take AI Turn for
+											<span data-grounded="ifplaying">
+												<span data-grounded="ifproponent">Opponent</span>
+												<span data-grounded="!ifproponent">Proponent</span>
+											</span>
+											<span data-preferred="ifplaying">
+												<span data-preferred="ifsocrates">Menexenus</span>
+												<span data-preferred="!ifsocrates">Socrates</span>
+											</span>
 										</button>
 									</li>
 									<li>
-										<button class="m-button" data-preferred="ifmoves>1" data-preferred-undo>Undo Last Move</button>
+										<button class="m-button" data-grounded="ifmoves>1" data-grounded-undo data-preferred="ifmoves>1" data-preferred-undo data-ifshowhide-mode="weak">
+											Undo Last Move
+										</button>
 									</li>
 								</ul>
 							</div>
