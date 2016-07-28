@@ -25,7 +25,6 @@ function canShow(ele) {
 			}
 
 			if (value in show_values[data_attribute]) {
-				if (ele.hasClass("turd")) {console.log(data_attribute, value, show_values[data_attribute][value], is_not, mode);};
 				if (show_values[data_attribute][value] === is_not) {
 					if (mode === "strong") {
 						return false;
@@ -38,8 +37,6 @@ function canShow(ele) {
 			}
 		}
 	}
-
-	if (ele.hasClass("turd")) {console.log("DONE:", show_values, mode === "strong" ? true : false)}
 
 	return mode === "strong" ? true : false;
 }
