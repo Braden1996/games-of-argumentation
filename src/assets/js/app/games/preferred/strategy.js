@@ -19,20 +19,21 @@ function getWinningStrategyM(game, out_argument) {
 		game.terminate_state !== TERMINATE_STATES["S_NOMOVE"]) {
 		return game._createCollection();
 	} else {
-		return out_argument.incomers().sources()
+		return (game.move_count === 0 ? game.findMoveArgs(MOVES["IN"]) : (
+			out_argument.incomers().sources()
 			.filter((i, a) => game.isValidMove(a, MOVES["IN"]))
-			.filter((i, a) => {
-				let trial_game = game.copy();
-				trial_game.move(a, MOVES["IN"]);
+		)).filter((i, a) => {
+			let trial_game = game.copy();
+			trial_game.move(a, MOVES["IN"]);
 
-				let out_moves = trial_game.findMoveArgs(MOVES["OUT"]);
-				return out_moves.empty() || out_moves.filter((i, a2) => {
-						let trial_game2 = trial_game.copy();
-						trial_game2.move(a2, MOVES["OUT"]);
-						return getWinningStrategyM(trial_game2, a2)
-							.nonempty();
-					}).nonempty();
-			});
+			let out_moves = trial_game.findMoveArgs(MOVES["OUT"]);
+			return out_moves.empty() || out_moves.filter((i, a2) => {
+					let trial_game2 = trial_game.copy();
+					trial_game2.move(a2, MOVES["OUT"]);
+					return getWinningStrategyM(trial_game2, a2)
+						.nonempty();
+				}).nonempty();
+		});
 	};
 };
 
