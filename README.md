@@ -1,6 +1,6 @@
-# Grounded Discussion Game - Web Demo
+# Argumentation Games - Web Demo
 ## Introduction
-A web-based demonstration of Martin Caminada's Grounded Discussion Game.
+A web-based demonstration of several argumentation games.
 
 For more information regarding the games, please consult their corresponding papers:
 - [Grounded Discussion Game](https://users.cs.cf.ac.uk/CaminadaM/publications/simplified_grounded_TAFA.pdf).
