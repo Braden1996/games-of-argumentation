@@ -19,8 +19,8 @@ let MOVES = {
 // Override our base game to provide the functionality required by the grounded
 // discussion game.
 class GroundedGame extends game.Game {
-	constructor(createCollection) {
-		super(createCollection);
+	constructor(createCollection, arg_stack=[], move_stack=[]) {
+		super(createCollection, arg_stack, move_stack);
 
 		// Attach our grounded game's enums to our class.
 		this._TERMINATE_STATES = TERMINATE_STATES;
