@@ -17,9 +17,7 @@ let parse_cytoscape_modules = [
 	 require("./logic/labelling.js"),
 
 	// Load games
-	require("./games/discuss/main.js"),
-	require("./games/grounded/main.js"),
-	require("./games/preferred/main.js")
+	require("./games/grounded/view.js"),
 ];
 
 function ready() {
@@ -27,7 +25,7 @@ function ready() {
 	let cy = cyto_helpers.createCytoscapeInstance(cy_container);
 	cy.style(config.cytoscapeStylesheet);
 
-	parse_cytoscape_modules.forEach((module, i, arr) => module.parseCytoscapeInstance(cy));
+	parse_cytoscape_modules.forEach((m, i) => m.parseCytoscapeInstance(cy));
 
 	return cy;
 }

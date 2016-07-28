@@ -57,12 +57,6 @@
 										<li>Stop Grounded Discussion</li>
 									</ul>
 								</li>
-								<li class="m-button m-button--switch" data-cytoscape="ifgraphset" data-grounded="!ifplaying">
-									<ul>
-										<li class="m-button--switch__li--active" data-preferred="start">Play Preferred Discussion</li>
-										<li>Stop Preferred Discussion</li>
-									</ul>
-								</li>
 							</ul>
 						</li>
 						<li data-tablist-id="log">
@@ -96,33 +90,6 @@
 									</li>
 									<li>
 										<button class="m-button" data-grounded="ifmoves>1" data-grounded-undo>Undo Last Move</button>
-									</li>
-								</ul>
-							</div>
-							<div data-grounded="!ifplaying" data-preferred="ifplaying">
-								<b>Played Moves:</b><br />
-								<span data-preferred="ifmoves<1">Please initiate the game by playing a ... move.</span>
-								<ol data-preferred-movelist>
-								</ol>
-
-								<br />
-								<label>Move: <input type="text" data-preferred-moveinput /></label>
-								<br /><br />
-
-								<ul class="m-buttongroup m-buttongroup--stretch">
-									<li class="m-button m-button--switch" data-preferred="ifmoves==1">
-										<ul>
-											<li class="m-button--switch__li--active" data-preferred="socrates">Play as Socrates</li>
-											<li data-preferred="menexenus">Play as Menexenus</li>
-										</ul>
-									</li>
-									<li>
-										<button class="m-button" data-preferred="ifaiturn" data-preferred-moveai>
-											Take AI Turn for <span data-preferred="ifsocrates">Menexenus</span><span data-preferred="!ifsocrates">Socrates</span>
-										</button>
-									</li>
-									<li>
-										<button class="m-button" data-preferred="ifmoves>1" data-preferred-undo>Undo Last Move</button>
 									</li>
 								</ul>
 							</div>

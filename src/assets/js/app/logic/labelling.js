@@ -1,86 +1,75 @@
 let cyto_helpers = require("../util/cytoscape-helpers.js");
 
-// A node is labelled 'out' iif it has at least one attacker that is already labelled 'in'
-function shouldLabelOut(node, lab) {
-	let attackers = node.incomers().sources();
-	let in_attackers = attackers.intersection(lab["in"]);
-	return in_attackers.length >= 1;
+// Create and return a blank labelling.
+// Note: 'cy.collection()', in this case, is just an empty collection.
+function createEmptyLabelling(cy) {
+	return {"in": cy.collection(), "out": cy.collection(), "undec": cy.collection()};
 }
 
-// A node is labelled 'in' iff all attackers are already labelled 'out'.
-function shouldLabelIn(node, lab) {
-	let attackers = node.incomers().sources();
+// An in-labelled arg is said to be legally in iff all of its attackers are
+// labelled out.
+function isLegallyIn(arg, lab) {
+	let attackers = arg.incomers().sources();
 	let out_attackers = attackers.intersection(lab["out"]);
 	return out_attackers.same(attackers);
 }
 
-function getGroundedLabelling(nodes) {
-	let cy = cyto_helpers.getCy(nodes);
+// An out-labelled arg is said to be legally out iff it has at least one
+// attacker that is labelled in.
+function isLegallyOut(arg, lab) {
+	let attackers = arg.incomers().sources();
+	let in_attackers = attackers.intersection(lab["in"]);
+	return in_attackers.length >= 1;
+}
 
-	// Note: 'cy.collection()', in this case, is just an empty set.
-	let lab = {"in": cy.collection(), "out": cy.collection(), "undec": cy.collection()};
+// Calculate the grounded labelling for the given graph.
+function getGroundedLabelling(args) {
+	let cy = cyto_helpers.getCy(args);
+	let lab = createEmptyLabelling(cy);
 
-	if (nodes.length != 0) {
-		// This array will store all the nodes that we labelled in the past iteration.
-		// That is, at any point, all nodes in this array will have the same min-max numbering.
-		let node_array = [];
-
-		// A counter used to keep track of the min-max numbering.
-		// This can be thought of as the distance (+1) from the nearest initial 'in' node.
-		let min_max_counter = 1;
-
-		// Perform an initial iteration over all the nodes, labelling 'in' for those with no attackers.
-		for (let i = 0; i < nodes.length; i++) {
-	    	let node = nodes[i];
-	    	if (shouldLabelIn(node, lab)) {
-				lab["in"] = lab["in"].add(node);
-				node.data("min_max_numbering", min_max_counter);
-				node_array.push(node);
-			}
+	// Begin by labelling in to all those arguments with no attackers.
+	let newly_labelled = args.filter((i, arg) => {
+		if (isLegallyIn(arg, lab)) {
+			lab["in"] = lab["in"].add(arg);
+			return true;
+		} else {
+			return false;
 		}
+	});
 
-		let next_node_array = node_array;
-		let label_made = true;
-		while (label_made) {
-			label_made = false;
+	// A counter used to keep track of the min-max numbering.
+	let count = 1;
+	let last_labelled = newly_labelled;
+	while (newly_labelled.nonempty()) {
+		newly_labelled.forEach((arg) => arg.data("min_max_numbering", count));
+		count++;
 
-			node_array = next_node_array;
-			next_node_array = [];
-			min_max_counter++;
+		newly_labelled = cy.collection();
+		last_labelled.forEach((arg) => {
+			let attacked = arg.outgoers().targets();
 
-			for (let i = 0; i < node_array.length; i++) {
-	    		let node = node_array[i];
-
-				let attacked = node.outgoers().targets();
-
-				for (let j = 0; j < attacked.length; j++) {
-					let attacked_node = attacked[j];
-
-					// Check that attacked_node isn't already labelled
-					if (!(attacked_node.anySame(lab["in"]) || attacked_node.anySame(lab["out"]))) {
-						let labelled = false;
-						if (shouldLabelIn(attacked_node, lab)) {
-							lab["in"] = lab["in"].add(attacked_node);
-							labelled = true;
-						} else if (shouldLabelOut(attacked_node, lab)) {
-							lab["out"] = lab["out"].add(attacked_node);
-							labelled = true;
-						}
-
-						if (labelled) {
-							label_made = true;
-							attacked_node.data("min_max_numbering", min_max_counter);
-							next_node_array.push(attacked_node);
-						}
+			newly_labelled = newly_labelled.union(attacked.filter((i, att_arg) => {
+				// Check that we haven't already labelled 'attacked_arg'.
+				if (!(att_arg.anySame(lab["in"]) || att_arg.anySame(lab["out"]))) {
+					if (isLegallyIn(att_arg, lab)) {
+						lab["in"] = lab["in"].add(att_arg);
+						return true;
+					} else if (isLegallyOut(att_arg, lab)) {
+						lab["out"] = lab["out"].add(att_arg);
+						return true;
+					} else {
+						return false;
 					}
 				}
-			}
-		}
+			}));
+		});
 
-		// All nodes that aren't 'in' or 'out' must be 'undec'
-		lab["undec"] = nodes.diff(lab["in"].union(lab["out"]))["left"];
-		lab["undec"].data("min_max_numbering", Infinity);
+		last_labelled = newly_labelled;
 	}
+
+	// All args that aren't 'in' or 'out' must be 'undec'
+	lab["undec"] = args.diff(lab["in"].union(lab["out"]))["left"];
+	lab["undec"].data("min_max_numbering", Infinity);
 
 	return lab;
 }

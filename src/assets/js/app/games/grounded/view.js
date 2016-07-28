@@ -1,183 +1,274 @@
 let cyto_helpers = require("../../util/cytoscape-helpers.js");
-let discuss = require("../discuss/main.js");
-let rules = require("./rules.js");
 let ifShowHide = require("../../util/ifshowhide.js");
 
-// Save a little bit of screenspace...
-let MOVES = rules.MOVES;
-let getMoveClass = rules.getMoveClass;
-let ROUND_STATES = rules.ROUND_STATES;
+//let discuss = require("../discuss/main.js");
+let grounded_game = require("./game.js");
+let getStrategicMove = require("./strategy.js");
 
+// Save some screen real-estate
+let MOVES = grounded_game.MOVES;
+let TERMINATE_STATES = grounded_game.TERMINATE_STATES;
+
+// Convert our move ENUMS back into a string to be displayed.
 let MOVE_STRINGS = {};
-MOVE_STRINGS[MOVES["HTB"]]     = "HTB";
-MOVE_STRINGS[MOVES["CB"]]      = "CB";
+MOVE_STRINGS[MOVES["HTB"]] = "HTB";
+MOVE_STRINGS[MOVES["CB"]] = "CB";
 MOVE_STRINGS[MOVES["CONCEDE"]] = "CONCEDE";
 MOVE_STRINGS[MOVES["RETRACT"]] = "RETRACT";
 
-function updateDom(cy) {
-	ifShowHide("data-grounded", "ifplaying", cy.app_data.grounded["state"] !== ROUND_STATES["UNKNOWN"]);
+// Classes to provide visual feedback regarding an argument's move.
+let MOVE_CLASSES = {};
+MOVE_CLASSES[MOVES["HTB"]] = "htb";
+MOVE_CLASSES[MOVES["CB"]] = "cb";
+MOVE_CLASSES[MOVES["CONCEDE"]] = "concede";
+MOVE_CLASSES[MOVES["RETRACT"]] = "retract";
 
-	ifShowHide("data-grounded", "ifmoves<1", cy.app_data.grounded["move_stack"].length < 1);
-	ifShowHide("data-grounded", "ifmoves==1", cy.app_data.grounded["move_stack"].length === 1);
-	ifShowHide("data-grounded", "ifmoves>1", cy.app_data.grounded["move_stack"].length > 1);
 
-	let is_proponent = $("[data-grounded='proponent']").hasClass("m-button--switch__li--active");
+// Called when something changes, so we can update the DOM appropriately.
+function updateDom(game) {
+	let game_alive = game !== undefined && !game.dying;
 
-	ifShowHide("data-grounded", "ifproponent", is_proponent);
-	ifShowHide("data-grounded", "ifaiturn",
-		cy.app_data.grounded["move_stack"].length >= 1 &&
-		(is_proponent !== rules.isProponentsTurn(cy.app_data.grounded["node_stack"])) &&
-		cy.app_data.grounded["state"] === ROUND_STATES["PLAYING"]
+	ifShowHide("data-grounded", "ifplaying",
+		game_alive
 	);
-}
 
-function buildLogMoveMessage(the_move, node, is_proponent) {
+	ifShowHide("data-grounded", "ifmoves<1",
+		game_alive &&
+		game.move_count < 1
+	);
+	ifShowHide("data-grounded", "ifmoves==1",
+		game_alive &&
+		game.move_count === 1
+	);
+	ifShowHide("data-grounded", "ifmoves>1",
+		game_alive &&
+		game.move_count > 1
+	);
+
+	ifShowHide("data-grounded", "ifproponent",
+		game_alive &&
+		is_proponent()
+	);
+
+	ifShowHide("data-grounded", "ifaiturn",
+		game_alive &&
+		is_proponent() !== game.isProponentsTurn() &&
+		!game.hasTerminated()
+	);
+};
+
+// Build a string to be logged given information of a recently made move.
+function getLogMoveMessage(arg, the_move, is_proponent) {
 	return (is_proponent ? "P) " : "O)") +
 		("<em>" + MOVE_STRINGS[the_move] + "</em>(") +
-		("<em>" + node.id() + "</em>)");
-}
+		("<em>" + arg.id() + "</em>)");
+};
 
-function parseMoveString(cy, str) {
-	str = str.replace("(", " ");
-	str = str.replace(")", "");
+// Return true if the player has chosen to play as the Proponent. Otherwise,
+// return false.
+function is_proponent() {
+	return $("[data-grounded='proponent']")
+		.hasClass("m-button--switch__li--active");
+};
 
-	let tokens = str.split(" ");
-	let move = MOVES[tokens.splice(0, 1)[0].toUpperCase()];
-	let node_id = tokens.join(" ");
-	let node = cy.nodes().filter((i, ele) => ele.id() === node_id).first();
-	return [move, node];
-}
+// Called once a new instance of the grounded discussion game has been started.
+function parseGameInstance(game) {
+	game.on("move undo delete", () => updateDom(game));
 
-function startGame(cy, startGameCallback) {
-	startGameCallback(cy);
-
-	$("[data-grounded-movelist]").empty();
-	discuss.clearDiscuss(cy);
-
-	// Disable delete mode
-	let delete_button = $("[data-switch-graph-delete]");
-	if (delete_button.hasClass("m-button--switch__li--active")) {
-		delete_button.closest(".m-button--switch").click();
-	}
-
-	updateDom(cy);
-}
-
-function endGame(cy, endGameCallback) {
-	endGameCallback(cy);
-
-	if (!$("[data-grounded='start']").hasClass("m-button--switch__li--active")) {
-		$("[data-grounded='start']").closest(".m-button--switch").click();
-	}
-
-	$("[data-grounded-movelist]").empty();
-	updateDom(cy);
-}
-
-function PostMove(moveObject) {
-	// SHAME: awful hacky way to prevent our alert prompts from blocking Cytoscape
-	// from rendering the frame corresponding with the most recent move.
-	window.setTimeout(() => {
-		if (moveObject["node"] !== undefined) {
-			let cy = cyto_helpers.getCy(moveObject["node"]);
-
-			updateDom(cy);
-
-			if (moveObject["valid"]) {
-				let log_str = buildLogMoveMessage(moveObject["move"], moveObject["node"], moveObject["is_proponent"]);
-				$("[data-grounded-movelist]").append("<li>" + log_str + "</li>");
-
-				if (cy.app_data.grounded["state"] !== ROUND_STATES["PLAYING"]) {
-					let end_msg = "The game has terminated for some unknown reason.";
-					switch (cy.app_data.grounded["state"]) {
-						case ROUND_STATES["INITIAL_CONCEDED"]:
-							end_msg = "The Proponent has won as their initial argument has been conceded!";
-							break;
-						case ROUND_STATES["HTB/CB_REPEAT"]:
-							end_msg = "The OPPONENT has won as a HTB/CB repeat has occurred!";
-							break;
-						case ROUND_STATES["CB_EMPTY_ATTACKERS"]:
-							end_msg = "The OPPONENT has won as their last CB argument has no valid attackers!";
-							break;
-					}
-
-					$("[data-grounded-movelist]").append("<li>" + end_msg + "</li>");
-					alert(end_msg);
-				}
-			} else {
-				if (cy.app_data.grounded["state"] === ROUND_STATES["PLAYING"]) {
-					alert("That is an invalid move!");
-				} else {
-					alert("The game has already ended!");
-				}
-			}
+	game.on("move", (arg, the_move) => {
+		if (the_move === MOVES["CONCEDE"]) {
+			arg.removeClass(MOVE_CLASSES[MOVES["HTB"]]);
+		} else if (the_move === MOVES["RETRACT"]) {
+			arg.removeClass(MOVE_CLASSES[MOVES["CB"]]);
 		}
-	}, 50);
-}
 
-function parseCytoscapeInstance(cy, playgame_exports) {
-	updateDom(cy); // Inital update
+		arg.addClass(MOVE_CLASSES[the_move]);
 
-	let graphUpdated = function(evt) {
-		if (evt.cy.app_data.grounded["state"] !== ROUND_STATES["UNKNOWN"]) {
-			endGame(evt.cy, playgame_exports.endGameCallback);
+		let log_html = "<li>" + getLogMoveMessage(arg, the_move, true) + "</li>";
+
+		if (game.hasTerminated()) {
+			let end_msg = "The game has terminated for some unknown reason.";
+			switch (game.terminate_state) {
+				case TERMINATE_STATES["INITIAL_CONCEDED"]:
+					end_msg = "The Proponent has won as their initial argument has" +
+						" been conceded!";
+					break;
+				case TERMINATE_STATES["HTB/CB_REPEAT"]:
+					end_msg = "The OPPONENT has won as a HTB/CB repeat has occurred!";
+					break;
+				case TERMINATE_STATES["CB_EMPTY_ATTACKERS"]:
+					end_msg = "The OPPONENT has won as their last CB argument has no" +
+						" valid attackers!";
+					break;
+			};
+
+			log_html += "<li data-grounded-deleteonundo>" + end_msg + "</li>";
+
+			// SHAME: an awful 'hacky' way to prevent our alert prompts blocking
+			// Cytoscape rendering the next frame. Doing this gives Cytoscape time to
+			// apply the CSS classes for the played move.
+			window.setTimeout(() => {
+				alert(end_msg);
+			}, 50);
+		};
+
+		$("[data-grounded-movelist]").append(log_html);
+	});
+
+	game.on("invalidmove", (arg, the_move) => {
+		if (game.hasTerminated()) {
+			alert("The game has already ended!");
 		} else {
-			updateDom(evt.cy);
+			alert("That is an invalid move!");
+		};
+	});
+
+	game.on("undo", (undo_arg, undo_move) => {
+		$("[data-grounded-deleteonundo]").remove();
+		$("[data-grounded-movelist] > li:last").remove();
+
+		if(undo_move === MOVES["CONCEDE"]) {
+			undo_arg.addClass(MOVE_CLASSES[MOVES["HTB"]]);
+		} else if(undo_move === MOVES["RETRACT"]) {
+			undo_arg.addClass(MOVE_CLASSES[MOVES["CB"]]);
 		}
-	}
-
-	cy.on("remove", graphUpdated);
-	cy.on("add", graphUpdated);
-
-	cy.on("tap", "node", (evt) => {
-		if (evt.cy.app_data.grounded["state"] !== ROUND_STATES["UNKNOWN"]) {
-			let is_proponent = $("[data-grounded='proponent']").hasClass("m-button--switch__li--active");
-			let moveObject = playgame_exports.autoMove(evt.cyTarget, is_proponent);
-			PostMove(moveObject);
+		if (!game.hasPlayed(undo_arg, undo_move)) {
+			undo_arg.removeClass(MOVE_CLASSES[undo_move]);
 		}
 	});
 
-	$("[data-grounded-moveinput]").keyup(function(e) {
-		if (e.keyCode === 13){
-			let [move, node] = parseMoveString(cy, $(this).val());
-			let is_proponent = $("[data-grounded='proponent']").hasClass("m-button--switch__li--active");
-			let moveObject = playgame_exports.move(move, node, is_proponent);
-			PostMove(moveObject);
+	game.on("delete", () => {
+		if (!$("[data-grounded='start']")
+			.hasClass("m-button--switch__li--active")) {
+			$("[data-grounded='start']").closest(".m-button--switch").click();
+		};
 
-			$(this).val("");
+		$("[data-grounded-movelist]").empty();
+
+		let arg = game.first()["arg"];
+		if (arg !== undefined) {
+			let cy = arg.cy();
+			let class_str = Object.keys(MOVE_CLASSES)
+				.reduce((s, key) => (s === "" ? s : s + " ") + MOVE_CLASSES[key], "");
+			cy.nodes().removeClass(class_str);
+		}
+	});
+};
+
+function parseCytoscapeInstance(cy) {
+	let game;
+
+	updateDom(game); // Initial update
+
+	// Updates to the graph will probably corrupt our game.
+	cy.on("add remove", (evt) => {
+		if (game === undefined) { return };
+
+		if (game.hasTerminated()) {
+			updateDom(game);
+		} else {
+			game.delete();
+			game = undefined;
+		};
+	});
+
+	// It is often convenient for the user to be able to play an argument simply
+	// by clicking on the node for the argument they wish to play. If it isn't the
+	// user's turn, we just take the AI's strategic turn.
+	cy.on("tap", "node", (evt) => {
+		if (game === undefined || game.hasTerminated()) { return };
+
+		let arg, the_move;
+		if (game.isProponentsTurn() === is_proponent()) {
+			arg = evt.cyTarget;
+			if (is_proponent()) {
+				the_move = MOVES["HTB"];
+			} else {
+				if (game.hasPlayed(arg, MOVES["HTB"])) {
+					the_move = MOVES["CONCEDE"];
+				} else if (game.hasPlayed(arg, MOVES["CB"]) &&
+					game.isValidMove(arg, MOVES["RETRACT"])) {  // For CB-REPEAT
+					the_move = MOVES["RETRACT"];
+				} else {
+					the_move = MOVES["CB"];
+				}
+			}
+		} else {
+			let move_obj = getStrategicMove(game, !is_proponent());
+			arg = move_obj["arg"];
+			the_move = move_obj["move"];
+		}
+
+		game.move(arg, the_move);
+	});
+
+	// Allow the user to enter moves via a text input box. Their input is
+	// processed once they hit enter (key code: 13). We also convert a string
+	// move-command into a move ENUM and an argument.
+	$("[data-grounded-moveinput]").keyup((evt) => {
+		if (game === undefined) { return };
+
+		if (evt.keyCode === 13) {
+			let str = $(evt.currentTarget).val();
+
+			// Replace unnecessary parentheses.
+			str = str.replace("(", " ");
+			str = str.replace(")", "");
+
+			let tokens = str.split(" ");
+			let move = MOVES[tokens.splice(0, 1)[0].toUpperCase()];
+			let arg_id = tokens.join(" ");
+			let arg = cy.nodes().filter((i, arg) => arg.id() === arg_id).first();
+
+			game.move(arg, move);
+
+			$(evt.currentTarget).val("");
 		}
 	});
 
 	$("[data-grounded='start']").on("m-button-switched", (evt, is_on) => {
 		if (is_on) {
-			endGame(cy, playgame_exports.endGameCallback);
+			game.delete();
+			game = undefined;
 		} else {
-			startGame(cy, playgame_exports.startGameCallback);
-		}
+			$("[data-grounded-movelist]").empty();
+
+			// Disable delete mode
+			let delete_button = $("[data-switch-graph-delete]");
+			if (delete_button.hasClass("m-button--switch__li--active")) {
+				delete_button.closest(".m-button--switch").click();
+			}
+
+			game = new grounded_game.Game(function(args) {
+				return cy.collection(args);
+			});
+
+			parseGameInstance(game);
+
+			updateDom(game);
+		};
 	});
 
-	$("[data-grounded-moveai]").click(function() {
-		let is_proponent = $("[data-grounded='proponent']").hasClass("m-button--switch__li--active");
-		let moveObject = playgame_exports.strategyMove(cy.app_data.grounded["node_stack"], !is_proponent);
-		PostMove(moveObject);
+	$("[data-grounded-moveai]").click(() => {
+		if (game === undefined) { return };
+		let move_obj = getStrategicMove(game, !is_proponent());
+		game.move(move_obj["arg"], move_obj["move"]);
 	});
 
-	$("[data-grounded-undo]").click(function() {
-		if (cy.app_data.grounded["state"] !== ROUND_STATES["PLAYING"]) {
-			$("[data-grounded-movelist] > li:last").remove();
-		}
-
-		let moveObject = playgame_exports.undoLastMove(cy.app_data.grounded["node_stack"]);
-		$("[data-grounded-movelist] > li:last").remove();
-		updateDom(cy);
+	$("[data-grounded-undo]").click(() => {
+		if (game === undefined) { return };
+		game.undoLastMove();
 	});
 
-	$("[data-grounded='proponent']").on("m-button-switched", (evt, is_on) => updateDom(cy));
+	$("[data-grounded='proponent']").on("m-button-switched", (evt, is_on) => {
+		updateDom(game);
+	});
 
 	$("[data-switch-graph-delete]").on("m-button-switched", (evt, is_on) => {
 		if (is_on) {
-			endGame(cy, playgame_exports.endGameCallback);
-		}
+			game.delete();
+			game = undefined;
+		};
 	});
 
 	return cy;

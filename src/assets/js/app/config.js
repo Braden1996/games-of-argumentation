@@ -51,14 +51,7 @@ function getStylesheet() {
 				"border-style": "solid",
 				"border-opacity": 1
 			})
-		.selector("node.discuss")
-			.css({
-				"border-color": "#3498db"
-			})
-		.selector("node.highlight")
-			.css({
-				"border-color": "#8e44ad"
-			})
+		// Grounded Discussion Game
 		.selector("node.htb")
 			.css({
 				"background-color": "lightgreen"
@@ -74,11 +67,6 @@ function getStylesheet() {
 		.selector("node.retract")
 			.css({
 				"background-color": "red"
-			})
-		.selector("edge.highlight")
-			.css({
-				"line-color": "#8e44ad",
-				"target-arrow-color": "#8e44ad"
 			})
 }
 
