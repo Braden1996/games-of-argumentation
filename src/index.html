@@ -82,13 +82,13 @@
 								<br /><br />
 
 								<ul class="m-buttongroup m-buttongroup--stretch">
-									<li class="m-button m-button--switch" data-grounded="ifmoves==1" data-preferred="ifmoves==1" data-ifshowhide-mode="weak">
+									<li class="m-button m-button--switch" data-grounded="ifmoves<1" data-preferred="ifmoves<1" data-ifshowhide-mode="weak">
 										<ul>
 											<li class="m-button--switch__li--active" data-grounded="proponent" data-preferred="menexenus">
-												Play as <span data-grounded="ifplaying">Proponent</span><span data-preferred="ifplaying">Menexenus</span>
+												Playing as <span data-grounded="ifplaying">Proponent</span><span data-preferred="ifplaying">Menexenus</span>
 											</li>
 											<li data-grounded="opponent" data-preferred="socrates">
-												Play as <span data-grounded="ifplaying">Opponent</span><span data-preferred="ifplaying">Socrates</span>
+												Playing as <span data-grounded="ifplaying">Opponent</span><span data-preferred="ifplaying">Socrates</span>
 											</li>
 										</ul>
 									</li>
@@ -106,7 +106,7 @@
 										</button>
 									</li>
 									<li>
-										<button class="m-button" data-grounded="ifmoves>1" data-grounded-undo data-preferred="ifmoves>1" data-preferred-undo data-ifshowhide-mode="weak">
+										<button class="m-button" data-grounded="!ifmoves<1" data-grounded-undo data-preferred="!ifmoves<1" data-preferred-undo>
 											Undo Last Move
 										</button>
 									</li>
