@@ -168,9 +168,9 @@ function parseCytoscapeInstance(cy) {
 		if (game === undefined || game.hasTerminated()) { return };
 
 		let arg, the_move;
-		if (game.isSocratesTurn() === is_socrates()) {
+		if (game.move_count === 0 || game.isSocratesTurn() === is_socrates()) {
 			arg = evt.cyTarget;
-			the_move = is_socrates() ? MOVES["OUT"] : MOVES["IN"];
+			the_move = game.move_count > 0 && is_socrates() ? MOVES["OUT"] : MOVES["IN"];
 		} else {
 			let move_obj = getStrategicMove(game, !is_socrates());
 			arg = move_obj["arg"];
@@ -222,9 +222,8 @@ function parseCytoscapeInstance(cy) {
 			});
 
 			parseGameInstance(game);
-
-			updateDom(game);
 		};
+		updateDom(game);
 	});
 
 	$("[data-preferred-moveai]").click(() => {
@@ -243,6 +242,8 @@ function parseCytoscapeInstance(cy) {
 	});
 
 	$("[data-switch-graph-delete]").on("m-button-switched", (evt, is_on) => {
+		if (game === undefined) { return };
+
 		if (is_on) {
 			game.delete();
 			game = undefined;

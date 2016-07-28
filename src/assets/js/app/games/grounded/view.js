@@ -181,9 +181,9 @@ function parseCytoscapeInstance(cy) {
 		if (game === undefined || game.hasTerminated()) { return };
 
 		let arg, the_move;
-		if (game.isProponentsTurn() === is_proponent()) {
+		if (game.move_count === 0 || game.isProponentsTurn() === is_proponent()) {
 			arg = evt.cyTarget;
-			if (is_proponent()) {
+			if (game.move_count === 0 || is_proponent()) {
 				the_move = MOVES["HTB"];
 			} else {
 				if (game.hasPlayed(arg, MOVES["HTB"])) {
@@ -246,9 +246,9 @@ function parseCytoscapeInstance(cy) {
 			});
 
 			parseGameInstance(game);
-
-			updateDom(game);
 		};
+
+		updateDom(game);
 	});
 
 	$("[data-grounded-moveai]").click(() => {
@@ -267,6 +267,8 @@ function parseCytoscapeInstance(cy) {
 	});
 
 	$("[data-switch-graph-delete]").on("m-button-switched", (evt, is_on) => {
+		if (game === undefined) { return };
+
 		if (is_on) {
 			game.delete();
 			game = undefined;
