@@ -77,7 +77,7 @@ class PreferredGame extends game.Game {
 		} else if (the_move === this.MOVES["OUT"]) {
 			return this.getArgsMoved(MOVES["IN"])
 				.incomers().sources()
-				.filter((i, arg) => !this.hasPlayed(arg, MOVES["OUT"]));
+				.filter((i, arg) => this.isValidMove(arg, MOVES["OUT"]));
 		}
 
 		return undefined;
@@ -99,9 +99,11 @@ class PreferredGame extends game.Game {
 					).nonempty();
 
 			// An OUT move is valid when:
+			//	- Not yet been played.
 			//	- Attacks any preceding IN move.
 			} else if (the_move === this.MOVES["OUT"]) {
-				return this.getArgsMoved(this.MOVES["IN"])
+				return !this.hasPlayed(arg, the_move) &&
+					this.getArgsMoved(this.MOVES["IN"])
 					.filter((i, in_arg) => arg.edgesTo(in_arg).nonempty())
 					.nonempty();
 			}
