@@ -84,7 +84,9 @@ function parseGameInstance(game) {
 
 		arg.addClass(MOVE_CLASSES[the_move]);
 
-		let log_html = "<li>" + getLogMoveMessage(arg, the_move, true) + "</li>";
+		let was_proponent = the_move === MOVES["HTB"];
+		let log_str = getLogMoveMessage(arg, the_move, was_proponent);
+		let log_html = "<li>" + log_str + "</li>";
 
 		if (game.hasTerminated()) {
 			let end_msg = "The game has terminated for some unknown reason.";
