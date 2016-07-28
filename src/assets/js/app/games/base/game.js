@@ -17,7 +17,7 @@ let MOVES = {};
 //	- Raise custom errors, e.g. on an invalid move.
 //	- Convert to some ENUM library.
 class Game {
-	constructor(createCollection) {
+	constructor(createCollection, arg_stack=[], move_stack=[]) {
 		// To help us from creating any further unnecessary coupling with Cytoscape,
 		// we need a function that can create a new collection.
 		this._createCollection = createCollection;
@@ -30,8 +30,8 @@ class Game {
 		this.MOVES = MOVES;
 
 		// Store a history of all the moves which have been played.
-		this._move_stack = [];
-		this._arg_stack = [];
+		this._arg_stack = arg_stack;
+		this._move_stack = move_stack;
 
 		// Allow us to attach callback functions to be triggered upon certain
 		// events.
@@ -53,6 +53,7 @@ class Game {
 		return this.TERMINATE_STATES["NONE"];
 	}
 
+	// Return the amount of moves which have been played.
 	get move_count() {
 		return this._move_stack.length;
 	}
@@ -113,6 +114,15 @@ class Game {
 	delete() {
 		this._dying = true;
 		this.emit("delete");
+	}
+
+	// Return a copy of the current game.
+	copy() {
+		return new this.constructor(
+			this._createCollection,
+			this._arg_stack.slice(0),
+			this._move_stack.slice(0)
+		);
 	}
 
 	// Return the move, and the corresponding argument, at the given index.
