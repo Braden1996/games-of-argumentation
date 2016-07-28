@@ -18,6 +18,7 @@ let parse_cytoscape_modules = [
 
 	// Load games
 	require("./games/grounded/view.js"),
+	require("./games/preferred/view.js"),
 ];
 
 function ready() {

@@ -68,6 +68,15 @@ function getStylesheet() {
 			.css({
 				"background-color": "red"
 			})
+		// Preferred Discussion Game
+		.selector("node.preferred-in")
+			.css({
+				"background-color": "green"
+			})
+		.selector("node.preferred-out")
+			.css({
+				"background-color": "red"
+			})
 }
 
 module.exports = {
