@@ -34,7 +34,7 @@ Other Gulp commands:
 ## File Structure
 ### Overview
 - `srs/assets/js/`: all the JavaScript files of our application. We use [BabelJ(https://babeljs.io/) in order to confidently use the latest version of JavaScript ([ES6](http://es6-features.org/)). We use [Browserify](http://browserify.org/) to modulate our code-base. Our Gulp tasks take care of all the compiling.
-- `srs/assets/scss/`: all the [SASS](http://sass-lang.com/) files of our application. Our Gulp tasks take care of all the compiling. We've taken a [BEM](http://getbem.com/introduction/)/[SMACSS](https://smacss.com/) to organising our CSS - try to keep this out.
+- `srs/assets/scss/`: all the [SASS](http://sass-lang.com/) files of our application. Our Gulp tasks take care of all the compiling. We've taken a [BEM](http://getbem.com/introduction/) and [SMACSS](https://smacss.com/) approach to organising our CSS - try to keep this going.
 
 ### JavaScript - Overview
 - `srs/assets/js/app/`: the body and brain of our application.
