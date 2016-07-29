@@ -72,6 +72,18 @@
 							</div>
 							<div data-grounded="ifplaying" data-preferred="ifplaying" data-ifshowhide-mode="weak">
 								<b>Played Moves:</b><br />
+								<sup class="float--right">
+									User is
+									<span data-grounded="ifplaying">
+										<span data-grounded="ifproponent">Proponent</span>
+										<span data-grounded="!ifproponent">Opponent</span>
+									</span>
+									<span data-preferred="ifplaying">
+										<span data-preferred="ifsocrates">Socrates</span>
+										<span data-preferred="!ifsocrates">Menexenus</span>
+									</span>
+								</sup>
+								<br />
 								<span data-grounded="ifmoves<1">Please initiate the game by playing a 'HTB' move.</span>
 								<span data-preferred="ifmoves<1">Please initiate the game by playing an 'in' move.</span>
 								<ol data-grounded-movelist data-preferred-movelist>
@@ -85,10 +97,10 @@
 									<li class="m-button m-button--switch" data-grounded="ifmoves<1" data-preferred="ifmoves<1" data-ifshowhide-mode="weak">
 										<ul>
 											<li class="m-button--switch__li--active" data-grounded="proponent" data-preferred="menexenus">
-												Playing as <span data-grounded="ifplaying">Proponent</span><span data-preferred="ifplaying">Menexenus</span>
+												Play as <span data-grounded="ifplaying">Opponent</span><span data-preferred="ifplaying">Socrates</span>
 											</li>
 											<li data-grounded="opponent" data-preferred="socrates">
-												Playing as <span data-grounded="ifplaying">Opponent</span><span data-preferred="ifplaying">Socrates</span>
+												Play as <span data-grounded="ifplaying">Proponent</span><span data-preferred="ifplaying">Menexenus</span>
 											</li>
 										</ul>
 									</li>
