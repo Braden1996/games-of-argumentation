@@ -26,11 +26,9 @@ function getStrategicMove(game, is_proponent) {
 
 	if (is_proponent) {
 		let htb_args = game.findMoveArgs(MOVES["HTB"]);
-		console.log("FUCK:", htb_args);
 		if (htb_args.nonempty()) {
 			the_move = MOVES["HTB"];
 			arg = getMinMaxArg(htb_args);
-			console.log("FUag:", arg);
 		}
 	} else {
 		// As we can only perform a CB move if no CONCEDE, or RETRACT,
