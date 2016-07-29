@@ -184,7 +184,7 @@ class GroundedGame extends game.Game {
 	// return false. This is the case when no previous moves have been made or
 	// the previous move was a CB.
 	isProponentsTurn() {
-		return this.move_count === 0 || this.last()["move"] === this.MOVES["CB"];
+		return this.findMoveArgs(this.MOVES["HTB"]).nonempty();
 	}
 }
 
