@@ -164,9 +164,7 @@ function parseCytoscapeInstance(cy) {
 
 	// Updates to the graph will probably corrupt our game.
 	cy.on("add remove", (evt) => {
-		if (game === undefined) { return };
-
-		if (game.hasTerminated()) {
+		if (game === undefined) {
 			updateDom(game);
 		} else {
 			game.delete();
@@ -246,9 +244,8 @@ function parseCytoscapeInstance(cy) {
 			});
 
 			parseGameInstance(game);
+			updateDom(game);
 		};
-
-		updateDom(game);
 	});
 
 	$("[data-grounded-moveai]").click(() => {
