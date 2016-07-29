@@ -46,6 +46,10 @@ function createCytoscapeInstance(container) {
 		}
 	});
 
+	cy.on("add remove", (evt) => {
+		ifShowHide("data-cytoscape", "ifgraphset", cy.nodes().nonempty());
+	});
+
 	cy.edgehandles(defaults);
 
 	cy.app_data = {};
@@ -58,8 +62,6 @@ function createCytoscapeInstance(container) {
 function clearGraph(cy) {
 	cy.remove(cy.elements());
 	cy.trigger("graphClear");
-
-	ifShowHide("data-cytoscape", "ifgraphset", false);
 }
 
 function setGraph(cy, graph) {
@@ -83,8 +85,6 @@ function setGraph(cy, graph) {
 	}});
 
 	layout.run();
-
-	ifShowHide("data-cytoscape", "ifgraphset", true);
 }
 
 // To help prevent us from passing 'cy' around.
