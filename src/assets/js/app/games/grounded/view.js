@@ -171,7 +171,7 @@ function parseGameInstance(game) {
 
 	let lab, minmax;
 
-	$("[data-switch-graph-view='labelling']")
+	$("[data-grounded-labelling")
 		.on("m-button-switched", (evt, is_on) => {
 			if (is_on) {
 				lab = getGroundedLabelling(game);
@@ -181,7 +181,7 @@ function parseGameInstance(game) {
 			};
 		});
 
-	$("[data-switch-graph-view='minmax']")
+	$("[data-grounded-minmax")
 		.on("m-button-switched", (evt, is_on) => {
 			if (is_on) {
 				lab = getGroundedLabelling(game);
