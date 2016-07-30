@@ -134,7 +134,7 @@ module.exports = function(attribute, value) {
 		};
 
 		// By default, disable elements we haven't yet checked.
-		if (ele.datasetifshowhideChecked === undefined) {
+		if (ele.dataset.ifshowhideChecked === undefined) {
 			ele.style.display = "none";
 		};
 	};
