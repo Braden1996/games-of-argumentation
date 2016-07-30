@@ -64,7 +64,7 @@ class PreferredGame extends game.Game {
 		//	been played, we can play any argument.
 		if (the_move === this.MOVES["IN"]) {
 			if (this.move_count === 0) {
-				return this.cy.collection.absoluteComplement();
+				return this.cy.collection().absoluteComplement();
 			} else {
 				return this.getArgsMoved(MOVES["OUT"]).last()
 					.incomers().sources();
