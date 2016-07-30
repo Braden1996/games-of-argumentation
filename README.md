@@ -1,4 +1,4 @@
-# Argumentation Games - Web Demo
+# Games of Argumentation - Web Demo
 ## Introduction
 A web-based demonstration of several argumentation games.
 
