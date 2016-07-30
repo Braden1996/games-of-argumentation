@@ -48,9 +48,9 @@ function createCytoscapeInstance(container) {
 	});
 
 	cy.on("add remove", (evt) => {
-		ifShowHide("data-cytoscape", "ifgraphset", cy.nodes().nonempty());
+		ifShowHide("cytoscape_graphset", cy.nodes().nonempty());
 	});
-	ifShowHide("data-cytoscape", "ifgraphset", false);
+	ifShowHide("cytoscape_graphset", false);
 
 	return cy;
 }

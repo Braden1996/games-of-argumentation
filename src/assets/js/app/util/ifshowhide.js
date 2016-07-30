@@ -1,60 +1,141 @@
-// This isn't perfect, but it allows us show/hide DOM elements based upon
-// arbitrary externally managed conditions.
-// Modes:
-//	- Strong: element will be shown if ALL conditions are true.
-//	- Weak: element will be shown if ANY condition is true.
+// A lightweight element visibility controller.
 
-let show_values = {};
+let showing = {};
 
-let not_prefix = "!";
+// The operations for our expression.
+let operations = {
+	"|": {"precedence": 5, "left": true, "function": (a, b) => a || b},
+	"&": {"precedence": 6, "left": true, "function": (a, b) => a && b},
+	"=": {"precedence": 10, "left": true, "function": (a, b) => a === b},
+	">": {"precedence": 11, "left": true, "function": (a, b) => a > b},
+	"<": {"precedence": 11, "left": true, "function": (a, b) => a < b},
+	"-": {"precedence": 13, "left": true, "function": (a, b) => a - b},
+	"+": {"precedence": 13, "left": true, "function": (a, b) => a + b},
+	"*": {"precedence": 14, "left": true, "function": (a, b) => a * b},
+	"!": {"precedence": 15, "left": false, "function": (a) => !a}
+};
 
-function canShow(ele) {
-	let mode = "strong";
-	if (ele.data("ifshowhide-mode") === "weak") {
-		mode = "weak";
-	}
+let invalid_str = "is an invalid ifshowhide expression";
 
-	for (let data_attribute in show_values) {
-		let value = ele.data(data_attribute);
+module.exports = function(attribute, value) {
+	showing[attribute] = value;
 
-		if (value) {
-			let is_not = false;
-			if (value.substring(0, not_prefix.length) === not_prefix) {
-				value = value.substring(not_prefix.length);
-				is_not = true;
-			}
+	let eles = document.querySelectorAll("[data-ifshowhide]");
+	for (let ele of eles) {
+		let condition = ele.dataset["ifshowhide"];
 
-			if (value in show_values[data_attribute]) {
-				if (show_values[data_attribute][value] === is_not) {
-					if (mode === "strong") {
-						return false;
-					}
+		// Break down the condition into tokens of attributes and operations
+		let escaped_operations = ("(" + ")" + Object.keys(operations).join(""))
+			.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+		let operation_regex = new RegExp("([" + escaped_operations + "])");
+		let tokens = condition.split(operation_regex)
+			.map(v => {
+				v = v.trim();
+				if (v === "") {
+					return v;  // We filter this out next
+				} else if (v.toLowerCase() === "true") {
+					return true;
+				} else if (v.toLowerCase() === "false") {
+					return false;
+				} else if (!isNaN(Number(v))) {
+					return Number(v);
 				} else {
-					if (mode === "weak") {
-						return true;
-					}
+					return v;  // We map this to 'showing[v]' later
+				};
+			})
+			.filter(v => v !== "");
+
+		// Check if this affects this element.
+		if (tokens.indexOf(attribute) === -1) {
+			continue;
+		} else {
+			tokens = tokens.map((v) => {
+				if (typeof v === typeof "" && v !== ")" && v !== "(" &&
+					operations[v] === undefined) {
+						return showing[v];
+				} else {
+					return v;
 				}
-			}
-		}
-	}
+			});
 
-	return mode === "strong" ? true : false;
-}
+			// Parse our expression tokens into Reverse Polish Notation
+			// using the shunting-yard algorithm.
+			let rpn_tokens = [];
+			let op_stack = [];
+			for (let token of tokens) {
+				if (token === "(") {
+					op_stack.push(token);
+				} else if (token === ")") {
+					while (op_stack.length === 0 || op_stack[op_stack.length-1] !== "(") {
+						if (op_stack.length === 0) {
+							console.log("'" + condition + "' " + invalid_str);
+							return;
+						} else {
+							rpn_tokens.push(op_stack.pop());
+						};
+					};
+					op_stack.pop();
+				} else {
+					let op1 = operations[token];
+					if (op1 === undefined) {
+						rpn_tokens.push(token);
+					} else {
+						let op2 = operations[op_stack[op_stack.length-1]];
+						while (op_stack.length !== 0 && op2 !== undefined && (
+							(op1.left && op1.precedence <= op2.precedence) ||
+							(!op1.left && op1.precedence < op2.precedence))) {
+								rpn_tokens.push(op_stack.pop());
+								op2 = operations[op_stack[op_stack.length-1]];
+						};
+						op_stack.push(token);
+					};
+				};
+			};
 
-function ifShowHide(data_attribute, value, show=true) {
-	data_attribute = data_attribute.substring("data-".length);
+			while (op_stack.length !== 0) {
+				let op = op_stack.pop();
+				if (op === "(") {
+					console.log("'" + condition + "' " + invalid_str);
+					return;
+				} else {
+					rpn_tokens.push(op);
+				};
+			};
 
-	if(!(data_attribute in show_values)) {
-		show_values[data_attribute] = {};
-	}
+			// Evaluate our Reverse Polish Notation expression.
+			let rpn_stack = [];
+			for (let token of rpn_tokens) {
+				let op1 = operations[token];
+				if (op1 === undefined) {
+					rpn_stack.push(token);
+				} else {
+					let op_n = op1.function.length;
+					if (rpn_stack.length < op_n) {
+						console.log("'" + condition + "' " + invalid_str);
+						return;
+					} else {
+						let op_args = rpn_stack.splice(rpn_stack.length - op_n, op_n);
+						let x = op1.function.apply(null, op_args);
+						rpn_stack.push(x);
+					};
+				};
+			};
 
-	show_values[data_attribute][value] = show;
+			// Check if evaluation was successful.
+			if (rpn_stack.length !== 1) {
+				console.log("'" + condition + "' " + invalid_str);
+				return;
+			};
 
-	let eles = $("[data-" + data_attribute + "='" + value + "']");
-	eles.each((i) => canShow($(eles[i])) ? $(eles[i]).show() : $(eles[i]).hide());
+			// Apply the visibility
+			ele.style.display = rpn_stack[0] ? "" : "none";
 
-	let not_eles = $("[data-" + data_attribute + "='" + not_prefix + value + "']");
-	not_eles.each((i) => canShow($(not_eles[i])) ? $(not_eles[i]).show() : $(not_eles[i]).hide());
-}
+			ele.dataset.ifshowhideChecked = "";
+		};
 
-module.exports = ifShowHide;
+		// By default, disable elements we haven't yet checked.
+		if (ele.datasetifshowhideChecked === undefined) {
+			ele.style.display = "none";
+		};
+	};
+};

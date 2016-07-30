@@ -21,7 +21,7 @@
 						<li id="l-sidebar__expandbutton" class="m-button m-button--circle" data-button-target="sidebar">
 							<div class="m-button__icon m-button__icon--burger"></div>
 						</li>
-						<li class="m-button m-button--circle m-button--switch" data-grounded="ifplaying">
+						<li class="m-button m-button--circle m-button--switch" data-ifshowhide="grounded_playing">
 							<ul>
 								<li class="m-button__icon m-button--switch__li--active">V</li>
 								<li class="m-button__icon" data-grounded-labelling>L</li>
@@ -49,15 +49,15 @@
 									<button class="m-button" data-onclick-redirect="opengraphfile">Open Graph File</button>
 									<input class="hide" type="file" data-open-graph-file data-onclick-id="opengraphfile"/>
 								</li>
-								<li><button class="m-button" data-save-graph-file data-cytoscape="ifgraphset">Save Graph File</button></li>
-								<li><button class="m-button" data-save-graph-png data-cytoscape="ifgraphset">Save Graph Image</button></li>
-								<li class="m-button m-button--switch" data-cytoscape="ifgraphset" data-preferred="!ifplaying">
+								<li><button class="m-button" data-save-graph-file data-ifshowhide="cytoscape_graphset">Save Graph File</button></li>
+								<li><button class="m-button" data-save-graph-png data-ifshowhide="cytoscape_graphset">Save Graph Image</button></li>
+								<li class="m-button m-button--switch" data-ifshowhide="cytoscape_graphset&!preferred_playing">
 									<ul>
 										<li class="m-button--switch__li--active" data-grounded="start">Play Grounded Discussion</li>
 										<li>Stop Grounded Discussion</li>
 									</ul>
 								</li>
-								<li class="m-button m-button--switch" data-cytoscape="ifgraphset" data-grounded="!ifplaying">
+								<li class="m-button m-button--switch" data-ifshowhide="cytoscape_graphset&!grounded_playing">
 									<ul>
 										<li class="m-button--switch__li--active" data-preferred="start">Play Preferred Discussion</li>
 										<li>Stop Preferred Discussion</li>
@@ -66,26 +66,22 @@
 							</ul>
 						</li>
 						<li data-tablist-id="log">
-							<div data-grounded="!ifplaying" data-preferred="!ifplaying">
+							<div data-ifshowhide="!(grounded_playing|preferred_playing)">
 								<b>Discussion of an Argument:</b><br />
 								<span>To begin a discussion game, please first start your chosen game from within the 'Operations' tab.</span>
 							</div>
-							<div data-grounded="ifplaying" data-preferred="ifplaying" data-ifshowhide-mode="weak">
+							<div data-ifshowhide="grounded_playing|preferred_playing">
 								<b>Played Moves:</b><br />
 								<sup class="float--right">
 									User is
-									<span data-grounded="ifplaying">
-										<span data-grounded="ifproponent">Proponent</span>
-										<span data-grounded="!ifproponent">Opponent</span>
-									</span>
-									<span data-preferred="ifplaying">
-										<span data-preferred="ifsocrates">Socrates</span>
-										<span data-preferred="!ifsocrates">Menexenus</span>
-									</span>
+									<span data-ifshowhide="grounded_playing&grounded_proponent">Proponent</span>
+									<span data-ifshowhide="grounded_playing&!grounded_proponent">Opponent</span>
+									<span data-ifshowhide="preferred_playing&preferred_socrates">Socrates</span>
+									<span data-ifshowhide="preferred_playing&!preferred_socrates">Menexenus</span>
 								</sup>
 								<br />
-								<span data-grounded="ifmoves<1">Please initiate the game by playing a 'HTB' move.</span>
-								<span data-preferred="ifmoves<1">Please initiate the game by playing an 'in' move.</span>
+								<span data-ifshowhide="grounded_moves<1">Please initiate the game by playing a 'HTB' move.</span>
+								<span data-ifshowhide="preferred_moves<1">Please initiate the game by playing an 'in' move.</span>
 								<ol data-grounded-movelist data-preferred-movelist>
 								</ol>
 
@@ -94,31 +90,31 @@
 								<br /><br />
 
 								<ul class="m-buttongroup m-buttongroup--stretch">
-									<li class="m-button m-button--switch" data-grounded="ifmoves<1" data-preferred="ifmoves<1" data-ifshowhide-mode="weak">
+									<li class="m-button m-button--switch" data-ifshowhide="grounded_moves<1|preferred_moves<1">
 										<ul>
 											<li class="m-button--switch__li--active" data-grounded="proponent" data-preferred="menexenus">
-												Play as <span data-grounded="ifplaying">Opponent</span><span data-preferred="ifplaying">Socrates</span>
+												Play as
+												<span data-ifshowhide="grounded_playing">Opponent</span>
+												<span data-ifshowhide="preferred_playing">Socrates</span>
 											</li>
 											<li data-grounded="opponent" data-preferred="socrates">
-												Play as <span data-grounded="ifplaying">Proponent</span><span data-preferred="ifplaying">Menexenus</span>
+												Play as
+												<span data-ifshowhide="grounded_playing">Proponent</span>
+												<span data-ifshowhide="preferred_playing">Menexenus</span>
 											</li>
 										</ul>
 									</li>
 									<li>
-										<button class="m-button" data-grounded="ifaiturn" data-grounded-moveai  data-preferred="ifaiturn" data-preferred-moveai data-ifshowhide-mode="weak">
+										<button class="m-button" data-grounded-moveai data-preferred-moveai data-ifshowhide="preferred_aiturn|grounded_aiturn">
 											Take AI Turn for
-											<span data-grounded="ifplaying">
-												<span data-grounded="ifproponent">Opponent</span>
-												<span data-grounded="!ifproponent">Proponent</span>
-											</span>
-											<span data-preferred="ifplaying">
-												<span data-preferred="ifsocrates">Menexenus</span>
-												<span data-preferred="!ifsocrates">Socrates</span>
-											</span>
+											<span data-ifshowhide="grounded_playing&grounded_proponent">Opponent</span>
+											<span data-ifshowhide="grounded_playing&!grounded_proponent">Proponent</span>
+											<span data-ifshowhide="preferred_playing&preferred_socrates">Menexenus</span>
+											<span data-ifshowhide="preferred_playing&!preferred_socrates">Socrates</span>
 										</button>
 									</li>
 									<li>
-										<button class="m-button" data-grounded="!ifmoves<1" data-grounded-undo data-preferred="!ifmoves<1" data-preferred-undo>
+										<button class="m-button" data-grounded-undo data-preferred-undo data-ifshowhide="grounded_moves>0|preferred_moves>0">
 											Undo Last Move
 										</button>
 									</li>

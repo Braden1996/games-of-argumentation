@@ -30,29 +30,10 @@ MOVE_CLASSES[MOVES["RETRACT"]] = "retract";
 function updateDom(game) {
 	let game_alive = game !== undefined && !game.dying;
 
-	ifShowHide("data-grounded", "ifplaying",
-		game_alive
-	);
-
-	ifShowHide("data-grounded", "ifmoves<1",
-		game_alive &&
-		game.move_count < 1
-	);
-	ifShowHide("data-grounded", "ifmoves==1",
-		game_alive &&
-		game.move_count === 1
-	);
-	ifShowHide("data-grounded", "ifmoves>1",
-		game_alive &&
-		game.move_count > 1
-	);
-
-	ifShowHide("data-grounded", "ifproponent",
-		game_alive &&
-		is_proponent()
-	);
-
-	ifShowHide("data-grounded", "ifaiturn",
+	ifShowHide("grounded_playing", game_alive);
+	ifShowHide("grounded_moves", game_alive ? game.move_count : undefined);
+	ifShowHide("grounded_proponent", game_alive && is_proponent());
+	ifShowHide("grounded_aiturn",
 		game_alive &&
 		is_proponent() !== game.isProponentsTurn() &&
 		!game.hasTerminated()

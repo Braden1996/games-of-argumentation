@@ -23,29 +23,10 @@ MOVE_CLASSES[MOVES["OUT"]] = "preferred-out";
 function updateDom(game) {
 	let game_alive = game !== undefined && !game.dying;
 
-	ifShowHide("data-preferred", "ifplaying",
-		game_alive
-	);
-
-	ifShowHide("data-preferred", "ifmoves<1",
-		game_alive &&
-		game.move_count < 1
-	);
-	ifShowHide("data-preferred", "ifmoves==1",
-		game_alive &&
-		game.move_count === 1
-	);
-	ifShowHide("data-preferred", "ifmoves>1",
-		game_alive &&
-		game.move_count > 1
-	);
-
-	ifShowHide("data-preferred", "ifsocrates",
-		game_alive &&
-		is_socrates()
-	);
-
-	ifShowHide("data-preferred", "ifaiturn",
+	ifShowHide("preferred_playing", game_alive);
+	ifShowHide("preferred_moves", game_alive ? game.move_count: undefined);
+	ifShowHide("preferred_socrates", game_alive && is_socrates());
+	ifShowHide("preferred_aiturn",
 		game_alive &&
 		is_socrates() !== game.isSocratesTurn() &&
 		!game.hasTerminated()
