@@ -17,10 +17,9 @@ let MOVES = {};
 //	- Raise custom errors, e.g. on an invalid move.
 //	- Convert to some ENUM library.
 class Game {
-	constructor(createCollection, arg_stack=[], move_stack=[]) {
-		// To help us from creating any further unnecessary coupling with Cytoscape,
-		// we need a function that can create a new collection.
-		this._createCollection = createCollection;
+	constructor(cy, arg_stack=[], move_stack=[]) {
+		// We need this so we can use Cytoscape internally.
+		this._cy = cy;
 
 		// This is set to true when 'this.delete()' is called.
 		this._dying = false;
@@ -46,6 +45,8 @@ class Game {
 		return this._emitter.emit.apply(this._emitter, arguments);
 	};
 
+	get cy() { return this._cy };
+
 	get dying() { return this._dying; }
 
 	// Return the current termination state of the game.
@@ -60,7 +61,7 @@ class Game {
 
 	// Get the args which have been used to play a certain move.
 	getArgsMoved(move) {
-		return this._createCollection(
+		return this.cy.collection(
 			this._arg_stack.filter((arg, i) => this.hasPlayed(arg, move))
 		);
 	}
@@ -119,7 +120,7 @@ class Game {
 	// Return a copy of the current game.
 	copy() {
 		return new this.constructor(
-			this._createCollection,
+			this.cy,
 			this._arg_stack.slice(0),
 			this._move_stack.slice(0)
 		);

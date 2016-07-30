@@ -19,8 +19,8 @@ let MOVES = {
 // Override our base game to provide the functionality required by the grounded
 // discussion game.
 class GroundedGame extends game.Game {
-	constructor(createCollection, arg_stack=[], move_stack=[]) {
-		super(createCollection, arg_stack, move_stack);
+	constructor(cy, arg_stack=[], move_stack=[]) {
+		super(cy, arg_stack, move_stack);
 
 		// Attach our grounded game's enums to our class.
 		this._TERMINATE_STATES = TERMINATE_STATES;
@@ -68,13 +68,13 @@ class GroundedGame extends game.Game {
 			let last_move_obj = this.last();
 			let last_move = last_move_obj["move"];
 			if (last_move === undefined) {
-				return this._createCollection().absoluteComplement();
+				return this.cy.collection().absoluteComplement();
 			} else if (last_move === this.MOVES["CB"]) {
 				let last_arg = last_move_obj["arg"];
 				return last_arg.incomers().sources()
 					.filter((i, arg) => this.isValidMove(arg, this.MOVES["HTB"]));
 			} else {
-				return this._createCollection()
+				return this.cy.collection()
 			}
 
 		// Find CB arguments.

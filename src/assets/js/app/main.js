@@ -11,10 +11,9 @@ let parse_cytoscape_modules = [
 	require("./views/save-graph-file.js"),
 	require("./views/save-graph-png.js"),
 	require("./views/switch-graph-delete.js"),
-	require("./views/switch-graph-view.js"),
 
 	// Load logic
-	 require("./logic/labelling.js"),
+	require("./logic/labelling.js"),
 
 	// Load games
 	require("./games/grounded/view.js"),

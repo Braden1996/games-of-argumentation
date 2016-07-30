@@ -215,9 +215,7 @@ function parseCytoscapeInstance(cy) {
 				delete_button.closest(".m-button--switch").click();
 			}
 
-			game = new preferred_game.Game(function(args) {
-				return cy.collection(args);
-			});
+			game = new preferred_game.Game(cy);
 
 			parseGameInstance(game);
 

@@ -18,8 +18,8 @@ let MOVES = {
 // Override our base game to provide the functionality required by the
 // preferred discussion game.
 class PreferredGame extends game.Game {
-	constructor(createCollection, arg_stack=[], move_stack=[]) {
-		super(createCollection, arg_stack, move_stack);
+	constructor(cy, arg_stack=[], move_stack=[]) {
+		super(cy, arg_stack, move_stack);
 
 		// Attach our preferred game's enums to our class.
 		this._TERMINATE_STATES = TERMINATE_STATES;
@@ -64,7 +64,7 @@ class PreferredGame extends game.Game {
 		//	been played, we can play any argument.
 		if (the_move === this.MOVES["IN"]) {
 			if (this.move_count === 0) {
-				return this._createCollection().absoluteComplement();
+				return this.cy.collection.absoluteComplement();
 			} else {
 				return this.getArgsMoved(MOVES["OUT"]).last()
 					.incomers().sources();

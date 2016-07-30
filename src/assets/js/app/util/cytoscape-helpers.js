@@ -2,6 +2,7 @@ let cytoscape = require("cytoscape");
 let edgehandles = require("cytoscape-edgehandles");
 let ifShowHide = require("./ifshowhide.js");
 
+// Create a new instance of Cytoscape
 function createCytoscapeInstance(container) {
 	// Register cytoscape-edgehandles
 	edgehandles(cytoscape, $);
@@ -20,11 +21,10 @@ function createCytoscapeInstance(container) {
 	// Configure cytoscape-edgehandles
 	var defaults = {
 		toggleOffOnLeave: true,
-		loopAllowed: function(node) {
-			// for the specified node, return whether edges from itself to itself are allowed
-			return true;
-		}
+		// Always allow the given node to create a loop with itself
+		loopAllowed: (node) => true
 	};
+	cy.edgehandles(defaults);
 
 	// Create functionality to create new nodes
 	cy.on("tap", (evt) => {
@@ -40,7 +40,8 @@ function createCytoscapeInstance(container) {
 					let node = { "data": { "id": node_id }, "position": evt.cyPosition };
 					cy.add(node);
 				} else {
-					alert("An argument already exists with the id '" + node_id + "'.\nPlease try again - or leave empty to cancel.");
+					alert("An argument already exists with the id '" + node_id + "'.\n" +
+						"Please try again - or leave empty to cancel.");
 				}
 			}
 		}
@@ -49,70 +50,39 @@ function createCytoscapeInstance(container) {
 	cy.on("add remove", (evt) => {
 		ifShowHide("data-cytoscape", "ifgraphset", cy.nodes().nonempty());
 	});
-
-	cy.edgehandles(defaults);
-
-	cy.app_data = {};
-
 	ifShowHide("data-cytoscape", "ifgraphset", false);
 
 	return cy;
 }
 
-function clearGraph(cy) {
-	cy.remove(cy.elements());
-	cy.trigger("graphClear");
-}
-
+// Set the graph to display the elements described within 'graph'.
+// 	If an element does not have an explicitly described position, we make use
+//	of Cytoscape's 'random' layout to generate an arbitrary position for said
+// 	element.
 function setGraph(cy, graph) {
-	clearGraph(cy);
+	cy.remove(cy.elements());  // Clear the current graph
 
 	cy.add(graph);
 
-	let position_elements = graph["nodes"].filter((ele, i, arr) => "position" in ele);
-	let element_positions = {}
+	let positions = {};
+	graph["nodes"].filter((ele) => "position" in ele).forEach((ele) => {
+		positions[ele.data.id] = Object.assign({}, ele.position);
+	});
 
-	position_elements.forEach((ele, i, arr) => element_positions[ele.data.id] = Object.assign({}, ele.position));
-
-	if (position_elements.length !== graph.length) {
+	if (positions.length !== graph.length) {
 		let random_layout = cy.makeLayout({ name: "random" });
 		random_layout.run();
 		random_layout.stop();
 	}
 
 	let layout = cy.makeLayout({ name: "preset", positions: (node) => {
-		return node.id() in element_positions ? element_positions[node.id()] : node.position();
+		return node.id() in positions ? positions[node.id()] : node.position();
 	}});
 
 	layout.run();
 }
 
-// To help prevent us from passing 'cy' around.
-function getCy(element) {
-	let cy = undefined;
-
-	if (Array.isArray(element)) {
-		for(let ele of element) {
-			cy = getCy(ele);
-			if (cy !== undefined) {
-				break;
-			}
-		}
-	} else if (typeof element.cy === "function") {
-		cy = element.cy();
-	}
-
-	return cy;
-}
-
-function attacks(attacker, victim) {
-	return attacker.edgesTo(victim).nonempty();
-}
-
 module.exports = {
 	"createCytoscapeInstance": createCytoscapeInstance,
-	"clearGraph": clearGraph,
-	"setGraph": setGraph,
-	"getCy": getCy,
-	"attacks": attacks
+	"setGraph": setGraph
 }

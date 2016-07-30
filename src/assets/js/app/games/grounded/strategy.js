@@ -1,15 +1,22 @@
-// Given a collection of arguments, return the argument with the lowest min-max
+let labelling = require("../../logic/labelling.js");
+
+let getGroundedLabelling = require("./labelling.js");
+
+// Given a collection of arguments, return the argument with the lowest, or the
+// highest, min-max numbering.
 // numbering.
 // Sadly, we cannot use Cytoscape JS's 'eles.min()' function as it internally
 // uses 'Infinity' - which conflicts with the 'min_max_numbering' of our 'undec'
 // arguments.
-function getMinMaxArg(args, max=false) {
-	let arg;
+function getMinMaxArg(minmax, args, max=false) {
+	let arg, arg_value;
 	args.forEach((a) => {
-		if (arg === undefined || (
-			(max && a.data("min_max_numbering") > arg.data("min_max_numbering")) ||
-			(!max && a.data("min_max_numbering") < arg.data("min_max_numbering")))) {
+		let value = labelling.searchMinMax(minmax, a);
+		if (value !== undefined && (arg === undefined || (
+			(max && value > arg_value) ||
+			(!max && value < arg_value)))) {
 			arg = a;
+			arg_value = value;
 		}
 	});
 	return arg;
@@ -24,11 +31,14 @@ function getStrategicMove(game, is_proponent) {
 
 	let the_move, arg;
 
+	let lab = getGroundedLabelling(game);
+	let minmax = labelling.getMinMaxNumbering(lab);
+
 	if (is_proponent) {
 		let htb_args = game.findMoveArgs(MOVES["HTB"]);
 		if (htb_args.nonempty()) {
 			the_move = MOVES["HTB"];
-			arg = getMinMaxArg(htb_args);
+			arg = getMinMaxArg(minmax, htb_args);
 		}
 	} else {
 		// As we can only perform a CB move if no CONCEDE, or RETRACT,
@@ -36,12 +46,12 @@ function getStrategicMove(game, is_proponent) {
 		let concede_args = game.findMoveArgs(MOVES["CONCEDE"]);
 		if (concede_args.nonempty()) {
 			the_move = MOVES["CONCEDE"];
-			arg = getMinMaxArg(concede_args, true);
+			arg = getMinMaxArg(minmax, concede_args, true);
 		} else {
 			let retract_args = game.findMoveArgs(MOVES["RETRACT"]);
 			if (retract_args.nonempty()) {
 				the_move = MOVES["RETRACT"];
-				arg = getMinMaxArg(retract_args, true);
+				arg = getMinMaxArg(minmax, retract_args, true);
 			} else {
 				let cb_args = game.findMoveArgs(MOVES["CB"]);
 				if (cb_args.nonempty()) {
@@ -58,7 +68,7 @@ function getStrategicMove(game, is_proponent) {
 					});
 
 					if (arg === undefined) {
-						arg = getMinMaxArg(cb_args, true);
+						arg = getMinMaxArg(minmax, cb_args, true);
 					}
 				}
 			}

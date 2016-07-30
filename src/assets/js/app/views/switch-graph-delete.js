@@ -1,18 +1,25 @@
-function parseCytoscapeInstance(cy) {
-	cy.app_data.switch_graph_delete = {};
+let delete_enabled = [];
 
-	$("[data-switch-graph-delete]").on("m-button-switched", function(event, is_on) {
-		cy.app_data.switch_graph_delete["delete_mode"] = is_on;
+function tryRemoveElement(evt) {
+	let idx = delete_enabled.indexOf(evt.cy);
+	if (idx !== -1) {
+		evt.cyTarget.remove();
+	};
+}
+
+function parseCytoscapeInstance(cy) {
+	$("[data-switch-graph-delete]").on("m-button-switched", (evt, is_on) => {
+		if (is_on) {
+			delete_enabled.push(cy);
+		} else {
+			let idx = delete_enabled.indexOf(cy);
+			if (idx !== -1) {
+				delete_enabled = delete_enabled.splice(idx, idx);
+			};
+		};
 	});
 
-	function tryRemoveElement(evt) {
-		if (cy.app_data.switch_graph_delete["delete_mode"]) {
-			evt.cyTarget.remove();
-		}
-	}
-
-	cy.on("tap", "edge", tryRemoveElement);
-	cy.on("tap", "node", tryRemoveElement);
+	cy.on("tap", "node, edge", tryRemoveElement);
 
 	return cy;
 }

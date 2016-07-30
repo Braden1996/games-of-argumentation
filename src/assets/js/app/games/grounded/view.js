@@ -1,8 +1,10 @@
 let cyto_helpers = require("../../util/cytoscape-helpers.js");
+let labelling = require("../../logic/labelling.js");
 let ifShowHide = require("../../util/ifshowhide.js");
 
 //let discuss = require("../discuss/main.js");
 let grounded_game = require("./game.js");
+let getGroundedLabelling = require("./labelling.js");
 let getStrategicMove = require("./strategy.js");
 
 // Save some screen real-estate
@@ -147,6 +149,7 @@ function parseGameInstance(game) {
 
 		$("[data-grounded-movelist]").empty();
 
+		// Disable the classes we applied during the game.
 		let arg = game.first()["arg"];
 		if (arg !== undefined) {
 			let cy = arg.cy();
@@ -154,7 +157,46 @@ function parseGameInstance(game) {
 				.reduce((s, key) => (s === "" ? s : s + " ") + MOVE_CLASSES[key], "");
 			cy.nodes().removeClass(class_str);
 		}
+
+		// Disable our augmented view.
+		while ($("[data-switch-graph-view='labelling']")
+			.hasClass("m-button--switch__li--active") ||
+			$("[data-switch-graph-view='minmax']")
+			.hasClass("m-button--switch__li--active")
+			) {
+				$("[data-switch-graph-view='labelling']").closest(".m-button--switch")
+					.click();
+		};
 	});
+
+	let lab, minmax;
+
+	$("[data-switch-graph-view='labelling']")
+		.on("m-button-switched", (evt, is_on) => {
+			if (is_on) {
+				lab = getGroundedLabelling(game);
+				labelling.showLabelling(lab);
+			} else if (lab !== undefined) {
+				labelling.hideLabelling(lab);
+			};
+		});
+
+	$("[data-switch-graph-view='minmax']")
+		.on("m-button-switched", (evt, is_on) => {
+			if (is_on) {
+				lab = getGroundedLabelling(game);
+				labelling.showLabelling(lab);
+				minmax = labelling.getMinMaxNumbering(lab);
+				labelling.showMinMax(minmax);
+			} else {
+				if (lab !== undefined) {
+					labelling.hideLabelling(lab);
+				}
+				if (minmax !== undefined) {
+					labelling.hideMinMax(minmax);
+				};
+			};
+		});
 };
 
 function parseCytoscapeInstance(cy) {
@@ -239,9 +281,7 @@ function parseCytoscapeInstance(cy) {
 				delete_button.closest(".m-button--switch").click();
 			}
 
-			game = new grounded_game.Game(function(args) {
-				return cy.collection(args);
-			});
+			game = new grounded_game.Game(cy);
 
 			parseGameInstance(game);
 			updateDom(game);

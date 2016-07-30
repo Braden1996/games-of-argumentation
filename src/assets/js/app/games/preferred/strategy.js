@@ -17,7 +17,7 @@ let TERMINATE_STATES = preferred_game.TERMINATE_STATES;
 function getWinningStrategyM(game, out_argument) {
 	if (game.hasTerminated() &&
 		game.terminate_state !== TERMINATE_STATES["S_NOMOVE"]) {
-		return game._createCollection();
+		return game.cy.collection();
 	} else {
 		return (game.move_count === 0 ? game.findMoveArgs(MOVES["IN"]) : (
 			out_argument.incomers().sources()
