@@ -26,6 +26,7 @@ function updateDom(game) {
 	ifShowHide("preferred_playing", game_alive);
 	ifShowHide("preferred_moves", game_alive ? game.move_count: undefined);
 	ifShowHide("preferred_socrates", game_alive && is_socrates());
+	ifShowHide("preferred_terminated", game_alive && game.hasTerminated());
 	ifShowHide("preferred_aiturn",
 		game_alive &&
 		is_socrates() !== game.isSocratesTurn() &&
@@ -122,6 +123,14 @@ function parseGameInstance(game) {
 				.reduce((s, key) => (s === "" ? s : s + " ") + MOVE_CLASSES[key], "");
 			cy.nodes().removeClass(class_str);
 		}
+	});
+
+	$("[data-preferred-hint").click((evt) => {
+		let hint_dur = 750;
+		if (is_socrates() === game.isSocratesTurn()) {
+			let move = is_socrates() ? MOVES["OUT"] : MOVES["IN"];
+			game.findMoveArgs(move).flashClass("highlight", hint_dur);
+		};
 	});
 };
 

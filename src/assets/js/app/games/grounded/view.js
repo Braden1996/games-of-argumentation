@@ -33,10 +33,10 @@ function updateDom(game) {
 	ifShowHide("grounded_playing", game_alive);
 	ifShowHide("grounded_moves", game_alive ? game.move_count : undefined);
 	ifShowHide("grounded_proponent", game_alive && is_proponent());
+	ifShowHide("grounded_terminated", game_alive && game.hasTerminated());
 	ifShowHide("grounded_aiturn",
 		game_alive &&
-		is_proponent() !== game.isProponentsTurn() &&
-		!game.hasTerminated()
+		is_proponent() !== game.isProponentsTurn()
 	);
 };
 
@@ -178,6 +178,20 @@ function parseGameInstance(game) {
 				};
 			};
 		});
+
+	$("[data-grounded-hint").click((evt) => {
+		let hint_dur = 750;
+		if (is_proponent() === game.isProponentsTurn()) {
+			if (is_proponent()) {
+				game.findMoveArgs(MOVES["HTB"]).flashClass("highlight", hint_dur);
+			} else {
+				game.findMoveArgs(MOVES["CB"])
+					.union(game.findMoveArgs(MOVES["CONCEDE"]))
+					.union(game.findMoveArgs(MOVES["RETRACT"]))
+					.flashClass("highlight", hint_dur);
+			};
+		};
+	});
 };
 
 function parseCytoscapeInstance(cy) {

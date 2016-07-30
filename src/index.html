@@ -34,6 +34,9 @@
 								<li class="m-button__icon m-button--switch__li--danger" data-switch-graph-delete>D</li>
 							</ul>
 						</li>
+						<li class="m-button m-button--circle" data-grounded-hint data-preferred-hint data-ifshowhide="(grounded_playing&!grounded_aiturn&!grounded_terminated)|(preferred_playing&!preferred_aiturn&!preferred_terminated)">
+							<div class="m-button__icon">?</div>
+						</li>
 					</ul>
 				</header>
 
@@ -105,7 +108,7 @@
 										</ul>
 									</li>
 									<li>
-										<button class="m-button" data-grounded-moveai data-preferred-moveai data-ifshowhide="preferred_aiturn|grounded_aiturn">
+										<button class="m-button" data-grounded-moveai data-preferred-moveai data-ifshowhide="(grounded_aiturn&!grounded_terminated)|(preferred_aiturn&!preferred_terminated)">
 											Take AI Turn for
 											<span data-ifshowhide="grounded_playing&grounded_proponent">Opponent</span>
 											<span data-ifshowhide="grounded_playing&!grounded_proponent">Proponent</span>

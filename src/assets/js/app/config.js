@@ -45,10 +45,11 @@ function getStylesheet() {
 					return e.attr("id") + "\n(" + min_max + ")";
 				}
 			})
-		.selector("node.discuss, node.highlight")
+		.selector("node.highlight")
 			.css({
 				"border-width": "4px",
 				"border-style": "solid",
+				"border-color": "magenta",
 				"border-opacity": 1
 			})
 		// Grounded Discussion Game
