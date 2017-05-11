@@ -46,7 +46,9 @@
     "jquery": "./bower_components/jquery/dist/jquery.js",
     "cytoscape": "./bower_components/cytoscape/dist/cytoscape.js",
     "cytoscape-edgehandles": "./bower_components/cytoscape-edgehandles/cytoscape-edgehandles.js",
-    "file-saver": "./bower_components/file-saver/FileSaver.js"
+    "file-saver": "./bower_components/file-saver/FileSaver.js",
+    "lodash.debounce": "./node_modules/lodash.debounce/index.js",
+    "lodash.throttle": "./node_modules/lodash.throttle/index.js"
   },
   "browserify-shim": {
     "jquery": "$"
@@ -55,5 +57,9 @@
     "transform": [
       "browserify-shim"
     ]
+  },
+  "dependencies": {
+    "lodash.debounce": "^4.0.8",
+    "lodash.throttle": "^4.1.1"
   }
 }
