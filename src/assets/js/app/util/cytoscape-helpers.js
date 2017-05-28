@@ -22,7 +22,12 @@ function createCytoscapeInstance(container) {
 	var defaults = {
 		toggleOffOnLeave: true,
 		// Always allow the given node to create a loop with itself
-		loopAllowed: (node) => true
+		loopAllowed: (node) => true,
+		edgeType: (sNode, tNode) => {
+			// Duplicate attacks are not allowed.
+			const curAttacks = sNode.outgoers().targets().intersection(tNode);
+			return curAttacks.empty() ? "flat" : null;
+		}
 	};
 	cy.edgehandles(defaults);
 
