@@ -21,7 +21,8 @@ module.exports = function(attribute, value) {
 	showing[attribute] = value;
 
 	let eles = document.querySelectorAll("[data-ifshowhide]");
-	for (let ele of eles) {
+	for (let i = 0; i < eles.length; i++) {
+		let ele = eles[i];
 		let condition = ele.dataset["ifshowhide"];
 
 		// Break down the condition into tokens of attributes and operations
