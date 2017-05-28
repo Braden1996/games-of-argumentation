@@ -132,12 +132,12 @@ class Game {
 	}
 
 	// Return the first move, and its corresponding argument.
-	first(i) {
+	first() {
 		return this.eq(0);
 	}
 
 	// Return the last move, and its corresponding argument.
-	last(i) {
+	last() {
 		return this.eq(this._move_stack.length-1);
 	}
 }
