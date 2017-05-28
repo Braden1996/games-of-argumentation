@@ -41,9 +41,10 @@ let labelling = {
 		//	value : The maximum/minimum value found.
 		//	ele : The element that corresponds to the maximum/minimum value.
 
+		// Stop when a pass is made where no numbering occured.
 		let last_length = -1;
-		while (minmax.length !== last_length) {
-			last_length = minmax.length;
+		while (minmax.values.length !== last_length) {
+			last_length = minmax.values.length;
 			unnumbered_in = unnumbered_in.filter((i, arg) => {
 				let out_attackers = arg.incomers().sources().intersection(lab["out"]);
 				let numbered_out = out_attackers.filter((i, att) => !!s(minmax, att));
